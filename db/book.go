@@ -1,0 +1,143 @@
+package db
+
+import (
+	"context"
+	"fmt"
+	"net/http"
+	"reflect"
+	"time"
+	"xiazki/model"
+
+	"github.com/labstack/echo/v4"
+	"github.com/uptrace/bun"
+)
+
+func InsertBook(db *bun.DB, c echo.Context, book *model.Book) error {
+	ctx := c.Request().Context()
+
+	tx, err := db.BeginTx(ctx, nil)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusInternalServerError, "Failed to start transaction")
+	}
+	defer tx.Rollback()
+
+	if _, err := tx.NewInsert().Model(book).Exec(ctx); err != nil {
+		return err
+	} else if err := insertBookRelation(ctx, tx, book.ID, book.Authors, newBookAuthor); err != nil {
+		return err
+	} else if err := insertBookRelation(ctx, tx, book.ID, book.Tags, newBookTag); err != nil {
+		return err
+	} else if err := insertBookRelation(ctx, tx, book.ID, book.Translators, newBookTranslator); err != nil {
+		return err
+	} else if err := insertBookRelation(ctx, tx, book.ID, book.Narrators, newBookNarrator); err != nil {
+		return err
+	}
+
+	if err := tx.Commit(); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func insertBookRelation[T any](ctx context.Context, tx bun.Tx, bookID int64, items []T, newLink func(bookID, id int64) any) error {
+	for _, item := range items {
+		itemVal := reflect.ValueOf(item)
+		name := itemVal.FieldByName("Name").String()
+		err := tx.NewSelect().
+			Model(&item).
+			Where("name = ?", name).
+			Scan(ctx)
+
+		if err != nil {
+			if _, err := tx.NewInsert().Model(&item).Exec(ctx); err != nil {
+				return fmt.Errorf("insert base '%s': %w", name, err)
+			}
+		}
+		id := reflect.ValueOf(&item).Elem().FieldByName("ID").Int()
+		link := newLink(bookID, id)
+		if _, err := tx.NewInsert().Model(link).Exec(ctx); err != nil {
+			return fmt.Errorf("insert link: %w", err)
+		}
+	}
+
+	return nil
+}
+
+func UpdateBook(db *bun.DB, c echo.Context, id int64, book *model.Book) error {
+	ctx := c.Request().Context()
+
+	tx, err := db.BeginTx(ctx, nil)
+	if err != nil {
+		return fmt.Errorf("start tx: %w", err)
+	}
+	defer tx.Rollback()
+
+	book.ID = id
+	book.UpdatedAt = time.Now()
+
+	_, err = tx.NewUpdate().
+		Model(book).
+		ExcludeColumn("created_at").
+		WherePK().
+		Exec(ctx)
+	if err != nil {
+		return fmt.Errorf("update book: %w", err)
+	}
+
+	if err := updateBookRelation(ctx, tx, book.ID, book.Authors, newBookAuthor, (*model.BookAuthor)(nil)); err != nil {
+		return fmt.Errorf("update relationships: %w", err)
+	} else if err := updateBookRelation(ctx, tx, book.ID, book.Tags, newBookTag, (*model.BookTag)(nil)); err != nil {
+		return fmt.Errorf("update relationships: %w", err)
+	} else if err := updateBookRelation(ctx, tx, book.ID, book.Translators, newBookTranslator, (*model.BookTranslator)(nil)); err != nil {
+		return fmt.Errorf("update relationships: %w", err)
+	} else if err := updateBookRelation(ctx, tx, book.ID, book.Narrators, newBookNarrator, (*model.BookNarrator)(nil)); err != nil {
+		return fmt.Errorf("update relationships: %w", err)
+	}
+
+	if err := tx.Commit(); err != nil {
+		return fmt.Errorf("commit tx: %w", err)
+	}
+
+	return nil
+}
+
+func updateBookRelation[T any, L any](ctx context.Context, tx bun.Tx, bookID int64, items []T, newLink func(bookID, id int64) any, linkTable L) error {
+	_, err := tx.NewDelete().
+		Model(linkTable).
+		Where("book_id = ?", bookID).
+		Exec(ctx)
+	if err != nil {
+		return fmt.Errorf("delete relations: %w", err)
+	}
+
+	for _, item := range items {
+		name := reflect.ValueOf(item).FieldByName("Name").String()
+		if _, err := tx.NewInsert().Model(&item).Exec(ctx); err != nil {
+			return fmt.Errorf("insert base '%s': %w", name, err)
+		}
+		id := reflect.ValueOf(&item).Elem().FieldByName("ID").Int()
+		link := newLink(bookID, id)
+		if _, err := tx.NewInsert().Model(link).Exec(ctx); err != nil {
+			return fmt.Errorf("insert link: %w", err)
+		}
+	}
+
+	return nil
+}
+
+func newBookAuthor(bookID, id int64) any {
+	return &model.BookAuthor{BookID: bookID, AuthorID: id}
+}
+
+func newBookTag(bookID, id int64) any {
+	return &model.BookTag{BookID: bookID, TagID: id}
+}
+
+func newBookTranslator(bookID, id int64) any {
+	return &model.BookTranslator{BookID: bookID, TranslatorID: id}
+}
+
+func newBookNarrator(bookID, id int64) any {
+	return &model.BookNarrator{BookID: bookID, NarratorID: id}
+}

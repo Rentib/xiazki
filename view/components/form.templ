@@ -1,0 +1,39 @@
+package components
+
+templ Input(Name string, Label string, Placeholder string, Type string, Errors map[string]string, Value string) {
+	<div>
+		if Label != "" {
+			<label
+				class="block text-sm font-medium text-gray-700"
+				for={ "form-field" + Name }
+			>
+				{ Label }
+			</label>
+		}
+		if Type == "textarea" {
+			<textarea
+				rows="2"
+				id={ "form-field-" + Name }
+				class="mt-1 block w-full border rounded-md px-3 py-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500 "
+				name={ Name }
+				placeholder={ Placeholder }
+			>{ Value }</textarea>
+		} else {
+			<input
+				id={ "form-field-" + Name }
+				class="mt-1 block w-full border rounded-md px-3 py-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500 "
+				name={ Name }
+				type={ Type }
+				value={ Value }
+				placeholder={ Placeholder }
+			/>
+		}
+		if Errors[Name] != "" {
+			<span
+				class="mt-1 text-red-600 text-sm"
+			>
+				{ Errors[Name] }
+			</span>
+		}
+	</div>
+}

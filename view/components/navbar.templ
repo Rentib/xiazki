@@ -1,0 +1,31 @@
+package components
+
+import "xiazki/model"
+
+templ Navbar(user *model.User) {
+	<nav class="bg-white shadow-sm border-b">
+		<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+			<div class="flex justify-between h-16">
+				<div class="flex items-center">
+					<a href="/books" class="text-xl font-bold text-gray-800">xiazki</a>
+				</div>
+				<div class="flex items-center space-x-4">
+					if user != nil {
+						<span class="text-gray-700">{ user.Username }</span>
+						<a href="/books/add" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md text-sm font-medium">
+							Add Book
+						</a>
+						<form method="POST" action="/logout">
+							<button type="submit" class="text-gray-700 hover:text-gray-900">Logout</button>
+						</form>
+					} else {
+						<a href="/login" class="text-gray-700 hover:text-gray-900">Login</a>
+						<a href="/register" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md text-sm font-medium">
+							Register
+						</a>
+					}
+				</div>
+			</div>
+		</div>
+	</nav>
+}

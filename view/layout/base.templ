@@ -1,0 +1,73 @@
+package layout
+
+type Data struct {
+	Title string
+	CSRF  string
+}
+
+templ Base(data Data) {
+	<!DOCTYPE html>
+	<html lang="en">
+		<head>
+			<meta charset="UTF-8"/>
+			<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+			<title>{ data.Title } - xiazki</title>
+			<script src="/static/js/htmx.min.js"></script>
+			<link href="/static/css/tailwind.css" rel="stylesheet"/>
+		</head>
+		<body class="bg-gray-50 min-h-screen" hx-boost="true">
+			<nav class="bg-white shadow-sm border-b">
+				<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+					<div class="flex justify-between h-16">
+						<div class="flex items-center">
+							<a href="/books" class="text-xl font-bold text-gray-900">xiazki</a>
+						</div>
+						// FIXME: This is a temporary solution until we have a proper way to check authentication status in templates.
+						if data.Title != "Login" && data.Title != "Register" {
+							<div class="flex items-center space-x-4">
+								@baseLink("/books", "Books")
+								@baseLink("/add_book", "Add Book")
+								@profile(data)
+							</div>
+						}
+					</div>
+				</div>
+			</nav>
+			<main class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+				{ children... }
+			</main>
+			<div id="modal"></div>
+		</body>
+	</html>
+}
+
+templ baseLink(href string, text string) {
+	<a href={ href } class="text-gray-700 hover:text-gray-900">{ text }</a>
+}
+
+templ profile(data Data) {
+	<div class="relative inline-block text-left">
+		<button
+			hx-on:click="document.getElementById('profile-menu').classList.toggle('hidden')"
+			class="w-8 h-8 rounded-full bg-gray-300 flex items-center justify-center font-semibold text-gray-700 hover:bg-gray-400"
+		>
+			// TODO: replace with user's initial
+			R
+		</button>
+		<div
+			id="profile-menu"
+			class="hidden absolute right-0 mt-2 w-40 origin-top-right bg-white border border-gray-200 rounded-md shadow-lg z-50"
+		>
+			<div class="py-1">
+				<div class="border-t my-1"></div>
+				<a
+					hx-post="/logout"
+					hx-headers={ "{\"X-CSRF-Token\":\"" + data.CSRF + "\"}" }
+					class="block px-4 py-2 text-gray-700 hover:bg-gray-100"
+				>
+					Sign out
+				</a>
+			</div>
+		</div>
+	</div>
+}
