@@ -1,0 +1,34 @@
+package components
+
+import "xiazki/model"
+
+type BookFormData struct {
+	CSRF   string
+	Book   model.Book
+	Errors map[string]string
+	Values map[string]string
+}
+
+templ BookFormFields(data BookFormData) {
+	@FormField("title", "Title", "", "text", data.Errors, data.Values)
+	@FormField("authors", "Authors (comma separated)", "", "text", data.Errors, data.Values)
+	@FormField("tags", "Tags (comma separated)", "", "text", data.Errors, data.Values)
+	@FormField("translators", "Translators (comma separated)", "", "text", data.Errors, data.Values)
+	@FormField("narrators", "Narrators (comma separated)", "", "text", data.Errors, data.Values)
+	@FormField("summary", "Summary", "", "textarea", data.Errors, data.Values)
+	<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+		@FormField("isbn10", "ISBN10", "", "text", data.Errors, data.Values)
+		@FormField("isbn13", "ISBN13", "", "text", data.Errors, data.Values)
+	</div>
+	@FormField("language", "Language", "ISO code", "text", data.Errors, data.Values)
+	<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+		@FormField("publisher", "Publisher", "", "text", data.Errors, data.Values)
+		@FormField("publish_date", "Publish Date", "", "date", data.Errors, data.Values)
+		@FormField("page_count", "Page Count", "", "number", data.Errors, data.Values)
+	</div>
+	<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+		@FormField("series_name", "Series Name", "", "text", data.Errors, data.Values)
+		@FormField("series_number", "Series Number", "", "number", data.Errors, data.Values)
+	</div>
+	@FormField("cover_url", "Cover URL", "", "url", data.Errors, data.Values)
+}

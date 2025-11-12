@@ -1,0 +1,71 @@
+package auth
+
+import (
+	"xiazki/view/components"
+	"xiazki/view/layout"
+)
+
+type AuthType string
+
+const (
+	Login    = "login"
+	Register = "register"
+)
+
+type Data struct {
+	Type   AuthType
+	CSRF   string
+	Errors map[string]string
+	Values map[string]string
+}
+
+templ Show(data Data) {
+	{{
+		title := map[AuthType]string{Login: "Login", Register: "Register"}
+		msg := map[AuthType]string{Login: "Sign in to xiazki", Register: "Create your account"}
+		note := map[AuthType]string{Login: "Don't have an account? Register", Register: "Already have an account? Sign in"}
+		href := map[AuthType]string{Login: "/register", Register: "/login"}
+	}}
+	@layout.Base(layout.Data{Title: title[data.Type], CSRF: data.CSRF}) {
+		<div class="min-h-full flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+			<div class="max-w-md w-full space-y-8">
+				<div>
+					<h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">
+						{ msg[data.Type] }
+					</h2>
+				</div>
+				@Form(data)
+				<div class="text-center">
+					<a href={ href[data.Type] } class="text-blue-600 hover:text-blue-500">
+						{ note[data.Type] }
+					</a>
+				</div>
+			</div>
+		</div>
+	}
+}
+
+templ Form(data Data) {
+	{{
+		post := map[AuthType]string{Login: "/login", Register: "/register"}
+		btn := map[AuthType]string{Login: "Sign in", Register: "Register"}
+	}}
+	<form
+		class="mt-8 space-y-6"
+		hx-post={ post[data.Type] }
+		hx-target="this"
+		hx-swap="outerHTML"
+		hx-headers={ "{\"X-CSRF-Token\":\"" + data.CSRF + "\"}" }
+	>
+		@components.FormField("username", "", "Username", "text", data.Errors, data.Values)
+		@components.FormField("password", "", "Password", "password", data.Errors, data.Values)
+		<div>
+			<button
+				type="submit"
+				class="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+			>
+				{ btn[data.Type] }
+			</button>
+		</div>
+	</form>
+}

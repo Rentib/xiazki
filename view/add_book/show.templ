@@ -1,0 +1,40 @@
+package add_book
+
+import "xiazki/view/layout"
+import "xiazki/view/components"
+
+type Data struct {
+	CSRF   string
+	Errors map[string]string
+	Values map[string]string
+}
+
+templ Show(data Data) {
+	@layout.Base(layout.Data{Title: "Add Book", CSRF: data.CSRF}) {
+		<div class="bg-white shadow-sm rounded-lg p-6 max-w-4xl mx-auto">
+			<h1 class="text-2xl font-bold text-gray-900 mb-6">Add New Book</h1>
+			@Form(data)
+		</div>
+	}
+}
+
+templ Form(data Data) {
+	<form
+		class="space-y-6 max-w-2xl"
+		hx-post="/add_book"
+		hx-target="this"
+		hx-swap="outerHTML"
+		hx-headers={ "{\"X-CSRF-Token\":\"" + data.CSRF + "\"}" }
+	>
+		@components.BookFormFields(components.BookFormData{
+			Errors: data.Errors,
+			Values: data.Values,
+		})
+		<button
+			type="submit"
+			class="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+		>
+			Add Book
+		</button>
+	</form>
+}

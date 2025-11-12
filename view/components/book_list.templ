@@ -1,0 +1,73 @@
+package components
+
+import (
+	"strconv"
+	"xiazki/model"
+)
+
+templ BookList(books []model.Book) {
+	<div class="px-4 py-6 sm:px-0">
+		<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
+			for _, book := range books {
+				@BookCard(book)
+			}
+		</div>
+	</div>
+}
+
+templ BookCard(book model.Book) {
+	<div class="block bg-white rounded-lg shadow-md flex flex-col items-center p-0 w-full max-w-xs hover:shadow-lg transition-shadow duration-200">
+		@BookCover(book)
+		<div class="w-full flex flex-col items-center p-4">
+			@BookTitle(book)
+			@BookAuthorList(book)
+			<div class="flex flex-wrap gap-2 justify-center w-full mt-2">
+				if book.SeriesName != "" {
+					<div class="text-gray-500" title={ book.SeriesName }>
+						#{ book.SeriesNumber }
+					</div>
+				}
+			</div>
+		</div>
+	</div>
+}
+
+templ BookCover(book model.Book) {
+	<a href={ "/book/" + strconv.FormatInt(book.ID, 10) } class="w-full aspect-[3/4]">
+		<img
+			src={ getCoverURL(book.CoverURL) }
+			alt="Book Cover"
+			class="w-full h-full object-cover rounded-sm bg-gray-100"
+		/>
+	</a>
+}
+
+templ BookTitle(book model.Book) {
+	<a href={ "/book/" + strconv.FormatInt(book.ID, 10) } class="text-lg font-semibold text-gray-900 text-center w-full mb-1 hover:underline">
+		{ book.Title }
+	</a>
+}
+
+templ BookAuthorList(book model.Book) {
+	<div class="w-full text-center text-sm text-gray-600 mb-2">
+		for i, author := range book.Authors {
+			if i > 0 {
+				<span>, </span>
+			}
+			@BookAuthor(author)
+		}
+	</div>
+}
+
+templ BookAuthor(author model.Author) {
+	<span class="text-gray-700">
+		{ author.Name }
+	</span>
+}
+
+func getCoverURL(coverURL string) string {
+	if coverURL != "" {
+		return coverURL
+	}
+	return "/static/img/cover.jpeg"
+}
