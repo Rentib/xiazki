@@ -18,7 +18,6 @@ templ Show(data Data) {
 		@Events(data)
 		@Reviews(data)
 		@Quotes(data)
-		<div id="modal"></div>
 	}
 }
 
@@ -42,7 +41,11 @@ templ MainInfo(data Data) {
 				<h2 class="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-2 w-32 shrink-0">Authors:</h2>
 				<div class="flex flex-wrap gap-2">
 					for _, author := range data.Book.Authors {
-						<span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm font-medium">{ author.Name }</span>
+						<a href={ "/author/" + strconv.FormatInt(author.ID, 10) }>
+							<span
+								class="bg-gray-100 text-gray-800 hover:bg-gray-200 px-3 py-1 rounded-full text-sm transition-colors duration-200"
+							>{ author.Name }</span>
+						</a>
 					}
 				</div>
 			</div>
@@ -116,7 +119,7 @@ templ Buttons(data Data) {
 			<span class="mr-2">󰆴</span>
 			<span class="align-middle">Delete</span>
 		</button>
-        // TODO:
+		// TODO:
 		//<button class="border border-blue-600 text-blue-600 px-4 py-2 rounded-md hover:bg-blue-100 focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm transition-colors duration-200">
 		//	<span class="mr-2"></span>
 		//	<span class="align-middle">Add Event</span>

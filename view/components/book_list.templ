@@ -60,9 +60,11 @@ templ BookAuthorList(book model.Book) {
 }
 
 templ BookAuthor(author model.Author) {
-	<span class="text-gray-700">
-		{ author.Name }
-	</span>
+	<a href={ "/author/" + strconv.FormatInt(author.ID, 10) }>
+		<span class="text-gray-700 hover:underline">
+			{ author.Name }
+		</span>
+	</a>
 }
 
 func getCoverURL(coverURL string) string {

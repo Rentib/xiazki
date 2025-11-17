@@ -1,0 +1,21 @@
+package author
+
+import (
+	"xiazki/model"
+	"xiazki/view/components"
+	"xiazki/view/layout"
+)
+
+type Data struct {
+	CSRF   string
+	Author model.Author
+}
+
+templ Show(data Data) {
+	@layout.Base(layout.Data{Title: "Books", CSRF: data.CSRF}) {
+		<h1 class="text-3xl font-bold mb-6 text-gray-900 text-center">
+			{ data.Author.Name }
+		</h1>
+		@components.BookList(data.Author.Books)
+	}
+}

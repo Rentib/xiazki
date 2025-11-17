@@ -52,6 +52,7 @@ func main() {
 	protected.Use(h.RequireAuth)
 	protected.GET("/", h.GetBooks)
 	protected.GET("/books", h.GetBooks)
+	protected.GET("/author/:id", h.GetAuthor)
 	protected.GET("/add_book", h.GetAddBook)
 	protected.GET("/book/:id", h.GetBook)
 	protected.GET("/book/:id/edit", h.GetBookEdit)
