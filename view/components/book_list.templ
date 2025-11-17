@@ -33,7 +33,7 @@ templ BookCard(book model.Book) {
 }
 
 templ BookCover(book model.Book) {
-	<a href={ "/book/" + strconv.FormatInt(book.ID, 10) } class="w-full aspect-[3/4]">
+	<a href={ "/book/" + strconv.FormatInt(book.ID, 10) } class="h-full">
 		<img
 			src={ getCoverURL(book.CoverURL) }
 			alt="Book Cover"
