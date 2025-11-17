@@ -1,0 +1,15 @@
+{
+    "overrides": [
+        {
+            "files": "*.templ",
+            "options": {
+                "parser": "tailwindcss-extra"
+            }
+        }
+    ],
+    "plugins": [
+        "prettier-plugin-tailwindcss-extra",
+        "prettier-plugin-tailwindcss"
+    ],
+    "tailwindStylesheet": "./static/css/input.css"
+}

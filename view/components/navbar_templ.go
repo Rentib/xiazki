@@ -31,7 +31,7 @@ func Navbar(user *model.User) templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<nav class=\"bg-white shadow-sm border-b\"><div class=\"max-w-7xl mx-auto px-4 sm:px-6 lg:px-8\"><div class=\"flex justify-between h-16\"><div class=\"flex items-center\"><a href=\"/books\" class=\"text-xl font-bold text-gray-800\">xiazki</a></div><div class=\"flex items-center space-x-4\">")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<nav class=\"border-b bg-white shadow-sm\"><div class=\"mx-auto max-w-7xl px-4 sm:px-6 lg:px-8\"><div class=\"flex h-16 justify-between\"><div class=\"flex items-center\"><a href=\"/books\" class=\"text-xl font-bold text-gray-800\">xiazki</a></div><div class=\"flex items-center space-x-4\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -49,12 +49,12 @@ func Navbar(user *model.User) templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "</span> <a href=\"/books/add\" class=\"bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md text-sm font-medium\">Add Book</a><form method=\"POST\" action=\"/logout\"><button type=\"submit\" class=\"text-gray-700 hover:text-gray-900\">Logout</button></form>")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "</span> <a href=\"/books/add\" class=\"rounded-md bg-blue-500 px-4 py-2 text-sm font-medium text-white hover:bg-blue-600\">Add Book</a><form method=\"POST\" action=\"/logout\"><button type=\"submit\" class=\"text-gray-700 hover:text-gray-900\">Logout</button></form>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 		} else {
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 4, "<a href=\"/login\" class=\"text-gray-700 hover:text-gray-900\">Login</a> <a href=\"/register\" class=\"bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md text-sm font-medium\">Register</a>")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 4, "<a href=\"/login\" class=\"text-gray-700 hover:text-gray-900\">Login</a> <a href=\"/register\" class=\"rounded-md bg-blue-500 px-4 py-2 text-sm font-medium text-white hover:bg-blue-600\">Register</a>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}

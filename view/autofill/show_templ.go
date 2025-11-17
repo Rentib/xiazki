@@ -60,7 +60,7 @@ func AutofillModal(data Data) templ.Component {
 				}()
 			}
 			ctx = templ.InitializeContext(ctx)
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div class=\"bg-white rounded-lg shadow-lg w-full max-w-md p-6\"><h2 class=\"text-xl font-bold mb-4\">Autofill Book Information</h2><form class=\"space-y-4\" hx-get=\"/add_book/autofill\" hx-target=\"#modal\" hx-swap=\"innerHTML\" hx-headers=\"")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div class=\"w-full max-w-md rounded-lg bg-white p-6 shadow-lg\"><h2 class=\"mb-4 text-xl font-bold\">Autofill Book Information</h2><form class=\"space-y-4\" hx-get=\"/add_book/autofill\" hx-target=\"#modal\" hx-swap=\"innerHTML\" hx-headers=\"")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -81,7 +81,7 @@ func AutofillModal(data Data) templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "<div class=\"flex justify-end\"><button type=\"button\" class=\"bg-gray-300 text-gray-700 px-4 py-2 rounded-md hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-500 text-sm transition-colors duration-200 mr-2\" onclick=\"document.getElementById('modal').innerHTML = ''\">Cancel</button> <button type=\"submit\" class=\"bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm transition-colors duration-200\">Autofill</button></div></form></div>")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "<div class=\"flex justify-end\"><button type=\"button\" class=\"mr-2 rounded-md bg-gray-300 px-4 py-2 text-sm text-gray-700 transition-colors duration-200 hover:bg-gray-400 focus:ring-2 focus:ring-gray-500 focus:outline-none\" onclick=\"document.getElementById('modal').innerHTML = ''\">Cancel</button> <button type=\"submit\" class=\"rounded-md bg-blue-600 px-4 py-2 text-sm text-white transition-colors duration-200 hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:outline-none\">Autofill</button></div></form></div>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -129,7 +129,7 @@ func MatchListModal(data Data) templ.Component {
 				}()
 			}
 			ctx = templ.InitializeContext(ctx)
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 4, "<div class=\"bg-white rounded-lg shadow-xl w-full max-w-4xl p-6 mx-4\"><div class=\"flex items-center justify-between mb-6\"><h2 class=\"text-2xl font-bold text-gray-800\">Select a Book to Autofill</h2><span class=\"text-sm text-gray-500 bg-gray-100 px-3 py-1 rounded-full\">")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 4, "<div class=\"mx-4 w-full max-w-4xl rounded-lg bg-white p-6 shadow-xl\"><div class=\"mb-6 flex items-center justify-between\"><h2 class=\"text-2xl font-bold text-gray-800\">Select a Book to Autofill</h2><span class=\"rounded-full bg-gray-100 px-3 py-1 text-sm text-gray-500\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -142,7 +142,7 @@ func MatchListModal(data Data) templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 5, " match(es) found</span></div><div class=\"space-y-4 max-h-[32rem] overflow-y-auto pr-2\">")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 5, " match(es) found</span></div><div class=\"max-h-128 space-y-4 overflow-y-auto pr-2\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -187,7 +187,7 @@ func MatchItem(CSRF string, Match add_book.BookFormValues) templ.Component {
 			templ_7745c5c3_Var7 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 7, "<form class=\"border border-gray-200 rounded-xl p-6 hover:border-blue-300 hover:shadow-md transition-all duration-200 cursor-pointer bg-white group\" hx-post=\"/add_book/autofill/select\" hx-headers=\"")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 7, "<form class=\"group cursor-pointer rounded-xl border border-gray-200 bg-white p-6 transition-all duration-200 hover:border-blue-300 hover:shadow-md\" hx-post=\"/add_book/autofill/select\" hx-headers=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -395,7 +395,7 @@ func MatchItem(CSRF string, Match add_book.BookFormValues) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 23, "\"><div class=\"flex gap-6\"><div class=\"flex-shrink-0\"><div class=\"w-24 h-36 bg-gray-100 rounded-lg shadow-sm overflow-hidden\">")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 23, "\"><div class=\"flex gap-6\"><div class=\"shrink-0\"><div class=\"h-36 w-24 overflow-hidden rounded-lg bg-gray-100 shadow-sm\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -426,17 +426,17 @@ func MatchItem(CSRF string, Match add_book.BookFormValues) templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 26, "\" class=\"w-full h-full object-cover transition-transform duration-200\">")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 26, "\" class=\"h-full w-full object-cover transition-transform duration-200\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 		} else {
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 27, "<div class=\"w-full h-full flex items-center justify-center bg-gray-200 text-gray-400\"><svg class=\"w-8 h-8\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\"><path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" d=\"M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z\"></path></svg></div>")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 27, "<div class=\"flex h-full w-full items-center justify-center bg-gray-200 text-gray-400\"><svg class=\"h-8 w-8\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\"><path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" d=\"M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z\"></path></svg></div>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 28, "</div></div><div class=\"flex-1 min-w-0\"><div class=\"mb-3\"><h3 class=\"text-xl font-bold text-gray-900 group-hover:text-blue-600 transition-colors line-clamp-2\">")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 28, "</div></div><div class=\"min-w-0 flex-1\"><div class=\"mb-3\"><h3 class=\"line-clamp-2 text-xl font-bold text-gray-900 transition-colors group-hover:text-blue-600\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -454,7 +454,7 @@ func MatchItem(CSRF string, Match add_book.BookFormValues) templ.Component {
 			return templ_7745c5c3_Err
 		}
 		if Match.SeriesName != "" {
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 30, "<div class=\"flex items-center gap-2 mt-1\"><span class=\"text-sm text-blue-600 bg-blue-50 px-2 py-1 rounded\">")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 30, "<div class=\"mt-1 flex items-center gap-2\"><span class=\"rounded bg-blue-50 px-2 py-1 text-sm text-blue-600\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -495,12 +495,12 @@ func MatchItem(CSRF string, Match add_book.BookFormValues) templ.Component {
 				return templ_7745c5c3_Err
 			}
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 35, "</div><div class=\"space-y-2 mb-4\">")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 35, "</div><div class=\"mb-4 space-y-2\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		if Match.Authors != "" {
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 36, "<div class=\"flex items-start gap-2\"><span class=\"text-sm font-medium text-gray-700 whitespace-nowrap\">Author(s):</span> <span class=\"text-sm text-gray-600\">")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 36, "<div class=\"flex items-start gap-2\"><span class=\"text-sm font-medium whitespace-nowrap text-gray-700\">Author(s):</span> <span class=\"text-sm text-gray-600\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -519,7 +519,7 @@ func MatchItem(CSRF string, Match add_book.BookFormValues) templ.Component {
 			}
 		}
 		if Match.Translators != "" {
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 38, "<div class=\"flex items-start gap-2\"><span class=\"text-sm font-medium text-gray-700 whitespace-nowrap\">Translator(s):</span> <span class=\"text-sm text-gray-600\">")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 38, "<div class=\"flex items-start gap-2\"><span class=\"text-sm font-medium whitespace-nowrap text-gray-700\">Translator(s):</span> <span class=\"text-sm text-gray-600\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -538,7 +538,7 @@ func MatchItem(CSRF string, Match add_book.BookFormValues) templ.Component {
 			}
 		}
 		if Match.Narrators != "" {
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 40, "<div class=\"flex items-start gap-2\"><span class=\"text-sm font-medium text-gray-700 whitespace-nowrap\">Narrator(s):</span> <span class=\"text-sm text-gray-600\">")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 40, "<div class=\"flex items-start gap-2\"><span class=\"text-sm font-medium whitespace-nowrap text-gray-700\">Narrator(s):</span> <span class=\"text-sm text-gray-600\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -556,7 +556,7 @@ func MatchItem(CSRF string, Match add_book.BookFormValues) templ.Component {
 				return templ_7745c5c3_Err
 			}
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 42, "</div><div class=\"grid grid-cols-2 gap-x-6 gap-y-2 mb-4\">")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 42, "</div><div class=\"mb-4 grid grid-cols-2 gap-x-6 gap-y-2\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -636,12 +636,12 @@ func MatchItem(CSRF string, Match add_book.BookFormValues) templ.Component {
 				return templ_7745c5c3_Err
 			}
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 51, "</div><div class=\"flex flex-wrap gap-4 mb-3\">")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 51, "</div><div class=\"mb-3 flex flex-wrap gap-4\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		if Match.ISBN13 != "" {
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 52, "<div class=\"flex items-center gap-1\"><span class=\"text-xs font-medium text-gray-500\">ISBN-13:</span> <code class=\"text-xs bg-gray-100 px-2 py-1 rounded\">")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 52, "<div class=\"flex items-center gap-1\"><span class=\"text-xs font-medium text-gray-500\">ISBN-13:</span> <code class=\"rounded bg-gray-100 px-2 py-1 text-xs\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -660,7 +660,7 @@ func MatchItem(CSRF string, Match add_book.BookFormValues) templ.Component {
 			}
 		}
 		if Match.ISBN10 != "" {
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 54, "<div class=\"flex items-center gap-1\"><span class=\"text-xs font-medium text-gray-500\">ISBN-10:</span> <code class=\"text-xs bg-gray-100 px-2 py-1 rounded\">")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 54, "<div class=\"flex items-center gap-1\"><span class=\"text-xs font-medium text-gray-500\">ISBN-10:</span> <code class=\"rounded bg-gray-100 px-2 py-1 text-xs\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -683,7 +683,7 @@ func MatchItem(CSRF string, Match add_book.BookFormValues) templ.Component {
 			return templ_7745c5c3_Err
 		}
 		if Match.Summary != "" {
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 57, "<div class=\"mt-3\"><p class=\"text-sm text-gray-600 line-clamp-2\">")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 57, "<div class=\"mt-3\"><p class=\"line-clamp-2 text-sm text-gray-600\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -702,12 +702,12 @@ func MatchItem(CSRF string, Match add_book.BookFormValues) templ.Component {
 			}
 		}
 		if Match.Tags != "" {
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 59, "<div class=\"flex flex-wrap gap-1 mt-3\">")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 59, "<div class=\"mt-3 flex flex-wrap gap-1\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 			for _, tag := range strings.Split(Match.Tags, ",") {
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 60, "<span class=\"inline-block bg-gray-100 text-gray-700 text-xs px-2 py-1 rounded-full\">")
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 60, "<span class=\"inline-block rounded-full bg-gray-100 px-2 py-1 text-xs text-gray-700\">")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
@@ -730,7 +730,7 @@ func MatchItem(CSRF string, Match add_book.BookFormValues) templ.Component {
 				return templ_7745c5c3_Err
 			}
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 63, "</div><div class=\"flex-shrink-0 flex items-center\"><button type=\"submit\" class=\"opacity-0 group-hover:opacity-100 bg-blue-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-blue-700 transition-all duration-200 transform group-hover:translate-x-0 -translate-x-2\">Select</button></div></div></form>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 63, "</div><div class=\"flex shrink-0 items-center\"><button type=\"submit\" class=\"-translate-x-2 transform rounded-lg bg-blue-600 px-4 py-2 font-medium text-white opacity-0 transition-all duration-200 group-hover:translate-x-0 group-hover:opacity-100 hover:bg-blue-700\">Select</button></div></div></form>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

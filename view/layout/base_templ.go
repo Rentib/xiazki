@@ -47,7 +47,7 @@ func Base(data Data) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, " - xiazki</title><script src=\"/static/js/htmx.min.js\"></script><link href=\"/static/css/tailwind.css\" rel=\"stylesheet\"></head><body class=\"bg-gray-50 min-h-screen\" hx-boost=\"true\"><nav class=\"bg-white shadow-sm border-b\"><div class=\"max-w-7xl mx-auto px-4 sm:px-6 lg:px-8\"><div class=\"flex justify-between h-16\"><div class=\"flex items-center\"><a href=\"/books\" class=\"text-xl font-bold text-gray-900\">xiazki</a></div>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, " - xiazki</title><script src=\"/static/js/htmx.min.js\"></script><link href=\"/static/css/tailwind.css\" rel=\"stylesheet\"></head><body class=\"min-h-screen bg-gray-50\" hx-boost=\"true\"><nav class=\"border-b bg-white shadow-sm\"><div class=\"mx-auto max-w-7xl px-4 sm:px-6 lg:px-8\"><div class=\"flex h-16 justify-between\"><div class=\"flex items-center\"><a href=\"/books\" class=\"text-xl font-bold text-gray-900\">xiazki</a></div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -73,7 +73,7 @@ func Base(data Data) templ.Component {
 				return templ_7745c5c3_Err
 			}
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 5, "</div></div></nav><main class=\"max-w-7xl mx-auto py-6 sm:px-6 lg:px-8\">")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 5, "</div></div></nav><main class=\"mx-auto max-w-7xl py-6 sm:px-6 lg:px-8\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -165,7 +165,7 @@ func profile(data Data) templ.Component {
 			templ_7745c5c3_Var6 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 10, "<div class=\"relative inline-block text-left\"><button hx-on:click=\"document.getElementById('profile-menu').classList.toggle('hidden')\" class=\"w-8 h-8 rounded-full bg-gray-300 flex items-center justify-center font-semibold text-gray-700 hover:bg-gray-400\">R</button><div id=\"profile-menu\" class=\"hidden absolute right-0 mt-2 w-40 origin-top-right bg-white border border-gray-200 rounded-md shadow-lg z-50\"><div class=\"py-1\"><div class=\"border-t my-1\"></div><a hx-post=\"/logout\" hx-headers=\"")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 10, "<div class=\"relative inline-block text-left\"><button hx-on:click=\"document.getElementById('profile-menu').classList.toggle('hidden')\" class=\"flex h-8 w-8 items-center justify-center rounded-full bg-gray-300 font-semibold text-gray-700 hover:bg-gray-400\">R</button><div id=\"profile-menu\" class=\"absolute right-0 z-50 mt-2 hidden w-40 origin-top-right rounded-md border border-gray-200 bg-white shadow-lg\"><div class=\"py-1\"><div class=\"my-1 border-t\"></div><a hx-post=\"/logout\" hx-headers=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

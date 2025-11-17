@@ -119,7 +119,7 @@ func MainInfo(data Data) templ.Component {
 			templ_7745c5c3_Var3 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 5, "<div class=\"md:flex md:items-start\"><div class=\"md:w-1/3 p-8 flex items-start justify-center\"><img src=\"")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 5, "<div class=\"md:flex md:items-start\"><div class=\"flex items-start justify-center p-8 md:w-1/3\"><img src=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -145,7 +145,7 @@ func MainInfo(data Data) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 7, "\" class=\"w-64 h-96 object-cover rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 mt-8\"></div><div class=\"md:w-2/3 p-8 flex flex-col justify-center\"><div class=\"flex flex-wrap items-center justify-between gap-4 mb-6\"><h1 class=\"text-3xl font-bold text-gray-900 flex-1 break-words\">")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 7, "\" class=\"mt-8 h-96 w-64 rounded-lg object-cover shadow-md transition-shadow duration-300 hover:shadow-lg\"></div><div class=\"flex flex-col justify-center p-8 md:w-2/3\"><div class=\"mb-6 flex flex-wrap items-center justify-between gap-4\"><h1 class=\"flex-1 text-3xl font-bold wrap-break-word text-gray-900\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -166,7 +166,7 @@ func MainInfo(data Data) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 9, "</div><div class=\"mb-6 flex flex-row\"><h2 class=\"text-sm font-semibold text-gray-500 uppercase tracking-wide mb-2 w-32 shrink-0\">Authors:</h2><div class=\"flex flex-wrap gap-2\">")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 9, "</div><div class=\"mb-6 flex flex-row\"><h2 class=\"mb-2 w-32 shrink-0 text-sm font-semibold tracking-wide text-gray-500 uppercase\">Authors:</h2><div class=\"flex flex-wrap gap-2\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -184,7 +184,7 @@ func MainInfo(data Data) templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 11, "\"><span class=\"bg-gray-100 text-gray-800 hover:bg-gray-200 px-3 py-1 rounded-full text-sm transition-colors duration-200\">")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 11, "\"><span class=\"rounded-full bg-gray-100 px-3 py-1 text-sm text-gray-800 transition-colors duration-200 hover:bg-gray-200\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -202,12 +202,12 @@ func MainInfo(data Data) templ.Component {
 				return templ_7745c5c3_Err
 			}
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 13, "</div></div><div class=\"grid grid-cols-1 gap-6 mb-6\">")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 13, "</div></div><div class=\"mb-6 grid grid-cols-1 gap-6\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		if data.Book.Publisher != "" {
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 14, "<div class=\"flex flex-row\"><h3 class=\"text-sm font-semibold text-gray-500 uppercase tracking-wide mb-1 w-32 shrink-0\">Publisher:</h3><p class=\"text-gray-900 ml-4\">")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 14, "<div class=\"flex flex-row\"><h3 class=\"mb-1 w-32 shrink-0 text-sm font-semibold tracking-wide text-gray-500 uppercase\">Publisher:</h3><p class=\"ml-4 text-gray-900\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -231,7 +231,7 @@ func MainInfo(data Data) templ.Component {
 				return templ_7745c5c3_Err
 			}
 			if data.Book.ISBN13 != "" {
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 17, "<h3 class=\"text-sm font-semibold text-gray-500 uppercase tracking-wide mb-1 w-32 shrink-0\">ISBN13:</h3><p class=\"text-gray-900 font-mono ml-4\">")
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 17, "<h3 class=\"mb-1 w-32 shrink-0 text-sm font-semibold tracking-wide text-gray-500 uppercase\">ISBN13:</h3><p class=\"ml-4 font-mono text-gray-900\">")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
@@ -249,7 +249,7 @@ func MainInfo(data Data) templ.Component {
 					return templ_7745c5c3_Err
 				}
 			} else {
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 19, "<h3 class=\"text-sm font-semibold text-gray-500 uppercase tracking-wide mb-1 w-32 shrink-0\">ISBN10:</h3><p class=\"text-gray-900 font-mono ml-4\">")
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 19, "<h3 class=\"mb-1 w-32 shrink-0 text-sm font-semibold tracking-wide text-gray-500 uppercase\">ISBN10:</h3><p class=\"ml-4 font-mono text-gray-900\">")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
@@ -273,7 +273,7 @@ func MainInfo(data Data) templ.Component {
 			}
 		}
 		if data.Book.PageCount > 0 {
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 22, "<div class=\"flex flex-row\"><h3 class=\"text-sm font-semibold text-gray-500 uppercase tracking-wide mb-1 w-32 shrink-0\">Pages:</h3><p class=\"text-gray-900 ml-4\">")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 22, "<div class=\"flex flex-row\"><h3 class=\"mb-1 w-32 shrink-0 text-sm font-semibold tracking-wide text-gray-500 uppercase\">Pages:</h3><p class=\"ml-4 text-gray-900\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -292,7 +292,7 @@ func MainInfo(data Data) templ.Component {
 			}
 		}
 		if !data.Book.PublishDate.IsZero() {
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 24, "<div class=\"flex flex-row\"><h3 class=\"text-sm font-semibold text-gray-500 uppercase tracking-wide mb-1 w-32 shrink-0\">Published:</h3><p class=\"text-gray-900 ml-4\">")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 24, "<div class=\"flex flex-row\"><h3 class=\"mb-1 w-32 shrink-0 text-sm font-semibold tracking-wide text-gray-500 uppercase\">Published:</h3><p class=\"ml-4 text-gray-900\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -311,7 +311,7 @@ func MainInfo(data Data) templ.Component {
 			}
 		}
 		if data.Book.SeriesName != "" {
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 26, "<div class=\"flex flex-row\"><h3 class=\"text-sm font-semibold text-gray-500 uppercase tracking-wide mb-1 w-32 shrink-0\">Series:</h3><p class=\"text-gray-900 ml-4\">")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 26, "<div class=\"flex flex-row\"><h3 class=\"mb-1 w-32 shrink-0 text-sm font-semibold tracking-wide text-gray-500 uppercase\">Series:</h3><p class=\"ml-4 text-gray-900\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -329,7 +329,7 @@ func MainInfo(data Data) templ.Component {
 				return templ_7745c5c3_Err
 			}
 			if data.Book.SeriesNumber > 0 {
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 28, "<span class=\"text-gray-500 ml-2\">(#")
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 28, "<span class=\"ml-2 text-gray-500\">(#")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
@@ -353,7 +353,7 @@ func MainInfo(data Data) templ.Component {
 			}
 		}
 		if data.Book.Language != "" {
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 31, "<div class=\"flex flex-row\"><h3 class=\"text-sm font-semibold text-gray-500 uppercase tracking-wide mb-1 w-32 shrink-0\">Language:</h3><p class=\"text-gray-900 ml-4\">")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 31, "<div class=\"flex flex-row\"><h3 class=\"mb-1 w-32 shrink-0 text-sm font-semibold tracking-wide text-gray-500 uppercase\">Language:</h3><p class=\"ml-4 text-gray-900\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -400,7 +400,7 @@ func Buttons(data Data) templ.Component {
 			templ_7745c5c3_Var17 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 34, "<div class=\"flex gap-2 shrink-0\"><a class=\"border border-green-600 text-green-600 px-4 py-2 rounded-md hover:bg-green-100 focus:outline-none focus:ring-2 focus:ring-green-500 text-sm transition-colors duration-200\" href=\"")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 34, "<div class=\"flex shrink-0 gap-2\"><a class=\"rounded-md border border-green-600 px-4 py-2 text-sm text-green-600 transition-colors duration-200 hover:bg-green-100 focus:ring-2 focus:ring-green-500 focus:outline-none\" href=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -413,7 +413,7 @@ func Buttons(data Data) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 35, "\"><span class=\"mr-2\">\uf044</span> <span class=\"align-middle\">Edit</span></a> <button class=\"border border-red-600 text-red-600 px-4 py-2 rounded-md hover:bg-red-100 focus:outline-none focus:ring-2 focus:ring-red-500 text-sm transition-colors duration-200\" hx-delete=\"")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 35, "\"><span class=\"mr-2\">\uf044</span> <span class=\"align-middle\">Edit</span></a> <button class=\"rounded-md border border-red-600 px-4 py-2 text-sm text-red-600 transition-colors duration-200 hover:bg-red-100 focus:ring-2 focus:ring-red-500 focus:outline-none\" hx-delete=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -468,12 +468,12 @@ func LongInfo(data Data) templ.Component {
 			templ_7745c5c3_Var21 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 38, "<div class=\"p-8 border-t border-gray-200\">")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 38, "<div class=\"border-t border-gray-200 p-8\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		if data.Book.Summary != "" {
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 39, "<div class=\"mb-8\"><h2 class=\"text-xl font-semibold text-gray-900 mb-4\">Summary</h2><p class=\"text-gray-700 leading-relaxed text-lg\">")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 39, "<div class=\"mb-8\"><h2 class=\"mb-4 text-xl font-semibold text-gray-900\">Summary</h2><p class=\"text-lg leading-relaxed text-gray-700\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -492,12 +492,12 @@ func LongInfo(data Data) templ.Component {
 			}
 		}
 		if len(data.Book.Tags) > 0 {
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 41, "<div class=\"mb-6\"><h3 class=\"text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3\">Tags</h3><div class=\"flex flex-wrap gap-2\">")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 41, "<div class=\"mb-6\"><h3 class=\"mb-3 text-sm font-semibold tracking-wide text-gray-500 uppercase\">Tags</h3><div class=\"flex flex-wrap gap-2\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 			for _, tag := range data.Book.Tags {
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 42, "<span class=\"bg-gray-100 text-gray-800 px-3 py-1 rounded-full text-sm\">")
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 42, "<span class=\"rounded-full bg-gray-100 px-3 py-1 text-sm text-gray-800\">")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
@@ -520,12 +520,12 @@ func LongInfo(data Data) templ.Component {
 				return templ_7745c5c3_Err
 			}
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 45, "<div class=\"grid grid-cols-1 md:grid-cols-2 gap-6\">")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 45, "<div class=\"grid grid-cols-1 gap-6 md:grid-cols-2\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		if len(data.Book.Translators) > 0 {
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 46, "<div><h3 class=\"text-sm font-semibold text-gray-500 uppercase tracking-wide mb-2\">Translators</h3><ul class=\"space-y-1\">")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 46, "<div><h3 class=\"mb-2 text-sm font-semibold tracking-wide text-gray-500 uppercase\">Translators</h3><ul class=\"space-y-1\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -554,7 +554,7 @@ func LongInfo(data Data) templ.Component {
 			}
 		}
 		if len(data.Book.Narrators) > 0 {
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 50, "<div><h3 class=\"text-sm font-semibold text-gray-500 uppercase tracking-wide mb-2\">Narrators</h3><ul class=\"space-y-1\">")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 50, "<div><h3 class=\"mb-2 text-sm font-semibold tracking-wide text-gray-500 uppercase\">Narrators</h3><ul class=\"space-y-1\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -611,7 +611,7 @@ func Events(data Data) templ.Component {
 			templ_7745c5c3_Var26 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 55, "<div class=\"p-8 border-t border-gray-200\"><h2 class=\"text-2xl font-semibold text-gray-900 mb-6\">Events</h2><div class=\"text-center py-8 text-gray-500\"><p>No events yet. <button class=\"text-blue-600 hover:text-blue-800 underline\">Add the first event</button></p></div></div>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 55, "<div class=\"border-t border-gray-200 p-8\"><h2 class=\"mb-6 text-2xl font-semibold text-gray-900\">Events</h2><div class=\"py-8 text-center text-gray-500\"><p>No events yet. <button class=\"text-blue-600 underline hover:text-blue-800\">Add the first event</button></p></div></div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -640,7 +640,7 @@ func Reviews(data Data) templ.Component {
 			templ_7745c5c3_Var27 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 56, "<div class=\"p-8 border-t border-gray-200\"><h2 class=\"text-2xl font-semibold text-gray-900 mb-6\">Reviews</h2><div class=\"text-center py-8 text-gray-500\"><p>No reviews yet. <button class=\"text-blue-600 hover:text-blue-800 underline\">Write the first review</button></p></div></div>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 56, "<div class=\"border-t border-gray-200 p-8\"><h2 class=\"mb-6 text-2xl font-semibold text-gray-900\">Reviews</h2><div class=\"py-8 text-center text-gray-500\"><p>No reviews yet. <button class=\"text-blue-600 underline hover:text-blue-800\">Write the first review</button></p></div></div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -669,7 +669,7 @@ func Quotes(data Data) templ.Component {
 			templ_7745c5c3_Var28 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 57, "<div class=\"p-8 border-t border-gray-200\"><h2 class=\"text-2xl font-semibold text-gray-900 mb-6\">Quotes</h2><div class=\"text-center py-8 text-gray-500\"><p>No quotes yet. <button class=\"text-blue-600 hover:text-blue-800 underline\">Add the first quote</button></p></div></div>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 57, "<div class=\"border-t border-gray-200 p-8\"><h2 class=\"mb-6 text-2xl font-semibold text-gray-900\">Quotes</h2><div class=\"py-8 text-center text-gray-500\"><p>No quotes yet. <button class=\"text-blue-600 underline hover:text-blue-800\">Add the first quote</button></p></div></div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

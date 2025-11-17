@@ -220,12 +220,12 @@ templ Show(data Data) {
 	{{ title := map[Operation]string{Add: "Add Book", Edit: "Edit Book"} }}
 	{{ h1 := map[Operation]string{Add: "Add New Book", Edit: "Edit Book"} }}
 	@layout.Base(layout.Data{Title: title[data.Op], CSRF: data.CSRF}) {
-		<div class="bg-white shadow-sm rounded-lg p-6 max-w-4xl mx-auto">
-			<div class="flex justify-between items-center mb-6">
-				<h1 class="text-2xl font-bold text-gray-900 mb-6">{ h1[data.Op] }</h1>
+		<div class="mx-auto max-w-4xl rounded-lg bg-white p-6 shadow-sm">
+			<div class="mb-6 flex items-center justify-between">
+				<h1 class="mb-6 text-2xl font-bold text-gray-900">{ h1[data.Op] }</h1>
 				<button
 					type="button"
-					class="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 text-sm transition-colors duration-200 font-semibold"
+					class="rounded-md bg-green-600 px-4 py-2 text-sm font-semibold text-white transition-colors duration-200 hover:bg-green-700 focus:ring-2 focus:ring-green-500 focus:outline-none"
 					hx-get="/add_book/autofill"
 					hx-target="#modal"
 					hx-swap="innerHTML"
@@ -244,7 +244,7 @@ templ Show(data Data) {
 
 templ FormAdd(data Data) {
 	<form
-		class="space-y-6 max-w-2xl"
+		class="max-w-2xl space-y-6"
 		hx-post="/add_book"
 		hx-target="this"
 		hx-swap="outerHTML"
@@ -253,7 +253,7 @@ templ FormAdd(data Data) {
 		@BookFormFields(data)
 		<button
 			type="submit"
-			class="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+			class="w-full rounded-md bg-blue-600 px-4 py-2 text-white hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:outline-none"
 		>
 			Add Book
 		</button>
@@ -262,7 +262,7 @@ templ FormAdd(data Data) {
 
 templ FormEdit(data Data) {
 	<form
-		class="space-y-6 max-w-2xl"
+		class="max-w-2xl space-y-6"
 		hx-put={ "/book/" + strconv.FormatInt(data.BookID, 10) + "/edit" }
 		hx-target="this"
 		hx-swap="outerHTML"
@@ -272,7 +272,7 @@ templ FormEdit(data Data) {
 		<div class="flex justify-end">
 			<button
 				type="submit"
-				class="bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm transition-colors duration-200"
+				class="rounded-md bg-blue-600 px-6 py-2 text-sm text-white transition-colors duration-200 hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:outline-none"
 			>
 				Edit Book
 			</button>
@@ -289,17 +289,17 @@ templ BookFormFields(data Data) {
 	@components.Input("translators", "Translators (comma separated)", "", "text", Errors, Values.Translators)
 	@components.Input("narrators", "Narrators (comma separated)", "", "text", Errors, Values.Narrators)
 	@components.Input("summary", "Summary", "", "textarea", Errors, Values.Summary)
-	<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+	<div class="grid grid-cols-1 gap-6 md:grid-cols-2">
 		@components.Input("isbn10", "ISBN10", "", "text", Errors, Values.ISBN10)
 		@components.Input("isbn13", "ISBN13", "", "text", Errors, Values.ISBN13)
 	</div>
 	@components.Input("language", "Language", "ISO code", "text", Errors, Values.Language)
-	<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+	<div class="grid grid-cols-1 gap-6 md:grid-cols-2">
 		@components.Input("publisher", "Publisher", "", "text", Errors, Values.Publisher)
 		@components.Input("publish_date", "Publish Date", "", "date", Errors, Values.PublishDate)
 		@components.Input("page_count", "Page Count", "", "number", Errors, Values.PageCount)
 	</div>
-	<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+	<div class="grid grid-cols-1 gap-6 md:grid-cols-2">
 		@components.Input("series_name", "Series Name", "", "text", Errors, Values.SeriesName)
 		@components.Input("series_number", "Series Number", "", "number", Errors, Values.SeriesNumber)
 	</div>

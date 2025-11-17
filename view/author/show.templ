@@ -13,7 +13,7 @@ type Data struct {
 
 templ Show(data Data) {
 	@layout.Base(layout.Data{Title: "Books", CSRF: data.CSRF}) {
-		<h1 class="text-3xl font-bold mb-6 text-gray-900 text-center">
+		<h1 class="mb-6 text-center text-3xl font-bold text-gray-900">
 			{ data.Author.Name }
 		</h1>
 		@components.BookList(data.Author.Books)
