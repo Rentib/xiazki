@@ -3,6 +3,7 @@ package handler
 import (
 	"net/http"
 	"strconv"
+
 	"xiazki/db"
 	"xiazki/model"
 	"xiazki/view/add_book"
@@ -57,7 +58,6 @@ func (h *Handler) GetBookEdit(c echo.Context) error {
 		Relation("Translators").
 		Relation("Narrators").
 		Scan(c.Request().Context())
-
 	if err != nil {
 		return echo.NewHTTPError(http.StatusInternalServerError, "Failed to fetch book details")
 	}

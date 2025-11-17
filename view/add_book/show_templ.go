@@ -259,20 +259,20 @@ func Show(data Data) templ.Component {
 				}()
 			}
 			ctx = templ.InitializeContext(ctx)
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div class=\"bg-white shadow-sm rounded-lg p-6 max-w-4xl mx-auto\"><h1 class=\"text-2xl font-bold text-gray-900 mb-6\">")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div class=\"bg-white shadow-sm rounded-lg p-6 max-w-4xl mx-auto\"><div class=\"flex justify-between items-center mb-6\"><h1 class=\"text-2xl font-bold text-gray-900 mb-6\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 			var templ_7745c5c3_Var3 string
 			templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(h1[data.Op])
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `view/add_book/show.templ`, Line: 224, Col: 66}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `view/add_book/show.templ`, Line: 225, Col: 67}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var3))
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "</h1>")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "</h1><button type=\"button\" class=\"bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 text-sm transition-colors duration-200 font-semibold\" hx-get=\"/add_book/autofill\" hx-target=\"#modal\" hx-swap=\"innerHTML\">Autofill</button></div>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -329,7 +329,7 @@ func FormAdd(data Data) templ.Component {
 		var templ_7745c5c3_Var5 string
 		templ_7745c5c3_Var5, templ_7745c5c3_Err = templ.JoinStringErrs("{\"X-CSRF-Token\":\"" + data.CSRF + "\"}")
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `view/add_book/show.templ`, Line: 240, Col: 57}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `view/add_book/show.templ`, Line: 251, Col: 57}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var5))
 		if templ_7745c5c3_Err != nil {
@@ -379,7 +379,7 @@ func FormEdit(data Data) templ.Component {
 		var templ_7745c5c3_Var7 string
 		templ_7745c5c3_Var7, templ_7745c5c3_Err = templ.JoinStringErrs("/book/" + strconv.FormatInt(data.BookID, 10) + "/edit")
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `view/add_book/show.templ`, Line: 255, Col: 66}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `view/add_book/show.templ`, Line: 266, Col: 66}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var7))
 		if templ_7745c5c3_Err != nil {
@@ -392,7 +392,7 @@ func FormEdit(data Data) templ.Component {
 		var templ_7745c5c3_Var8 string
 		templ_7745c5c3_Var8, templ_7745c5c3_Err = templ.JoinStringErrs("{\"X-CSRF-Token\":\"" + data.CSRF + "\"}")
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `view/add_book/show.templ`, Line: 258, Col: 57}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `view/add_book/show.templ`, Line: 269, Col: 57}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var8))
 		if templ_7745c5c3_Err != nil {

@@ -62,6 +62,8 @@ func main() {
 	protectedHX.POST("/add_book", h.PostAddBook)
 	protectedHX.POST("/logout", h.PostLogout)
 	protectedHX.PUT("/book/:id/edit", h.PutBookEdit)
+	protectedHX.GET("/add_book/autofill", h.GetAddBookAutofill)
+	protectedHX.POST("/add_book/autofill/select", h.PostAddBookAutofillSelect)
 
 	e.Logger.Debug(e.Start(":8080"))
 }
