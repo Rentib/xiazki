@@ -47,6 +47,7 @@ templ baseLink(href string, text string) {
 
 templ profile(data Data) {
 	<div class="relative inline-block text-left">
+		// TODO: hide on click anywhere, not only on click on profile-menu
 		<button
 			hx-on:click="document.getElementById('profile-menu').classList.toggle('hidden')"
 			class="flex h-8 w-8 items-center justify-center rounded-full bg-gray-300 font-semibold text-gray-700 hover:bg-gray-400"
@@ -59,6 +60,12 @@ templ profile(data Data) {
 			class="absolute right-0 z-50 mt-2 hidden w-40 origin-top-right rounded-md border border-gray-200 bg-white shadow-lg"
 		>
 			<div class="py-1">
+				<a
+					class="block px-4 py-2 text-gray-700 hover:bg-gray-100"
+					href="/profile"
+				>
+					Profile
+				</a>
 				<div class="my-1 border-t"></div>
 				<a
 					hx-post="/logout"

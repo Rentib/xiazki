@@ -56,6 +56,7 @@ func main() {
 	protected.GET("/add_book", h.GetAddBook)
 	protected.GET("/book/:id", h.GetBook)
 	protected.GET("/book/:id/edit", h.GetBookEdit)
+	protected.GET("/profile", h.GetProfile)
 
 	protectedHX := protected.Group("")
 	protectedHX.Use(h.RequireAuthHTMX)
@@ -65,6 +66,7 @@ func main() {
 	protectedHX.PUT("/book/:id/edit", h.PutBookEdit)
 	protectedHX.GET("/add_book/autofill", h.GetAddBookAutofill)
 	protectedHX.POST("/add_book/autofill/select", h.PostAddBookAutofillSelect)
+	protectedHX.POST("/user/change_password", h.PostUserChangePassword)
 
 	e.Logger.Debug(e.Start(":8080"))
 }

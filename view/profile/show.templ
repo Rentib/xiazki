@@ -1,0 +1,88 @@
+package profile
+
+import (
+	"xiazki/model"
+	"xiazki/view/components"
+	"xiazki/view/layout"
+)
+
+type ChangePasswordFormValues struct {
+	CurrentPassword string `json:"current_password" form:"current_password"`
+	NewPassword     string `json:"new_password" form:"new_password"`
+	ConfirmPassword string `json:"confirm_password" form:"confirm_password"`
+}
+
+func (cpfv ChangePasswordFormValues) Validate(user *model.User) map[string]string {
+	errors := make(map[string]string)
+
+	if cpfv.CurrentPassword == "" {
+		errors["current_password"] = "Current password is required"
+	} else if !user.CheckPassword(cpfv.CurrentPassword) {
+		errors["current_password"] = "Current password is incorrect"
+	}
+
+	if cpfv.NewPassword == "" {
+		errors["new_password"] = "New password is required"
+	} else if len(cpfv.NewPassword) < 8 {
+		errors["new_password"] = "New password must be at least 8 characters"
+	} else if len(cpfv.NewPassword) > 128 {
+		errors["new_password"] = "New password must be at most 128 characters"
+	}
+
+	if cpfv.ConfirmPassword == "" {
+		errors["confirm_password"] = "Please confirm your new password"
+	} else if cpfv.NewPassword != cpfv.ConfirmPassword {
+		errors["confirm_password"] = "Passwords do not match"
+	}
+
+	return errors
+}
+
+type Data struct {
+	CSRF   string
+	User   *model.User
+	Values ChangePasswordFormValues
+	Errors map[string]string
+}
+
+templ Show(data Data) {
+	@layout.Base(layout.Data{Title: "Profile", CSRF: data.CSRF}) {
+		<div class="flex items-center justify-center px-4 py-4 sm:px-6 lg:px-8">
+			<div class="w-full max-w-lg space-y-6">
+				<div class="rounded-md border border-gray-300 bg-white p-6">
+					<div class="flex items-center space-x-4">
+						<div>
+							<h3 class="font-medium text-gray-900">{ data.User.Username }</h3>
+							<p class="text-sm text-gray-500">Joined { data.User.CreatedAt.Format("Jan 2006") }</p>
+						</div>
+					</div>
+				</div>
+				@ChangePasswordForm(data)
+			</div>
+		</div>
+	}
+}
+
+templ ChangePasswordForm(data Data) {
+	{{ Values := data.Values }}
+	{{ Errors := data.Errors }}
+	<form
+		class="space-y-4 rounded-md border border-gray-300 bg-white p-6"
+		hx-post="/user/change_password"
+		hx-target="this"
+		hx-swap="outerHTML"
+		hx-headers={ "{\"X-CSRF-Token\":\"" + data.CSRF + "\"}" }
+	>
+		@components.Input("current_password", "", "Current password", "password", Errors, Values.CurrentPassword)
+		@components.Input("new_password", "", "New password", "password", Errors, Values.NewPassword)
+		@components.Input("confirm_password", "", "Confirm new password", "password", Errors, Values.ConfirmPassword)
+		<div>
+			<button
+				type="submit"
+				class="group relative flex w-full justify-center rounded-md border border-transparent bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:outline-none"
+			>
+				Update Password
+			</button>
+		</div>
+	</form>
+}

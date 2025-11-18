@@ -165,14 +165,14 @@ func profile(data Data) templ.Component {
 			templ_7745c5c3_Var6 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 10, "<div class=\"relative inline-block text-left\"><button hx-on:click=\"document.getElementById('profile-menu').classList.toggle('hidden')\" class=\"flex h-8 w-8 items-center justify-center rounded-full bg-gray-300 font-semibold text-gray-700 hover:bg-gray-400\">R</button><div id=\"profile-menu\" class=\"absolute right-0 z-50 mt-2 hidden w-40 origin-top-right rounded-md border border-gray-200 bg-white shadow-lg\"><div class=\"py-1\"><div class=\"my-1 border-t\"></div><a hx-post=\"/logout\" hx-headers=\"")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 10, "<div class=\"relative inline-block text-left\"><button hx-on:click=\"document.getElementById('profile-menu').classList.toggle('hidden')\" class=\"flex h-8 w-8 items-center justify-center rounded-full bg-gray-300 font-semibold text-gray-700 hover:bg-gray-400\">R</button><div id=\"profile-menu\" class=\"absolute right-0 z-50 mt-2 hidden w-40 origin-top-right rounded-md border border-gray-200 bg-white shadow-lg\"><div class=\"py-1\"><a class=\"block px-4 py-2 text-gray-700 hover:bg-gray-100\" href=\"/profile\">Profile</a><div class=\"my-1 border-t\"></div><a hx-post=\"/logout\" hx-headers=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var7 string
 		templ_7745c5c3_Var7, templ_7745c5c3_Err = templ.JoinStringErrs("{\"X-CSRF-Token\":\"" + data.CSRF + "\"}")
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `view/layout/base.templ`, Line: 65, Col: 60}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `view/layout/base.templ`, Line: 72, Col: 60}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var7))
 		if templ_7745c5c3_Err != nil {
