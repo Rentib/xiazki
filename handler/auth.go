@@ -4,6 +4,7 @@ package handler
 
 import (
 	"net/http"
+
 	"xiazki/model"
 	"xiazki/view/auth"
 
@@ -77,7 +78,6 @@ func (h *Handler) PostRegister(c echo.Context) error {
 		return echo.NewHTTPError(http.StatusInternalServerError, "Failed to create user")
 	}
 
-	// FIXME: this fails
 	if _, err := h.db.NewInsert().Model(&user).Exec(c.Request().Context()); err != nil {
 		return echo.NewHTTPError(http.StatusInternalServerError, "Failed to create user")
 	}
@@ -96,7 +96,7 @@ func (h *Handler) PostLogin(c echo.Context) error {
 
 	// FIXME: is returnign password back safe???
 	data := auth.Data{
-		Op:     auth.Register,
+		Op:     auth.Login,
 		CSRF:   c.Get("csrf").(string),
 		Values: map[string]string{"username": form.Username, "password": form.Password},
 		Errors: map[string]string{},
