@@ -33,8 +33,8 @@ func (h *Handler) GetAddBookAutofill(c echo.Context) error {
 	}
 
 	// TODO: more sources
-	if bfv, err := h.ol.FetchBookByISBN(afv.ISBN); err == nil && bfv != nil {
-		matches = append(matches, *bfv)
+	if book, err := h.ol.GetISBN(afv.ISBN); err == nil && book != nil {
+		matches = append(matches, add_book.BookToBookFormValues(*book))
 	}
 
 	if len(matches) == 0 {

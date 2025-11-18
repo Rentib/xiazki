@@ -4,7 +4,7 @@ import (
 	"context"
 	"net/http"
 
-	"xiazki/services"
+	"xiazki/services/openlibrary"
 
 	"github.com/a-h/templ"
 	"github.com/labstack/echo/v4"
@@ -13,13 +13,13 @@ import (
 
 type Handler struct {
 	db *bun.DB
-	ol *services.OpenLibraryService
+	ol *openlibrary.Fetcher
 }
 
 func NewHandler(db *bun.DB) *Handler {
 	return &Handler{
 		db: db,
-		ol: services.NewOpenLibraryService(),
+		ol: openlibrary.NewFetcher(),
 	}
 }
 
