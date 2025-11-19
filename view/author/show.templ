@@ -8,7 +8,7 @@ import (
 
 type Data struct {
 	CSRF   string
-	Author model.Author
+	Author *model.Author
 }
 
 templ Show(data Data) {

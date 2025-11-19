@@ -16,7 +16,7 @@ import (
 
 type Data struct {
 	CSRF   string
-	Author model.Author
+	Author *model.Author
 }
 
 func Show(data Data) templ.Component {

@@ -31,20 +31,15 @@ func InsertBook(db *bun.DB, c echo.Context, book *model.Book) error {
 	})
 }
 
-func insertBookRelation[T any](ctx context.Context, tx bun.Tx, bookID int64, items []T, newLink func(bookID, id int64) any) error {
+func insertBookRelation[T any](ctx context.Context, tx bun.Tx, bookID int64, items []*T, newLink func(bookID, id int64) any) error {
 	for _, item := range items {
-		itemVal := reflect.ValueOf(item)
-		name := itemVal.FieldByName("Name").String()
-		err := tx.NewSelect().
-			Model(&item).
-			Where("name = ?", name).
-			Scan(ctx)
-		if err != nil {
-			if _, err := tx.NewInsert().Model(&item).Exec(ctx); err != nil {
+		name := reflect.ValueOf(item).Elem().FieldByName("Name").String()
+		if err := tx.NewSelect().Model(item).Where("name = ?", name).Scan(ctx); err != nil {
+			if _, err := tx.NewInsert().Model(item).Exec(ctx); err != nil {
 				return fmt.Errorf("insert base '%s': %w", name, err)
 			}
 		}
-		id := reflect.ValueOf(&item).Elem().FieldByName("ID").Int()
+		id := reflect.ValueOf(item).Elem().FieldByName("ID").Int()
 		link := newLink(bookID, id)
 		if _, err := tx.NewInsert().Model(link).Exec(ctx); err != nil {
 			return fmt.Errorf("insert link: %w", err)
@@ -84,7 +79,7 @@ func UpdateBook(db *bun.DB, c echo.Context, id int64, book *model.Book) error {
 	})
 }
 
-func updateBookRelation[T any, L any](ctx context.Context, tx bun.Tx, bookID int64, items []T, newLink func(bookID, id int64) any, linkTable L) error {
+func updateBookRelation[T any, L any](ctx context.Context, tx bun.Tx, bookID int64, items []*T, newLink func(bookID, id int64) any, linkTable L) error {
 	_, err := tx.NewDelete().
 		Model(linkTable).
 		Where("book_id = ?", bookID).
@@ -93,21 +88,7 @@ func updateBookRelation[T any, L any](ctx context.Context, tx bun.Tx, bookID int
 		return fmt.Errorf("delete relations: %w", err)
 	}
 
-	for _, item := range items {
-		name := reflect.ValueOf(item).FieldByName("Name").String()
-		if err := tx.NewSelect().Model(&item).Where("name = ?", name).Scan(ctx); err != nil {
-			if _, err := tx.NewInsert().Model(&item).Exec(ctx); err != nil {
-				return fmt.Errorf("insert base '%s': %w", name, err)
-			}
-		}
-		id := reflect.ValueOf(&item).Elem().FieldByName("ID").Int()
-		link := newLink(bookID, id)
-		if _, err := tx.NewInsert().Model(link).Exec(ctx); err != nil {
-			return fmt.Errorf("insert link: %w", err)
-		}
-	}
-
-	return nil
+	return insertBookRelation(ctx, tx, bookID, items, newLink)
 }
 
 func newBookAuthor(bookID, id int64) any {

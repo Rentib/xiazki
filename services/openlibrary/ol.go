@@ -227,26 +227,26 @@ func (f *Fetcher) GetISBN(isbn string) (*model.Book, error) {
 			return ""
 		}(),
 
-		Authors: func() []model.Author {
-			var result []model.Author
+		Authors: func() []*model.Author {
+			var result []*model.Author
 			for _, a := range authors {
-				result = append(result, model.Author{
+				result = append(result, &model.Author{
 					Name: a.Name,
 				})
 			}
 			return result
 		}(),
-		Tags: func() []model.Tag {
-			var result []model.Tag
+		Tags: func() []*model.Tag {
+			var result []*model.Tag
 			for _, subject := range work.Subjects {
-				result = append(result, model.Tag{
+				result = append(result, &model.Tag{
 					Name: subject,
 				})
 			}
 			return result
 		}(),
-		Translators: []model.Translator{},
-		Narrators:   []model.Narrator{},
+		Translators: []*model.Translator{},
+		Narrators:   []*model.Narrator{},
 	}
 
 	return book, nil

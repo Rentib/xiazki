@@ -70,7 +70,7 @@ func (b BookFormValues) ToBook() *model.Book {
 		for _, author := range authors {
 			name := strings.TrimSpace(author)
 			if name != "" {
-				book.Authors = append(book.Authors, model.Author{Name: name})
+				book.Authors = append(book.Authors, &model.Author{Name: name})
 			}
 		}
 	}
@@ -79,7 +79,7 @@ func (b BookFormValues) ToBook() *model.Book {
 		for _, tag := range tags {
 			name := strings.TrimSpace(tag)
 			if name != "" {
-				book.Tags = append(book.Tags, model.Tag{Name: name})
+				book.Tags = append(book.Tags, &model.Tag{Name: name})
 			}
 		}
 	}
@@ -88,7 +88,7 @@ func (b BookFormValues) ToBook() *model.Book {
 		for _, translator := range translators {
 			name := strings.TrimSpace(translator)
 			if name != "" {
-				book.Translators = append(book.Translators, model.Translator{Name: name})
+				book.Translators = append(book.Translators, &model.Translator{Name: name})
 			}
 		}
 	}
@@ -97,7 +97,7 @@ func (b BookFormValues) ToBook() *model.Book {
 		for _, narrator := range narrators {
 			name := strings.TrimSpace(narrator)
 			if name != "" {
-				book.Narrators = append(book.Narrators, model.Narrator{Name: name})
+				book.Narrators = append(book.Narrators, &model.Narrator{Name: name})
 			}
 		}
 	}

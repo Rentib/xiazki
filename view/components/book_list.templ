@@ -5,7 +5,7 @@ import (
 	"xiazki/model"
 )
 
-templ BookList(books []model.Book) {
+templ BookList(books []*model.Book) {
 	<div class="px-4 py-6 sm:px-0">
 		<div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-5">
 			for _, book := range books {
@@ -15,7 +15,7 @@ templ BookList(books []model.Book) {
 	</div>
 }
 
-templ BookCard(book model.Book) {
+templ BookCard(book *model.Book) {
 	<div class="flex w-full max-w-xs flex-col items-center rounded-lg bg-white p-0 shadow-md transition-shadow duration-200 hover:shadow-lg">
 		@BookCover(book)
 		<div class="flex w-full flex-col items-center p-4">
@@ -32,7 +32,7 @@ templ BookCard(book model.Book) {
 	</div>
 }
 
-templ BookCover(book model.Book) {
+templ BookCover(book *model.Book) {
 	<a href={ "/book/" + strconv.FormatInt(book.ID, 10) } class="h-full">
 		<img
 			src={ getCoverURL(book.CoverURL) }
@@ -42,13 +42,13 @@ templ BookCover(book model.Book) {
 	</a>
 }
 
-templ BookTitle(book model.Book) {
+templ BookTitle(book *model.Book) {
 	<a href={ "/book/" + strconv.FormatInt(book.ID, 10) } class="mb-1 w-full text-center text-lg font-semibold text-gray-900 hover:underline">
 		{ book.Title }
 	</a>
 }
 
-templ BookAuthorList(book model.Book) {
+templ BookAuthorList(book *model.Book) {
 	<div class="mb-2 w-full text-center text-sm text-gray-600">
 		for i, author := range book.Authors {
 			if i > 0 {
@@ -59,7 +59,7 @@ templ BookAuthorList(book model.Book) {
 	</div>
 }
 
-templ BookAuthor(author model.Author) {
+templ BookAuthor(author *model.Author) {
 	<a href={ "/author/" + strconv.FormatInt(author.ID, 10) }>
 		<span class="text-gray-700 hover:underline">
 			{ author.Name }
