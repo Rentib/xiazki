@@ -3,18 +3,25 @@ package main
 import (
 	"fmt"
 	"log"
+	"os"
 
 	"xiazki/db"
 	"xiazki/handler"
 
 	"github.com/gorilla/sessions"
+	"github.com/joho/godotenv"
 	"github.com/labstack/echo-contrib/session"
-
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 )
 
 func main() {
+	if os.Getenv("APP_ENV") != "prod" {
+		if err := godotenv.Load(); err != nil {
+			log.Printf("Warning: .env file not found: %v", err)
+		}
+	}
+
 	database, err := db.InitDB()
 	if err != nil {
 		log.Fatal(err)
@@ -38,8 +45,17 @@ func main() {
 	}))
 	e.Use(middleware.Recover())
 	e.Use(middleware.Secure())
-	e.Use(middleware.CSRFWithConfig(middleware.CSRFConfig{TokenLookup: "header:X-CSRF-Token"}))
-	e.Use(session.Middleware(sessions.NewCookieStore([]byte("secret")))) // FIXME: SECRET!!!
+	e.Use(middleware.CSRFWithConfig(middleware.CSRFConfig{
+		TokenLookup:    "header:X-CSRF-Token",
+		CookiePath:     "/",
+		CookieHTTPOnly: true,
+		CookieSecure:   os.Getenv("APP_ENV") == "prod",
+	}))
+	sessionSecret := os.Getenv("SESSION_SECRET")
+	if sessionSecret == "" {
+		log.Fatal("SESSION_SECRET environment variable is required")
+	}
+	e.Use(session.Middleware(sessions.NewCookieStore([]byte(sessionSecret))))
 
 	e.Static("/static", "static")
 

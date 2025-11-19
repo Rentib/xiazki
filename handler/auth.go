@@ -4,6 +4,7 @@ package handler
 
 import (
 	"net/http"
+	"strings"
 
 	"xiazki/model"
 	"xiazki/view/auth"
@@ -35,6 +36,7 @@ func (h *Handler) PostRegister(c echo.Context) error {
 	}
 
 	// FIXME: is returnign password back safe???
+
 	data := auth.Data{
 		Op:     auth.Register,
 		CSRF:   c.Get("csrf").(string),
@@ -42,35 +44,48 @@ func (h *Handler) PostRegister(c echo.Context) error {
 		Errors: map[string]string{},
 	}
 
-	var user model.User
 	if form.Username == "" {
 		data.Errors["username"] = "Username is required"
-		return Render(c, auth.Form(data))
-	} else if err := h.db.NewSelect().Model(&user).Where("username = ?", form.Username).Scan(c.Request().Context()); err == nil {
-		data.Errors["username"] = "Username already taken"
-		return Render(c, auth.Form(data))
+	} else if len(form.Username) < 3 {
+		data.Errors["username"] = "Username must be at least 3 characters"
+	} else if len(form.Username) > 30 {
+		data.Errors["username"] = "Username must be at most 30 characters"
+	}
+
+	// Check username uniqueness only if basic validation passes
+	if len(data.Errors) == 0 {
+		var existingUser model.User
+		err := h.db.NewSelect().Model(&existingUser).Where("username = ?", form.Username).Scan(c.Request().Context())
+		if err == nil {
+			data.Errors["username"] = "Username already taken"
+		}
 	}
 
 	if form.Password == "" {
 		data.Errors["password"] = "Password is required"
-		return Render(c, auth.Form(data))
 	} else if len(form.Password) < 8 {
 		data.Errors["password"] = "Password must be at least 8 characters"
-		return Render(c, auth.Form(data))
 	} else if len(form.Password) > 128 {
 		data.Errors["password"] = "Password must be at most 128 characters"
+	}
+
+	if len(data.Errors) > 0 {
 		return Render(c, auth.Form(data))
 	}
 
-	user = model.User{
+	user := model.User{
 		ID:       uuid.New(),
 		Username: form.Username,
 	}
-	if userCount, err := h.db.NewSelect().Model((*model.User)(nil)).Count(c.Request().Context()); err != nil {
+
+	userCount, err := h.db.NewSelect().Model((*model.User)(nil)).Count(c.Request().Context())
+	if err != nil {
 		return echo.NewHTTPError(http.StatusInternalServerError, "Failed to check users")
-	} else if userCount == 0 {
+	}
+
+	if userCount == 0 {
 		user.Role = model.RoleAdmin
-	} else if userCount != 0 {
+	} else {
 		user.Role = model.RoleUser
 	}
 
@@ -79,6 +94,10 @@ func (h *Handler) PostRegister(c echo.Context) error {
 	}
 
 	if _, err := h.db.NewInsert().Model(&user).Exec(c.Request().Context()); err != nil {
+		if strings.Contains(err.Error(), "duplicate") || strings.Contains(err.Error(), "unique") {
+			data.Errors["username"] = "Username already taken"
+			return Render(c, auth.Form(data))
+		}
 		return echo.NewHTTPError(http.StatusInternalServerError, "Failed to create user")
 	}
 
@@ -102,15 +121,26 @@ func (h *Handler) PostLogin(c echo.Context) error {
 		Errors: map[string]string{},
 	}
 
+	if form.Username == "" {
+		data.Errors["username"] = "Username is required"
+		return Render(c, auth.Form(data))
+	}
+	if form.Password == "" {
+		data.Errors["password"] = "Password is required"
+		return Render(c, auth.Form(data))
+	}
+
 	var user model.User
 	err := h.db.NewSelect().Model(&user).Where("username = ?", form.Username).Scan(c.Request().Context())
 	if err != nil {
-		data.Errors["username"] = "No such user"
+		// Use generic error to avoid revealing whether user exists
+		data.Errors["password"] = "Invalid username or password"
 		return Render(c, auth.Form(data))
 	}
 
 	if !user.CheckPassword(form.Password) {
-		data.Errors["password"] = "Incorrect password"
+		// Use generic error to avoid revealing whether user exists
+		data.Errors["password"] = "Invalid username or password"
 		return Render(c, auth.Form(data))
 	}
 

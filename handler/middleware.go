@@ -2,6 +2,9 @@ package handler
 
 import (
 	"net/http"
+	"os"
+
+	"xiazki/model"
 
 	"github.com/google/uuid"
 	"github.com/gorilla/sessions"
@@ -10,48 +13,87 @@ import (
 )
 
 const (
-	auth_sessions_key string = "session"
-	auth_key          string = "authenticated"
-	user_id_key       string = "user_id"
+	sessionName   = "session"
+	authKey       = "authenticated"
+	userIDKey     = "user_id"
+	sessionMaxAge = 86400 * 7 // 7 days
 )
 
 func (h *Handler) createSession(c echo.Context, userID uuid.UUID) error {
-	sess, _ := session.Get(auth_sessions_key, c) // FIXME: handle error
+	sess, _ := session.Get(sessionName, c) // FIXME: handle error
+
 	sess.Options = &sessions.Options{
 		Path:     "/",
-		MaxAge:   86400 * 7,
+		MaxAge:   sessionMaxAge,
 		HttpOnly: true,
+		Secure:   os.Getenv("APP_ENV") == "prod",
+		SameSite: http.SameSiteLaxMode,
 	}
-	sess.Values = map[any]any{
-		auth_key:    true,
-		user_id_key: userID.String(),
-	}
-	if err := sess.Save(c.Request(), c.Response()); err != nil {
-		return err
-	}
-	return nil
+
+	sess.Values[authKey] = true
+	sess.Values[userIDKey] = userID.String()
+
+	return sess.Save(c.Request(), c.Response())
 }
 
 func (h *Handler) clearSession(c echo.Context) error {
-	sess, err := session.Get("session", c)
+	sess, err := session.Get(sessionName, c)
 	if err != nil {
 		return err
 	}
-	for key := range sess.Values {
-		delete(sess.Values, key)
-	}
+
+	sess.Values = make(map[any]any)
 	sess.Options.MaxAge = -1
 	return sess.Save(c.Request(), c.Response())
 }
 
-func checkSession(c echo.Context) error {
-	sess, err := session.Get("session", c)
+func (h *Handler) getCurrentUser(c echo.Context) (*model.User, error) {
+	sess, err := session.Get(sessionName, c)
 	if err != nil {
-		return echo.NewHTTPError(http.StatusUnauthorized, "Unauthorized")
+		return nil, err
 	}
-	if auth, err := sess.Values[auth_key].(bool); !err || !auth {
-		return echo.NewHTTPError(http.StatusUnauthorized, "Unauthorized")
+
+	if auth, ok := sess.Values[authKey].(bool); !ok || !auth {
+		return nil, echo.NewHTTPError(http.StatusUnauthorized, "Not authenticated")
 	}
+
+	userIDStr, ok := sess.Values[userIDKey].(string)
+	if !ok {
+		return nil, echo.NewHTTPError(http.StatusUnauthorized, "Invalid session")
+	}
+
+	userID, err := uuid.Parse(userIDStr)
+	if err != nil {
+		return nil, echo.NewHTTPError(http.StatusUnauthorized, "Invalid user ID")
+	}
+
+	var user model.User
+	if err := h.db.NewSelect().Model(&user).Where("id = ?", userID).Scan(c.Request().Context()); err != nil {
+		return nil, echo.NewHTTPError(http.StatusUnauthorized, "User not found")
+	}
+
+	return &user, nil
+}
+
+func checkSession(c echo.Context) error {
+	sess, err := session.Get(sessionName, c)
+	if err != nil {
+		return err
+	}
+
+	if auth, ok := sess.Values[authKey].(bool); !ok || !auth {
+		return echo.NewHTTPError(http.StatusUnauthorized, "Not authenticated")
+	}
+
+	userIDStr, ok := sess.Values[userIDKey].(string)
+	if !ok {
+		return echo.NewHTTPError(http.StatusUnauthorized, "Invalid session")
+	}
+
+	if _, err := uuid.Parse(userIDStr); err != nil {
+		return echo.NewHTTPError(http.StatusUnauthorized, "Invalid user ID")
+	}
+
 	return nil
 }
 
