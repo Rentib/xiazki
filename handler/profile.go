@@ -4,16 +4,13 @@ import (
 	"fmt"
 	"net/http"
 
-	"xiazki/model"
 	"xiazki/view/profile"
 
-	"github.com/google/uuid"
-	"github.com/labstack/echo-contrib/session"
 	"github.com/labstack/echo/v4"
 )
 
 func (h *Handler) GetProfile(c echo.Context) error {
-	user, err := getUser(c, h)
+	user, err := h.currentUser(c)
 	if err != nil {
 		return err
 	}
@@ -25,7 +22,7 @@ func (h *Handler) GetProfile(c echo.Context) error {
 }
 
 func (h *Handler) PostUserChangePassword(c echo.Context) error {
-	user, err := getUser(c, h)
+	user, err := h.currentUser(c)
 	if err != nil {
 		return err
 	}
@@ -54,29 +51,4 @@ func (h *Handler) PostUserChangePassword(c echo.Context) error {
 
 	// TODO: flash message "Password changed successfully"
 	return HxRedirect(c, "/profile")
-}
-
-func getUser(c echo.Context, h *Handler) (*model.User, error) {
-	sess, err := session.Get("session", c)
-	if err != nil {
-		return nil, echo.NewHTTPError(http.StatusUnauthorized, "Unauthorized")
-	}
-	userIDStr, ok := sess.Values["user_id"].(string)
-	if !ok {
-		return nil, echo.NewHTTPError(http.StatusUnauthorized, "Unauthorized")
-	}
-	userID, err := uuid.Parse(userIDStr)
-	if err != nil {
-		return nil, echo.NewHTTPError(http.StatusUnauthorized, "Unauthorized")
-	}
-
-	var user model.User
-	err = h.db.NewSelect().
-		Model(&user).
-		Where("id = ?", userID).
-		Scan(c.Request().Context())
-	if err != nil {
-		return nil, echo.NewHTTPError(http.StatusInternalServerError, fmt.Sprintf("Failed to fetch profile: %v", err))
-	}
-	return &user, nil
 }

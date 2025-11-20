@@ -47,7 +47,7 @@ func (h *Handler) clearSession(c echo.Context) error {
 	return sess.Save(c.Request(), c.Response())
 }
 
-func (h *Handler) getCurrentUser(c echo.Context) (*model.User, error) {
+func (h *Handler) currentUser(c echo.Context) (*model.User, error) {
 	sess, err := session.Get(sessionName, c)
 	if err != nil {
 		return nil, err
@@ -75,6 +75,24 @@ func (h *Handler) getCurrentUser(c echo.Context) (*model.User, error) {
 	return &user, nil
 }
 
+func (h *Handler) RequireAuth(next echo.HandlerFunc) echo.HandlerFunc {
+	return func(c echo.Context) error {
+		if err := checkSession(c); err != nil {
+			return c.Redirect(http.StatusSeeOther, "/login")
+		}
+		return next(c)
+	}
+}
+
+func (h *Handler) RequireAuthHTMX(next echo.HandlerFunc) echo.HandlerFunc {
+	return func(c echo.Context) error {
+		if err := checkSession(c); err != nil || c.Request().Header.Get("HX-Request") != "true" {
+			return c.NoContent(http.StatusUnauthorized)
+		}
+		return next(c)
+	}
+}
+
 func checkSession(c echo.Context) error {
 	sess, err := session.Get(sessionName, c)
 	if err != nil {
@@ -95,22 +113,4 @@ func checkSession(c echo.Context) error {
 	}
 
 	return nil
-}
-
-func (h *Handler) RequireAuth(next echo.HandlerFunc) echo.HandlerFunc {
-	return func(c echo.Context) error {
-		if err := checkSession(c); err != nil {
-			return c.Redirect(http.StatusSeeOther, "/login")
-		}
-		return next(c)
-	}
-}
-
-func (h *Handler) RequireAuthHTMX(next echo.HandlerFunc) echo.HandlerFunc {
-	return func(c echo.Context) error {
-		if err := checkSession(c); err != nil || c.Request().Header.Get("HX-Request") != "true" {
-			return c.NoContent(http.StatusUnauthorized)
-		}
-		return next(c)
-	}
 }

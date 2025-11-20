@@ -127,7 +127,7 @@ func get(client *http.Client, url string, target any) error {
 	if err != nil {
 		return fmt.Errorf("failed to fetch data: %w", err)
 	}
-	defer response.Body.Close()
+	defer func() { _ = response.Body.Close() }()
 
 	if response.StatusCode != http.StatusOK {
 		return fmt.Errorf("failed to fetch data: status code %d", response.StatusCode)

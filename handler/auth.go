@@ -151,6 +151,6 @@ func (h *Handler) PostLogin(c echo.Context) error {
 }
 
 func (h *Handler) PostLogout(c echo.Context) error {
-	h.clearSession(c)
+	_ = h.clearSession(c) // FIXME: handle error
 	return HxRedirect(c, "/login")
 }

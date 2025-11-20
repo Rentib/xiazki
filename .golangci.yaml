@@ -1,0 +1,16 @@
+version: "2"
+linters:
+  exclusions:
+    paths:
+      - _templ\.go
+formatters:
+  enable:
+    - gofmt
+issues:
+  fix: false
+run:
+  timeout: 1m
+  relative-path-mode: gomod
+  tests: false
+  allow-parallel-runners: true
+  allow-serial-runners: true

@@ -26,7 +26,7 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	defer database.Close()
+	defer func() { _ = database.Close() }()
 
 	h := handler.NewHandler(database)
 	e := echo.New()
