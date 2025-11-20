@@ -28,7 +28,7 @@ func main() {
 	}
 	defer func() { _ = database.Close() }()
 
-	h := handler.NewHandler(database)
+	h := handler.NewHandler(database, os.Getenv("GOOGLE_BOOKS_API_KEY"))
 	e := echo.New()
 
 	e.Use(middleware.RequestLoggerWithConfig(middleware.RequestLoggerConfig{

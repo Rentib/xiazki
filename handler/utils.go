@@ -4,6 +4,7 @@ import (
 	"context"
 	"net/http"
 
+	"xiazki/services/googlebooks"
 	"xiazki/services/openlibrary"
 
 	"github.com/a-h/templ"
@@ -13,12 +14,14 @@ import (
 
 type Handler struct {
 	db *bun.DB
+	gb *googlebooks.Fetcher
 	ol *openlibrary.Fetcher
 }
 
-func NewHandler(db *bun.DB) *Handler {
+func NewHandler(db *bun.DB, gbAPIKey string) *Handler {
 	return &Handler{
 		db: db,
+		gb: googlebooks.NewFetcher(gbAPIKey),
 		ol: openlibrary.NewFetcher(),
 	}
 }
