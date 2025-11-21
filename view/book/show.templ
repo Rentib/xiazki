@@ -2,6 +2,7 @@ package book
 
 import (
 	"strconv"
+
 	"xiazki/model"
 	"xiazki/view/layout"
 )
@@ -70,7 +71,7 @@ templ MainInfo(data Data) {
 				if data.Book.PageCount > 0 {
 					<div class="flex flex-row">
 						<h3 class="mb-1 w-32 shrink-0 text-sm font-semibold tracking-wide text-gray-500 uppercase">Pages:</h3>
-                        <p class="ml-4 text-gray-900">{ strconv.FormatInt(data.Book.PageCount, 10) }</p>
+						<p class="ml-4 text-gray-900">{ strconv.FormatInt(data.Book.PageCount, 10) }</p>
 					</div>
 				}
 				if !data.Book.PublishDate.IsZero() {
@@ -85,7 +86,7 @@ templ MainInfo(data Data) {
 						<p class="ml-4 text-gray-900">
 							{ data.Book.SeriesName }
 							if data.Book.SeriesNumber > 0 {
-                                <span class="ml-2 text-gray-500">(#{ strconv.FormatInt(int64(data.Book.SeriesNumber), 10) })</span>
+								<span class="ml-2 text-gray-500">(#{ strconv.FormatInt(int64(data.Book.SeriesNumber), 10) })</span>
 							}
 						</p>
 					</div>
@@ -111,6 +112,15 @@ templ Buttons(data Data) {
 			<span class="align-middle">Edit</span>
 		</a>
 		<button
+			class="rounded-md border border-blue-600 px-4 py-2 text-sm text-blue-600 transition-colors duration-200 hover:bg-blue-100 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+			hx-get={ "/book/" + strconv.FormatInt(data.Book.ID, 10) + "/add_event" }
+			hx-target="#modal"
+			hx-swap="innerHTML"
+		>
+			<span class="mr-2"></span>
+			<span class="align-middle">Add Event</span>
+		</button>
+		<button
 			class="rounded-md border border-red-600 px-4 py-2 text-sm text-red-600 transition-colors duration-200 hover:bg-red-100 focus:ring-2 focus:ring-red-500 focus:outline-none"
 			hx-delete={ "/book/" + strconv.FormatInt(data.Book.ID, 10) }
 			hx-headers={ "{\"X-CSRF-Token\":\"" + data.CSRF + "\"}" }
@@ -119,11 +129,6 @@ templ Buttons(data Data) {
 			<span class="mr-2">󰆴</span>
 			<span class="align-middle">Delete</span>
 		</button>
-		// TODO:
-		//<button class="rounded-md border border-blue-600 px-4 py-2 text-sm text-blue-600 transition-colors duration-200 hover:bg-blue-100 focus:ring-2 focus:ring-blue-500 focus:outline-none">
-		//	<span class="mr-2"></span>
-		//	<span class="align-middle">Add Event</span>
-		//</button>
 	</div>
 }
 
@@ -175,9 +180,34 @@ templ LongInfo(data Data) {
 templ Events(data Data) {
 	<div class="border-t border-gray-200 p-8">
 		<h2 class="mb-6 text-2xl font-semibold text-gray-900">Events</h2>
-		<div class="py-8 text-center text-gray-500">
-			<p>No events yet. <button class="text-blue-600 underline hover:text-blue-800">Add the first event</button></p>
-		</div>
+		for _, event := range data.Book.Events {
+			<div class="mb-4 flex items-center justify-between rounded-lg bg-gray-100 px-4 py-2">
+				<div>
+					switch event.Type {
+						case model.EventFinished:
+							<span class="font-semibold text-blue-600">
+								Finished Reading
+							</span>
+						case model.EventReading:
+							<span class="font-semibold text-green-600">
+								Started Reading
+							</span>
+						case model.EventDropped:
+							<span class="font-semibold text-red-600">
+								Dropped
+							</span>
+						default:
+							Unknown
+					}
+					<span class="ml-2 text-gray-600">{ event.Date.Format("January 2, 2006") }</span>
+				</div>
+			</div>
+		}
+		if len(data.Book.Events) == 0 {
+			<div class="py-8 text-center text-gray-500">
+				<p>No events yet. <button class="text-blue-600 underline hover:text-blue-800">Add an event</button></p>
+			</div>
+		}
 	</div>
 }
 

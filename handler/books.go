@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"net/http"
 	"strconv"
 
 	"xiazki/model"
@@ -8,6 +9,7 @@ import (
 	"xiazki/view/books"
 
 	"github.com/labstack/echo/v4"
+	"github.com/uptrace/bun"
 )
 
 func (h *Handler) GetBooks(c echo.Context) error {
@@ -15,10 +17,15 @@ func (h *Handler) GetBooks(c echo.Context) error {
 	err := h.db.NewSelect().
 		Model(&b).
 		Relation("Authors").
-		Order("created_at DESC").
+		Relation("Events", func(q *bun.SelectQuery) *bun.SelectQuery {
+			return q.Where(
+				"date = (SELECT MAX(e2.date) FROM events e2 WHERE e2.book_id = event.book_id)",
+			).Order("date DESC")
+		}).
+		OrderExpr("created_at DESC").
 		Scan(c.Request().Context())
 	if err != nil {
-		return err
+		return echo.NewHTTPError(http.StatusInternalServerError, "Failed to fetch books: "+err.Error())
 	}
 
 	return Render(c, books.Show(books.Data{CSRF: c.Get("csrf").(string), Books: b}))
@@ -31,6 +38,9 @@ func (h *Handler) GetAuthor(c echo.Context) error {
 		return err
 	}
 
+	// TOOD: change logic to add events
+	// Author doesn't have events relation, so the sql query would need to be
+	// different and start with books rather then authors.
 	var a model.Author
 	err = h.db.NewSelect().
 		Model(&a).

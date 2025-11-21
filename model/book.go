@@ -28,4 +28,6 @@ type Book struct {
 	Tags        []*Tag        `bun:"m2m:book_tags,join:Book=Tag"`
 	Translators []*Translator `bun:"m2m:book_translators,join:Book=Translator"`
 	Narrators   []*Narrator   `bun:"m2m:book_narrators,join:Book=Narrator"`
+
+	Events []*Event `bun:"rel:has-many,join:id=book_id"`
 }
