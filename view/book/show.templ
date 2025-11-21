@@ -70,7 +70,7 @@ templ MainInfo(data Data) {
 				if data.Book.PageCount > 0 {
 					<div class="flex flex-row">
 						<h3 class="mb-1 w-32 shrink-0 text-sm font-semibold tracking-wide text-gray-500 uppercase">Pages:</h3>
-						<p class="ml-4 text-gray-900">{ strconv.Itoa(data.Book.PageCount) }</p>
+                        <p class="ml-4 text-gray-900">{ strconv.FormatInt(data.Book.PageCount, 10) }</p>
 					</div>
 				}
 				if !data.Book.PublishDate.IsZero() {
@@ -85,7 +85,7 @@ templ MainInfo(data Data) {
 						<p class="ml-4 text-gray-900">
 							{ data.Book.SeriesName }
 							if data.Book.SeriesNumber > 0 {
-								<span class="ml-2 text-gray-500">(#{ strconv.Itoa(data.Book.SeriesNumber) })</span>
+                                <span class="ml-2 text-gray-500">(#{ strconv.FormatInt(int64(data.Book.SeriesNumber), 10) })</span>
 							}
 						</p>
 					</div>

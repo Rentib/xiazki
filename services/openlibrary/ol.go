@@ -66,7 +66,7 @@ type Edition struct {
 	Languages     []KeyStruct `json:"languages"`
 	Publishers    []string    `json:"publishers"`
 	PublishDate   string      `json:"publish_date"`
-	NumberOfPages int         `json:"number_of_pages"`
+	NumberOfPages int64       `json:"number_of_pages"`
 	Covers        []int       `json:"covers"`
 
 	Works       []KeyStruct         `json:"works"`

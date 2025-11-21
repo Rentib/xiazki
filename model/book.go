@@ -17,9 +17,9 @@ type Book struct {
 	Language     string    `bun:"language"`
 	Publisher    string    `bun:"publisher"`
 	PublishDate  time.Time `bun:"publish_date"`
-	PageCount    int       `bun:"page_count"`
+	PageCount    int64     `bun:"page_count"`
 	SeriesName   string    `bun:"series_name"`
-	SeriesNumber int       `bun:"series_number"`
+	SeriesNumber int64     `bun:"series_number"`
 	CoverURL     string    `bun:"cover_url"`
 	CreatedAt    time.Time `bun:"created_at,nullzero,notnull,default:current_timestamp"`
 	UpdatedAt    time.Time `bun:"updated_at,nullzero,notnull,default:current_timestamp"`

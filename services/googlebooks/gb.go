@@ -1,6 +1,6 @@
 package googlebooks
 
-// https://developers.google.com/books
+// https://developers.google.com/books/v1
 
 import (
 	"encoding/json"
@@ -27,28 +27,56 @@ func NewFetcher(apiKey string) *Fetcher {
 	}
 }
 
-type Response struct {
-	Items []struct {
-		VolumeInfo Volume `json:"volumeInfo"`
-	} `json:"items"`
+type Volumes struct {
+	Items []*Volume `json:"items,omitempty"`
 }
 
 type Volume struct {
-	Title               string     `json:"title"`
-	Authors             []string   `json:"authors"`
-	PublishedDate       string     `json:"publishedDate"`
-	IndustryIdentifiers []struct { // ISBN_10, ISBN_13
-		Type       string `json:"type"`
-		Identifier string `json:"identifier"`
-	} `json:"industryIdentifiers"`
-	ReadingModels struct {
-		Text  bool `json:"text"`
-		Image bool `json:"Image"`
-	} `json:"readingModes"`
-	PageCount  int      `json:"pageCount"`
-	PrintType  string   `json:"printType"` // BOOK
-	Categories []string `json:"categories"`
-	Language   string   `json:"language"`
+	VolumeInfo *VolumeVolumeInfo `json:"volumeInfo,omitempty"`
+}
+
+type VolumeVolumeInfo struct {
+	Authors             []string                               `json:"authors,omitempty"`
+	CanonicalVolumeLink string                                 `json:"canonicalVolumeLink,omitempty"`
+	Categories          []string                               `json:"categories,omitempty"`
+	ContentVersion      string                                 `json:"contentVersion,omitempty"`
+	Description         string                                 `json:"description,omitempty"`
+	ImageLinks          *VolumeVolumeInfoImageLinks            `json:"imageLinks,omitempty"`
+	IndustryIdentifiers []*VolumeVolumeInfoIndustryIdentifiers `json:"industryIdentifiers,omitempty"`
+	InfoLink            string                                 `json:"infoLink,omitempty"`
+	Language            string                                 `json:"language,omitempty"`
+	MainCategory        string                                 `json:"mainCategory,omitempty"`
+	PageCount           int64                                  `json:"pageCount,omitempty"`
+	PublishedDate       string                                 `json:"publishedDate,omitempty"`
+	Publisher           string                                 `json:"publisher,omitempty"`
+	SeriesInfo          *Volumeseriesinfo                      `json:"seriesInfo,omitempty"`
+	Subtitle            string                                 `json:"subtitle,omitempty"`
+	Title               string                                 `json:"title,omitempty"`
+}
+
+type VolumeVolumeInfoImageLinks struct {
+	ExtraLarge     string `json:"extraLarge,omitempty"`
+	Large          string `json:"large,omitempty"`
+	Medium         string `json:"medium,omitempty"`
+	Small          string `json:"small,omitempty"`
+	SmallThumbnail string `json:"smallThumbnail,omitempty"`
+	Thumbnail      string `json:"thumbnail,omitempty"`
+}
+
+type VolumeVolumeInfoIndustryIdentifiers struct {
+	Identifier string `json:"identifier,omitempty"` // Identifier: Industry specific volume identifier.
+	Type       string `json:"type,omitempty"`       // Type: Identifier type. Possible values are ISBN_10, ISBN_13, ISSN and OTHER.
+}
+
+type Volumeseriesinfo struct {
+	ShortSeriesBookTitle string                          `json:"shortSeriesBookTitle,omitempty"`
+	VolumeSeries         []*VolumeseriesinfoVolumeSeries `json:"volumeSeries,omitempty"`
+}
+
+type VolumeseriesinfoVolumeSeries struct {
+	OrderNumber    int64  `json:"orderNumber,omitempty"`
+	SeriesBookType string `json:"seriesBookType,omitempty"`
+	SeriesID       string `json:"seriesId,omitempty"`
 }
 
 func get(client *http.Client, url string, target any) error {
@@ -80,7 +108,7 @@ func (f *Fetcher) GetISBN(isbn string) (*model.Book, error) {
 	}
 
 	url := fmt.Sprintf("%s?q=isbn:%s&key=%s", f.baseURL, isbn, f.apiKey)
-	var resp Response
+	var resp Volumes
 	if err := get(f.client, url, &resp); err != nil {
 		return nil, fmt.Errorf("failed to get volume data: %w", err)
 	}
@@ -91,8 +119,8 @@ func (f *Fetcher) GetISBN(isbn string) (*model.Book, error) {
 
 	volume := resp.Items[0].VolumeInfo
 	book := &model.Book{
-		Title: volume.Title,
-		// Summary:
+		Title:   volume.Title,
+		Summary: volume.Description,
 		ISBN10: func() string {
 			for _, id := range volume.IndustryIdentifiers {
 				if id.Type == "ISBN_10" {
@@ -109,8 +137,8 @@ func (f *Fetcher) GetISBN(isbn string) (*model.Book, error) {
 			}
 			return ""
 		}(),
-		Language: volume.Language,
-		// Publisher:
+		Language:  volume.Language,
+		Publisher: volume.Publisher,
 		PublishDate: func() time.Time {
 			formats := []string{
 				"2006",
@@ -125,9 +153,41 @@ func (f *Fetcher) GetISBN(isbn string) (*model.Book, error) {
 			return time.Time{}
 		}(),
 		PageCount: volume.PageCount,
-		// SeriesName
-		// SeriesNumber
-		// CoverURL
+		SeriesName: func() string {
+			if volume.SeriesInfo != nil {
+				return volume.SeriesInfo.ShortSeriesBookTitle
+			}
+			return ""
+		}(),
+		SeriesNumber: func() int64 {
+			if volume.SeriesInfo != nil && len(volume.SeriesInfo.VolumeSeries) > 0 {
+				return volume.SeriesInfo.VolumeSeries[0].OrderNumber
+			}
+			return 0
+		}(),
+		CoverURL: func() string {
+			if volume.ImageLinks != nil {
+				if volume.ImageLinks.ExtraLarge != "" {
+					return volume.ImageLinks.ExtraLarge
+				}
+				if volume.ImageLinks.Large != "" {
+					return volume.ImageLinks.Large
+				}
+				if volume.ImageLinks.Medium != "" {
+					return volume.ImageLinks.Medium
+				}
+				if volume.ImageLinks.Small != "" {
+					return volume.ImageLinks.Small
+				}
+				if volume.ImageLinks.Thumbnail != "" {
+					return volume.ImageLinks.Thumbnail
+				}
+				if volume.ImageLinks.SmallThumbnail != "" {
+					return volume.ImageLinks.SmallThumbnail
+				}
+			}
+			return ""
+		}(),
 
 		Authors: func() []*model.Author {
 			var authors []*model.Author
