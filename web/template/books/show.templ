@@ -1,0 +1,18 @@
+package books
+
+import (
+	"xiazki/internal/model"
+	"xiazki/web/template/components"
+	"xiazki/web/template/layout"
+)
+
+type Data struct {
+	CSRF  string
+	Books []*model.Book
+}
+
+templ Show(data Data) {
+	@layout.Base(layout.Data{Title: "Books", CSRF: data.CSRF}) {
+		@components.BookList(data.Books)
+	}
+}

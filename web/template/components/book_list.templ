@@ -1,0 +1,97 @@
+package components
+
+import (
+	"strconv"
+	"xiazki/internal/model"
+)
+
+templ BookList(books []*model.Book) {
+	<div class="px-4 py-6 sm:px-0">
+		<div class="grid grid-cols-2 gap-6 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
+			for _, book := range books {
+				@BookCard(book)
+			}
+		</div>
+	</div>
+}
+
+templ BookCard(book *model.Book) {
+	<div class="group flex w-full max-w-xs flex-col items-center rounded-lg bg-white p-0 shadow-md transition-all duration-300 hover:shadow-2xl">
+		@BookCover(book)
+		<div class="flex flex-1 flex-col p-4">
+			@BookTitle(book)
+			@BookAuthorList(book)
+			<div class="mt-2 flex items-center justify-center gap-2">
+				if book.SeriesName != "" {
+					<div class="text-sm font-medium text-gray-500" title={ book.SeriesName }>
+						#{ book.SeriesNumber }
+					</div>
+				}
+				@BookEvent(book)
+			</div>
+		</div>
+	</div>
+}
+
+templ BookCover(book *model.Book) {
+	<div class="flex justify-center overflow-hidden bg-gray-100">
+		<a href={ "/book/" + strconv.FormatInt(book.ID, 10) } class="block aspect-3/4 w-full">
+			<img
+				src={ getCoverURL(book.CoverURL) }
+				alt={ book.Title }
+				class="h-full w-full object-contain"
+			/>
+		</a>
+	</div>
+}
+
+templ BookTitle(book *model.Book) {
+	<a href={ "/book/" + strconv.FormatInt(book.ID, 10) } class="mb-1 w-full text-center text-lg font-semibold text-gray-900 hover:underline">
+		{ book.Title }
+	</a>
+}
+
+templ BookAuthorList(book *model.Book) {
+	<div class="mb-4 min-h-12">
+		<div class="flex flex-wrap justify-center gap-x-1 text-center">
+			for i, author := range book.Authors {
+				@BookAuthor(author)
+				if i < len(book.Authors)-1 {
+					<span class="text-gray-500">,</span>
+				}
+			}
+		</div>
+	</div>
+}
+
+templ BookAuthor(author *model.Author) {
+	<a href={ "/author/" + strconv.FormatInt(author.ID, 10) } class="text-sm text-gray-600 transition-colors duration-200 hover:text-blue-600 hover:underline">
+		{ author.Name }
+	</a>
+}
+
+templ BookEvent(book *model.Book) {
+	if book.Events != nil && len(book.Events) > 0 {
+		{{ event := book.Events[len(book.Events)-1] }}
+		if event.Type == "finished" {
+			<div class="rounded-full border border-blue-200 bg-blue-50 px-3 py-1 text-sm font-medium whitespace-nowrap text-blue-700">
+				Finished
+			</div>
+		} else if event.Type == "reading" {
+			<div class="rounded-full border border-green-200 bg-green-50 px-3 py-1 text-sm font-medium whitespace-nowrap text-green-700">
+				Reading
+			</div>
+		} else if event.Type == "dropped" {
+			<div class="rounded-full border border-red-200 bg-red-50 px-3 py-1 text-sm font-medium whitespace-nowrap text-red-700">
+				Dropped
+			</div>
+		}
+	}
+}
+
+func getCoverURL(coverURL string) string {
+	if coverURL != "" {
+		return coverURL
+	}
+	return "/static/img/cover.jpeg"
+}
