@@ -33,7 +33,6 @@ templ AddEventModal(bookID int64, csrf string) {
 				hx-post={ "/book/" + strconv.FormatInt(bookID, 10) + "/add_event" }
 				hx-target="#modal"
 				hx-swap="innerHTML"
-				hx-headers={ "{\"X-CSRF-Token\":\"" + csrf + "\"}" }
 			>
 				<fieldset>
 					<input id="finished" class="peer/finished hidden" type="radio" name="type" value={ string(model.EventFinished) } checked/>

@@ -248,7 +248,6 @@ templ FormAdd(data Data) {
 		hx-post="/add_book"
 		hx-target="this"
 		hx-swap="outerHTML"
-		hx-headers={ "{\"X-CSRF-Token\":\"" + data.CSRF + "\"}" }
 	>
 		@BookFormFields(data)
 		<button
@@ -266,7 +265,6 @@ templ FormEdit(data Data) {
 		hx-put={ "/book/" + strconv.FormatInt(data.BookID, 10) + "/edit" }
 		hx-target="this"
 		hx-swap="outerHTML"
-		hx-headers={ "{\"X-CSRF-Token\":\"" + data.CSRF + "\"}" }
 	>
 		@BookFormFields(data)
 		<div class="flex justify-end">

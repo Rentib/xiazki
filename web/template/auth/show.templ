@@ -57,7 +57,6 @@ templ Form(data Data) {
 		hx-post={ post[data.Op] }
 		hx-target="this"
 		hx-swap="outerHTML"
-		hx-headers={ "{\"X-CSRF-Token\":\"" + data.CSRF + "\"}" }
 	>
 		@components.Input("username", "", "Username", "text", data.Errors, data.Values["username"])
 		@components.Input("password", "", "Password", "password", data.Errors, data.Values["password"])

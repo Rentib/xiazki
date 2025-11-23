@@ -71,7 +71,6 @@ templ ChangePasswordForm(data Data) {
 		hx-post="/user/change_password"
 		hx-target="this"
 		hx-swap="outerHTML"
-		hx-headers={ "{\"X-CSRF-Token\":\"" + data.CSRF + "\"}" }
 	>
 		@components.Input("current_password", "", "Current password", "password", Errors, Values.CurrentPassword)
 		@components.Input("new_password", "", "New password", "password", Errors, Values.NewPassword)
