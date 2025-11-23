@@ -1,9 +1,9 @@
 package autofill
 
 import (
-	"strings"
-	"xiazki/web/template/add_book"
+	"strconv"
 	"xiazki/web/template/components"
+	"xiazki/internal/model"
 )
 
 type AutofillFormValues struct {
@@ -14,7 +14,7 @@ type Data struct {
 	CSRF    string
 	Values  AutofillFormValues
 	Errors  map[string]string
-	Matches []add_book.BookFormValues
+	Matches []*model.Book
 }
 
 templ AutofillModal(data Data) {
@@ -69,7 +69,7 @@ templ MatchListModal(data Data) {
 	}
 }
 
-templ MatchItem(CSRF string, Match add_book.BookFormValues) {
+templ MatchItem(CSRF string, Match *model.Book) {
 	// TODO: figure out how to remove the modal, and fill the form data from Match
 	<form
 		class="group cursor-pointer rounded-xl border border-gray-200 bg-white p-6 transition-all duration-200 hover:border-blue-300 hover:shadow-md"
@@ -79,19 +79,75 @@ templ MatchItem(CSRF string, Match add_book.BookFormValues) {
 	>
 		// Hidden inputs with values to submit {{{
 		<input type="hidden" name="title" value={ Match.Title }/>
-		<input type="hidden" name="authors" value={ Match.Authors }/>
-		<input type="hidden" name="tags" value={ Match.Tags }/>
-		<input type="hidden" name="translators" value={ Match.Translators }/>
-		<input type="hidden" name="narrators" value={ Match.Narrators }/>
+		<input
+			type="hidden"
+			name="authors"
+			value={ func() string {
+                names := ""
+                for i, author := range Match.Authors {
+                    names += author.Name
+                    if i < len(Match.Authors)-1 {
+                        names += ", "
+                    }
+                }
+                return names
+            }() }
+		/>
+		<input
+			type="hidden"
+			name="tags"
+			value={ func() string {
+                names := ""
+                for i, tag := range Match.Tags {
+                    names += tag.Name
+                    if i < len(Match.Tags)-1 {
+                        names += ", "
+                    }
+                }
+                return names
+            }() }
+		/>
+		<input
+			type="hidden"
+			name="translators"
+			value={ func() string {
+                names := ""
+                for i, translator := range Match.Translators {
+                    names += translator.Name
+                    if i < len(Match.Translators)-1 {
+                        names += ", "
+                    }
+                }
+                return names
+            }() }
+		/>
+		<input
+			type="hidden"
+			name="narrators"
+			value={ func() string {
+                names := ""
+                for i, narrator := range Match.Narrators {
+                    names += narrator.Name
+                    if i < len(Match.Narrators)-1 {
+                        names += ", "
+                    }
+                }
+                return names
+            }() }
+		/>
 		<input type="hidden" name="summary" value={ Match.Summary }/>
 		<input type="hidden" name="isbn10" value={ Match.ISBN10 }/>
 		<input type="hidden" name="isbn13" value={ Match.ISBN13 }/>
 		<input type="hidden" name="language" value={ Match.Language }/>
-		<input type="hidden" name="publish_date" value={ Match.PublishDate }/>
+		if !Match.PublishDate.IsZero() {
+			<input type="hidden" name="publish_date" value={ Match.PublishDate.Format("2006-01-02") }/>
+		}
 		<input type="hidden" name="publisher" value={ Match.Publisher }/>
 		<input type="hidden" name="page_count" value={ Match.PageCount }/>
 		<input type="hidden" name="series_name" value={ Match.SeriesName }/>
-		<input type="hidden" name="series_number" value={ Match.SeriesNumber }/>
+		if Match.SeriesNumber > 0 {
+			<input type="hidden" name="series_number" value={ Match.SeriesNumber }/>
+		}
 		<input type="hidden" name="cover_url" value={ Match.CoverURL }/>
 		// }}}
 		<div class="flex gap-6">
@@ -121,30 +177,49 @@ templ MatchItem(CSRF string, Match add_book.BookFormValues) {
 						<div class="mt-1 flex items-center gap-2">
 							<span class="rounded bg-blue-50 px-2 py-1 text-sm text-blue-600">
 								{ Match.SeriesName }
-								if Match.SeriesNumber != "" {
-									<span>#{ Match.SeriesNumber }</span>
-								}
+								<span>#{ strconv.FormatInt(int64(Match.SeriesNumber), 10) }</span>
 							</span>
 						</div>
 					}
 				</div>
 				<div class="mb-4 space-y-2">
-					if Match.Authors != "" {
+					if len(Match.Authors) > 0 {
 						<div class="flex items-start gap-2">
 							<span class="text-sm font-medium whitespace-nowrap text-gray-700">Author(s):</span>
-							<span class="text-sm text-gray-600">{ Match.Authors }</span>
+							for i, author := range Match.Authors {
+								<div>
+									<span class="text-sm text-gray-600">{ author.Name }</span>
+									if i < len(Match.Authors)-1 {
+										<span class="text-sm text-gray-300">, </span>
+									}
+								</div>
+							}
 						</div>
 					}
-					if Match.Translators != "" {
-						<div class="flex items-start gap-2">
-							<span class="text-sm font-medium whitespace-nowrap text-gray-700">Translator(s):</span>
-							<span class="text-sm text-gray-600">{ Match.Translators }</span>
-						</div>
-					}
-					if Match.Narrators != "" {
+					if len(Match.Narrators) > 0 {
 						<div class="flex items-start gap-2">
 							<span class="text-sm font-medium whitespace-nowrap text-gray-700">Narrator(s):</span>
-							<span class="text-sm text-gray-600">{ Match.Narrators }</span>
+							for i, narrator := range Match.Narrators {
+								<div>
+									<span class="text-sm text-gray-600">{ narrator.Name }</span>
+									if i < len(Match.Narrators)-1 {
+										<span class="text-sm text-gray-300">, </span>
+									}
+								</div>
+							}
+						</div>
+					}
+					if len(Match.Translators) > 0 {
+						<div class="flex items-start gap-2">
+							<span class="text-sm font-medium whitespace-nowrap text-gray-700">Translator(s):</span>
+							for i, translator := range Match.Translators {
+								<div>
+									<span class="text-sm text-gray-600">{ translator.Name }</span>
+									if i < len(Match.Translators)-1 {
+										<span class="text-sm text-gray-300">, </span>
+									}
+								</div>
+							}
 						</div>
 					}
 				</div>
@@ -155,10 +230,10 @@ templ MatchItem(CSRF string, Match add_book.BookFormValues) {
 							<span class="text-xs text-gray-600">{ Match.Publisher }</span>
 						</div>
 					}
-					if Match.PublishDate != "" {
+					if !Match.PublishDate.IsZero() {
 						<div class="flex items-center gap-2">
 							<span class="text-xs font-medium text-gray-500">Published:</span>
-							<span class="text-xs text-gray-600">{ Match.PublishDate }</span>
+							<span class="text-xs text-gray-600">{ Match.PublishDate.Format("January 2, 2006") }</span>
 						</div>
 					}
 					if Match.Language != "" {
@@ -167,10 +242,10 @@ templ MatchItem(CSRF string, Match add_book.BookFormValues) {
 							<span class="text-xs text-gray-600">{ Match.Language }</span>
 						</div>
 					}
-					if Match.PageCount != "" {
+					if Match.PageCount > 0 {
 						<div class="flex items-center gap-2">
 							<span class="text-xs font-medium text-gray-500">Pages:</span>
-							<span class="text-xs text-gray-600">{ Match.PageCount }</span>
+							<span class="text-xs text-gray-600">{ strconv.FormatInt(Match.PageCount, 10) }</span>
 						</div>
 					}
 				</div>
@@ -193,11 +268,11 @@ templ MatchItem(CSRF string, Match add_book.BookFormValues) {
 						<p class="line-clamp-2 text-sm text-gray-600">{ Match.Summary }</p>
 					</div>
 				}
-				if Match.Tags != "" {
+				if len(Match.Tags) > 0 {
 					<div class="mt-3 flex flex-wrap gap-1">
-						for _, tag := range strings.Split(Match.Tags, ",") {
+						for _, tag := range Match.Tags {
 							<span class="inline-block rounded-full bg-gray-100 px-2 py-1 text-xs text-gray-700">
-								{ strings.TrimSpace(tag) }
+								{ tag.Name }
 							</span>
 						}
 					</div>

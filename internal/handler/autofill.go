@@ -3,6 +3,7 @@ package handler
 import (
 	"net/http"
 
+	"xiazki/internal/model"
 	"xiazki/internal/utils"
 	"xiazki/web/template/add_book"
 	"xiazki/web/template/autofill"
@@ -18,7 +19,7 @@ func (h *Handler) GetAddBookAutofill(c echo.Context) error {
 	afv := autofill.AutofillFormValues{
 		ISBN: isbn,
 	}
-	matches := []add_book.BookFormValues{}
+	matches := []*model.Book{}
 
 	if err != nil {
 		errors := map[string]string{}
@@ -34,10 +35,10 @@ func (h *Handler) GetAddBookAutofill(c echo.Context) error {
 
 	// TODO: more sources
 	if book, err := h.gb.GetISBN(afv.ISBN); err == nil && book != nil {
-		matches = append(matches, add_book.BookToBookFormValues(*book))
+		matches = append(matches, book)
 	}
 	if book, err := h.ol.GetISBN(afv.ISBN); err == nil && book != nil {
-		matches = append(matches, add_book.BookToBookFormValues(*book))
+		matches = append(matches, book)
 	}
 
 	if len(matches) == 0 {
