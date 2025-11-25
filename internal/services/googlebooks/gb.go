@@ -13,20 +13,6 @@ import (
 	"xiazki/internal/utils"
 )
 
-type Fetcher struct {
-	client  *http.Client
-	baseURL string
-	apiKey  string
-}
-
-func NewFetcher(apiKey string) *Fetcher {
-	return &Fetcher{
-		client:  http.DefaultClient,
-		baseURL: "https://www.googleapis.com/books/v1/volumes",
-		apiKey:  apiKey,
-	}
-}
-
 type Volumes struct {
 	Items []*Volume `json:"items,omitempty"`
 }
@@ -100,6 +86,20 @@ func get(client *http.Client, url string, target any) error {
 	}
 
 	return nil
+}
+
+type Fetcher struct {
+	client  *http.Client
+	baseURL string
+	apiKey  string
+}
+
+func NewFetcher(apiKey string) *Fetcher {
+	return &Fetcher{
+		client:  http.DefaultClient,
+		baseURL: "https://www.googleapis.com/books/v1/volumes",
+		apiKey:  apiKey,
+	}
 }
 
 func (f *Fetcher) GetISBN(isbn string) (*model.Book, error) {

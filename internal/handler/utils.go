@@ -4,6 +4,7 @@ import (
 	"context"
 	"net/http"
 
+	"xiazki/internal/model"
 	"xiazki/internal/services/googlebooks"
 	"xiazki/internal/services/openlibrary"
 
@@ -12,17 +13,22 @@ import (
 	"github.com/uptrace/bun"
 )
 
+type Fetcher interface {
+	GetISBN(string) (*model.Book, error)
+}
+
 type Handler struct {
-	db *bun.DB
-	gb *googlebooks.Fetcher
-	ol *openlibrary.Fetcher
+	db      *bun.DB
+	fetcher []Fetcher
 }
 
 func NewHandler(db *bun.DB, gbAPIKey string) *Handler {
 	return &Handler{
 		db: db,
-		gb: googlebooks.NewFetcher(gbAPIKey),
-		ol: openlibrary.NewFetcher(),
+		fetcher: []Fetcher{
+			googlebooks.NewFetcher(gbAPIKey),
+			openlibrary.NewFetcher(),
+		},
 	}
 }
 

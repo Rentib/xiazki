@@ -56,14 +56,9 @@ func (h *Handler) GetAddBookAutofillSSE(c echo.Context) error {
 	matches := make(chan *model.Book, 2)
 	done := make(chan struct{})
 
-	services := []func(string) (*model.Book, error){
-		h.gb.GetISBN,
-		h.ol.GetISBN,
-	}
-
-	for _, service := range services {
+	for _, fetcher := range h.fetcher {
 		wg.Go(func() {
-			if book, err := service(isbn); err == nil && book != nil {
+			if book, err := fetcher.GetISBN(isbn); err == nil && book != nil {
 				select {
 				case matches <- book:
 				case <-done:

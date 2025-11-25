@@ -13,18 +13,6 @@ import (
 	"xiazki/internal/utils"
 )
 
-type Fetcher struct {
-	client  *http.Client
-	baseURL string
-}
-
-func NewFetcher() *Fetcher {
-	return &Fetcher{
-		client:  http.DefaultClient,
-		baseURL: "https://openlibrary.org",
-	}
-}
-
 type KeyStruct struct {
 	Key string `json:"key"`
 }
@@ -143,6 +131,18 @@ func get(client *http.Client, url string, target any) error {
 	}
 
 	return nil
+}
+
+type Fetcher struct {
+	client  *http.Client
+	baseURL string
+}
+
+func NewFetcher() *Fetcher {
+	return &Fetcher{
+		client:  http.DefaultClient,
+		baseURL: "https://openlibrary.org",
+	}
 }
 
 func (f *Fetcher) GetISBN(isbn string) (*model.Book, error) {
