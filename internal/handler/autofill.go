@@ -1,7 +1,10 @@
 package handler
 
 import (
+	"context"
+	"io"
 	"net/http"
+	"sync"
 
 	"xiazki/internal/model"
 	"xiazki/internal/utils"
@@ -19,7 +22,6 @@ func (h *Handler) GetAddBookAutofill(c echo.Context) error {
 	afv := autofill.AutofillFormValues{
 		ISBN: isbn,
 	}
-	matches := []*model.Book{}
 
 	if err != nil {
 		errors := map[string]string{}
@@ -33,26 +35,79 @@ func (h *Handler) GetAddBookAutofill(c echo.Context) error {
 		}))
 	}
 
-	// TODO: more sources
-	if book, err := h.gb.GetISBN(afv.ISBN); err == nil && book != nil {
-		matches = append(matches, book)
-	}
-	if book, err := h.ol.GetISBN(afv.ISBN); err == nil && book != nil {
-		matches = append(matches, book)
-	}
-
-	if len(matches) == 0 {
-		// TODO: show info that no matches were found
-		return Render(c, autofill.AutofillModal(autofill.Data{
-			CSRF:   c.Get("csrf").(string),
-			Values: afv,
-		}))
-	}
-
 	return Render(c, autofill.MatchListModal(autofill.Data{
-		CSRF:    c.Get("csrf").(string),
-		Matches: matches,
+		CSRF:   c.Get("csrf").(string),
+		Values: afv,
 	}))
+}
+
+func (h *Handler) GetAddBookAutofillSSE(c echo.Context) error {
+	isbn, err := utils.StringToISBN(c.QueryParam("isbn"))
+	if err != nil {
+		return err
+	}
+
+	w := c.Response()
+	w.Header().Set("Content-Type", "text/event-stream")
+	w.Header().Set("Cache-Control", "no-cache")
+	w.Header().Set("Connection", "keep-alive")
+
+	wg := sync.WaitGroup{}
+	matches := make(chan *model.Book, 2)
+	done := make(chan struct{})
+
+	services := []func(string) (*model.Book, error){
+		h.gb.GetISBN,
+		h.ol.GetISBN,
+	}
+
+	for _, service := range services {
+		wg.Go(func() {
+			if book, err := service(isbn); err == nil && book != nil {
+				select {
+				case matches <- book:
+				case <-done:
+				}
+			}
+		})
+	}
+
+	go func() {
+		wg.Wait()
+		close(matches)
+	}()
+
+	for {
+		select {
+		case <-c.Request().Context().Done():
+			close(done)
+			return nil
+		case match, ok := <-matches:
+			if !ok {
+				if _, err := io.WriteString(w, "event: close\ndata:\n\n"); err != nil {
+					close(done)
+					return err
+				}
+				w.Flush()
+				return nil
+			}
+
+			component := autofill.MatchItem(c.Get("csrf").(string), match)
+			if _, err := io.WriteString(w, "data: "); err != nil {
+				close(done)
+				return err
+			}
+			if err = component.Render(context.Background(), w); err != nil {
+				close(done)
+				return err
+			}
+			if _, err := io.WriteString(w, "\n\n"); err != nil {
+				close(done)
+				return err
+			}
+			w.Flush()
+		}
+	}
 }
 
 func (h *Handler) PostAddBookAutofillSelect(c echo.Context) error {

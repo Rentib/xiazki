@@ -51,26 +51,33 @@ templ AutofillModal(data Data) {
 }
 
 templ MatchListModal(data Data) {
-	{{ Matches := data.Matches }}
+	// TODO: make width and height constant
 	@components.Modal() {
-		<div class="mx-4 w-full max-w-4xl rounded-lg bg-white p-6 shadow-xl">
-			<div class="mb-6 flex items-center justify-between">
+		<div
+			class="mx-4 w-full max-w-4xl rounded-lg bg-white p-6 shadow-xl"
+			hx-ext="sse"
+			sse-connect={ "/add_book/autofill/sse?isbn=" + data.Values.ISBN }
+			sse-close="close"
+		>
+			<div class="mb-6 flex flex-row space-around gap-4">
 				<h2 class="text-2xl font-bold text-gray-800">Select a Book to Autofill</h2>
-				<span class="rounded-full bg-gray-100 px-3 py-1 text-sm text-gray-500">
-					{ len(Matches) } match(es) found
-				</span>
+				<div
+					sse-swap="close"
+					hx-swap="outerHTML"
+				>
+					<svg class="w-8 h-8 animate-spin rounded-full border-4 border-blue-500 border-t-transparent"></svg>
+				</div>
 			</div>
-			<div class="max-h-128 space-y-4 overflow-y-auto pr-2">
-				for _, match := range Matches {
-					@MatchItem(data.CSRF, match)
-				}
-			</div>
+			<div
+				class="max-h-128 space-y-4 overflow-y-auto"
+				sse-swap="message"
+				hx-swap="beforeend"
+			></div>
 		</div>
 	}
 }
 
 templ MatchItem(CSRF string, Match *model.Book) {
-	// TODO: figure out how to remove the modal, and fill the form data from Match
 	<form
 		class="group cursor-pointer rounded-xl border border-gray-200 bg-white p-6 transition-all duration-200 hover:border-blue-300 hover:shadow-md"
 		hx-post="/add_book/autofill/select"
