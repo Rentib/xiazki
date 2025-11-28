@@ -612,6 +612,9 @@ func Events(data Data) templ.Component {
 			templ_7745c5c3_Var26 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
+		if len(data.Book.Events) == 0 {
+			return
+		}
 		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 55, "<div class=\"border-t border-gray-200 p-8\"><h2 class=\"mb-6 text-2xl font-semibold text-gray-900\">Events</h2>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
@@ -650,7 +653,7 @@ func Events(data Data) templ.Component {
 			var templ_7745c5c3_Var27 string
 			templ_7745c5c3_Var27, templ_7745c5c3_Err = templ.JoinStringErrs(event.Date.Format("January 2, 2006"))
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/template/book/show.templ`, Line: 201, Col: 76}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/template/book/show.templ`, Line: 204, Col: 76}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var27))
 			if templ_7745c5c3_Err != nil {
@@ -663,7 +666,7 @@ func Events(data Data) templ.Component {
 			var templ_7745c5c3_Var28 string
 			templ_7745c5c3_Var28, templ_7745c5c3_Err = templ.JoinStringErrs("/event/" + strconv.FormatInt(event.ID, 10))
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/template/book/show.templ`, Line: 214, Col: 61}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/template/book/show.templ`, Line: 217, Col: 61}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var28))
 			if templ_7745c5c3_Err != nil {
@@ -674,13 +677,7 @@ func Events(data Data) templ.Component {
 				return templ_7745c5c3_Err
 			}
 		}
-		if len(data.Book.Events) == 0 {
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 64, "<div class=\"py-8 text-center text-gray-500\"><p>No events yet. <button class=\"text-blue-600 underline hover:text-blue-800\">Add an event</button></p></div>")
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
-			}
-		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 65, "</div>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 64, "</div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -709,7 +706,7 @@ func Reviews(data Data) templ.Component {
 			templ_7745c5c3_Var29 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 66, "<div class=\"border-t border-gray-200 p-8\"><h2 class=\"mb-6 text-2xl font-semibold text-gray-900\">Reviews</h2><div class=\"py-8 text-center text-gray-500\"><p>No reviews yet. <button class=\"text-blue-600 underline hover:text-blue-800\">Write the first review</button></p></div></div>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 65, "<div class=\"border-t border-gray-200 p-8\"><h2 class=\"mb-6 text-2xl font-semibold text-gray-900\">Reviews</h2><div class=\"py-8 text-center text-gray-500\"><p>No reviews yet. <button class=\"text-blue-600 underline hover:text-blue-800\">Write the first review</button></p></div></div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -738,7 +735,7 @@ func Quotes(data Data) templ.Component {
 			templ_7745c5c3_Var30 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 67, "<div class=\"border-t border-gray-200 p-8\"><h2 class=\"mb-6 text-2xl font-semibold text-gray-900\">Quotes</h2><div class=\"py-8 text-center text-gray-500\"><p>No quotes yet. <button class=\"text-blue-600 underline hover:text-blue-800\">Add the first quote</button></p></div></div>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 66, "<div class=\"border-t border-gray-200 p-8\"><h2 class=\"mb-6 text-2xl font-semibold text-gray-900\">Quotes</h2><div class=\"py-8 text-center text-gray-500\"><p>No quotes yet. <button class=\"text-blue-600 underline hover:text-blue-800\">Add the first quote</button></p></div></div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

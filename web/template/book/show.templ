@@ -177,6 +177,9 @@ templ LongInfo(data Data) {
 }
 
 templ Events(data Data) {
+	if len(data.Book.Events) == 0 {
+		{{ return }}
+	}
 	<div class="border-t border-gray-200 p-8">
 		<h2 class="mb-6 text-2xl font-semibold text-gray-900">Events</h2>
 		for _, event := range data.Book.Events {
@@ -218,11 +221,6 @@ templ Events(data Data) {
 						<span class="text-sm">󰆴</span>
 					</button>
 				</div>
-			</div>
-		}
-		if len(data.Book.Events) == 0 {
-			<div class="py-8 text-center text-gray-500">
-				<p>No events yet. <button class="text-blue-600 underline hover:text-blue-800">Add an event</button></p>
 			</div>
 		}
 	</div>
