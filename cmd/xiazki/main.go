@@ -87,6 +87,7 @@ func main() {
 	protectedHX.PUT("/book/:id/edit", h.PutBookEdit)
 	protectedHX.GET("/book/:id/add_event", h.GetBookAddEvent)
 	protectedHX.POST("/book/:id/add_event", h.PostBookAddEvent)
+	protectedHX.DELETE("/event/:id", h.DeleteEvent)
 
 	e.Logger.Debug(e.Start(":8080"))
 }
