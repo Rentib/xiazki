@@ -20,3 +20,10 @@ type Review struct {
 	BookID int64 `bun:"book_id,notnull"`
 	Book   *Book `bun:"rel:belongs-to,join:book_id=id"`
 }
+
+type ReviewStats struct {
+	UserRating    int64   `bun:"user_rating"`
+	AverageRating float64 `bun:"average_rating"`
+	RatingsCount  int64   `bun:"ratings_count"`
+	OpinionsCount int64   `bun:"opinions_count"`
+}

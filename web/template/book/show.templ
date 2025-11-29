@@ -2,6 +2,7 @@ package book
 
 import (
 	"strconv"
+	"fmt"
 
 	"xiazki/internal/model"
 	"xiazki/web/template/layout"
@@ -15,88 +16,149 @@ type Data struct {
 templ Show(data Data) {
 	@layout.Base(layout.Data{Title: data.Book.Title, CSRF: data.CSRF}) {
 		@MainInfo(data)
-		@LongInfo(data)
+		@SummaryAndTags(data)
 		@Events(data)
-		@Reviews(data)
-		@Quotes(data)
 	}
 }
 
 templ MainInfo(data Data) {
 	<div class="md:flex md:items-start">
-		<div class="flex items-start justify-center p-8 md:w-1/3">
-			<img
-				src={ getCoverURL(data.Book.CoverURL) }
-				alt={ data.Book.Title }
-				class="mt-8 h-96 w-64 rounded-lg object-cover shadow-md transition-shadow duration-300 hover:shadow-lg"
-			/>
+		@CoverImage(data)
+		<div class="flex flex-col p-4 md:w-2/3 md:flex-row md:p-8">
+			@BookDetails(data)
+			@RatingSection(data)
 		</div>
-		<div class="flex flex-col justify-center p-8 md:w-2/3">
-			<div class="mb-6 flex flex-wrap items-center justify-between gap-4">
-				<h1 class="wrap-break-word flex-1 text-3xl font-bold text-gray-900">
-					{ data.Book.Title }
-				</h1>
-				@Buttons(data)
-			</div>
-			<div class="mb-6 flex flex-row">
-				<h2 class="mb-2 w-32 shrink-0 text-sm font-semibold uppercase tracking-wide text-gray-500">Authors:</h2>
-				<div class="flex flex-wrap gap-2">
-					for _, author := range data.Book.Authors {
-						<a href={ "/author/" + strconv.FormatInt(author.ID, 10) }>
-							<span
-								class="rounded-full bg-gray-100 px-3 py-1 text-sm text-gray-800 transition-colors duration-200 hover:bg-gray-200"
-							>{ author.Name }</span>
-						</a>
-					}
+	</div>
+}
+
+templ CoverImage(data Data) {
+	<div class="flex items-start justify-center p-4 md:w-1/3 md:p-8">
+		<img
+			src={ getCoverURL(data.Book.CoverURL) }
+			alt={ data.Book.Title }
+			class="h-80 w-52 rounded-lg object-cover shadow-md transition-shadow duration-300 hover:shadow-lg md:h-96 md:w-64"
+		/>
+	</div>
+}
+
+templ BookDetails(data Data) {
+	<div class="flex-1">
+		<div class="mb-4 flex flex-wrap items-center justify-between gap-4">
+			<h1 class="wrap-break-word flex-1 text-2xl font-bold text-gray-900 md:text-3xl">
+				{ data.Book.Title }
+			</h1>
+		</div>
+		@Authors(data)
+		@BookMetadata(data)
+	</div>
+}
+
+templ Authors(data Data) {
+	<div class="mb-4 flex flex-row">
+		<h2 class="mb-2 w-24 shrink-0 text-sm font-semibold uppercase tracking-wide text-gray-500 md:w-32">Authors:</h2>
+		<div class="flex flex-wrap gap-2">
+			for _, author := range data.Book.Authors {
+				<a href={ "/author/" + strconv.FormatInt(author.ID, 10) }>
+					<span
+						class="rounded-full bg-gray-100 px-3 py-1 text-sm text-gray-800 transition-colors duration-200 hover:bg-gray-200"
+					>{ author.Name }</span>
+				</a>
+			}
+		</div>
+	</div>
+}
+
+templ BookMetadata(data Data) {
+	<div class="mb-4 grid grid-cols-1 gap-4">
+		@Publisher(data)
+		@ISBN(data)
+		@Pages(data)
+		@PublishDate(data)
+		@Series(data)
+		@Language(data)
+	</div>
+}
+
+templ Publisher(data Data) {
+	if data.Book.Publisher != "" {
+		<div class="flex flex-row">
+			<h3 class="mb-1 w-24 shrink-0 text-sm font-semibold uppercase tracking-wide text-gray-500 md:w-32">Publisher:</h3>
+			<p class="ml-4 text-gray-900">{ data.Book.Publisher }</p>
+		</div>
+	}
+}
+
+templ ISBN(data Data) {
+	if data.Book.ISBN13 != "" || data.Book.ISBN10 != "" {
+		<div class="flex flex-row">
+			if data.Book.ISBN13 != "" {
+				<h3 class="mb-1 w-24 shrink-0 text-sm font-semibold uppercase tracking-wide text-gray-500 md:w-32">ISBN13:</h3>
+				<p class="ml-4 font-mono text-gray-900">{ data.Book.ISBN13 }</p>
+			} else {
+				<h3 class="mb-1 w-24 shrink-0 text-sm font-semibold uppercase tracking-wide text-gray-500 md:w-32">ISBN10:</h3>
+				<p class="ml-4 font-mono text-gray-900">{ data.Book.ISBN10 }</p>
+			}
+		</div>
+	}
+}
+
+templ Pages(data Data) {
+	if data.Book.PageCount > 0 {
+		<div class="flex flex-row">
+			<h3 class="mb-1 w-24 shrink-0 text-sm font-semibold uppercase tracking-wide text-gray-500 md:w-32">Pages:</h3>
+			<p class="ml-4 text-gray-900">{ strconv.FormatInt(data.Book.PageCount, 10) }</p>
+		</div>
+	}
+}
+
+templ PublishDate(data Data) {
+	if !data.Book.PublishDate.IsZero() {
+		<div class="flex flex-row">
+			<h3 class="mb-1 w-24 shrink-0 text-sm font-semibold uppercase tracking-wide text-gray-500 md:w-32">Published:</h3>
+			<p class="ml-4 text-gray-900">{ data.Book.PublishDate.Format("January 2, 2006") }</p>
+		</div>
+	}
+}
+
+templ Series(data Data) {
+	if data.Book.SeriesName != "" {
+		<div class="flex flex-row">
+			<h3 class="mb-1 w-24 shrink-0 text-sm font-semibold uppercase tracking-wide text-gray-500 md:w-32">Series:</h3>
+			<p class="ml-4 text-gray-900">
+				{ data.Book.SeriesName }
+				if data.Book.SeriesNumber > 0 {
+					<span class="ml-2 text-gray-500">(#{ strconv.FormatInt(int64(data.Book.SeriesNumber), 10) })</span>
+				}
+			</p>
+		</div>
+	}
+}
+
+templ Language(data Data) {
+	if data.Book.Language != "" {
+		<div class="flex flex-row">
+			<h3 class="mb-1 w-24 shrink-0 text-sm font-semibold uppercase tracking-wide text-gray-500 md:w-32">Language:</h3>
+			<p class="ml-4 text-gray-900">{ data.Book.Language }</p>
+		</div>
+	}
+}
+
+templ RatingSection(data Data) {
+	<div class="mt-6 md:mt-0 md:w-80 md:pl-8">
+		<div class="mb-4 flex justify-end">
+			@Buttons(data)
+		</div>
+		<div class="rounded-lg border border-gray-200 p-6">
+			<div id="review-section" class="mt-4">
+				<div
+					hx-get={ "/book/" + strconv.FormatInt(data.Book.ID, 10) + "/stats" }
+					hx-trigger="load"
+					hx-swap="innerHTML"
+				>
+					<div class="flex justify-center p-4">
+						<div class="loader h-8 w-8 rounded-full border-4 border-t-4 border-gray-200 ease-linear"></div>
+					</div>
 				</div>
-			</div>
-			<div class="mb-6 grid grid-cols-1 gap-6">
-				if data.Book.Publisher != "" {
-					<div class="flex flex-row">
-						<h3 class="mb-1 w-32 shrink-0 text-sm font-semibold uppercase tracking-wide text-gray-500">Publisher:</h3>
-						<p class="ml-4 text-gray-900">{ data.Book.Publisher }</p>
-					</div>
-				}
-				if data.Book.ISBN13 != "" || data.Book.ISBN10 != "" {
-					<div class="flex flex-row">
-						if data.Book.ISBN13 != "" {
-							<h3 class="mb-1 w-32 shrink-0 text-sm font-semibold uppercase tracking-wide text-gray-500">ISBN13:</h3>
-							<p class="ml-4 font-mono text-gray-900">{ data.Book.ISBN13 }</p>
-						} else {
-							<h3 class="mb-1 w-32 shrink-0 text-sm font-semibold uppercase tracking-wide text-gray-500">ISBN10:</h3>
-							<p class="ml-4 font-mono text-gray-900">{ data.Book.ISBN10 }</p>
-						}
-					</div>
-				}
-				if data.Book.PageCount > 0 {
-					<div class="flex flex-row">
-						<h3 class="mb-1 w-32 shrink-0 text-sm font-semibold uppercase tracking-wide text-gray-500">Pages:</h3>
-						<p class="ml-4 text-gray-900">{ strconv.FormatInt(data.Book.PageCount, 10) }</p>
-					</div>
-				}
-				if !data.Book.PublishDate.IsZero() {
-					<div class="flex flex-row">
-						<h3 class="mb-1 w-32 shrink-0 text-sm font-semibold uppercase tracking-wide text-gray-500">Published:</h3>
-						<p class="ml-4 text-gray-900">{ data.Book.PublishDate.Format("January 2, 2006") }</p>
-					</div>
-				}
-				if data.Book.SeriesName != "" {
-					<div class="flex flex-row">
-						<h3 class="mb-1 w-32 shrink-0 text-sm font-semibold uppercase tracking-wide text-gray-500">Series:</h3>
-						<p class="ml-4 text-gray-900">
-							{ data.Book.SeriesName }
-							if data.Book.SeriesNumber > 0 {
-								<span class="ml-2 text-gray-500">(#{ strconv.FormatInt(int64(data.Book.SeriesNumber), 10) })</span>
-							}
-						</p>
-					</div>
-				}
-				if data.Book.Language != "" {
-					<div class="flex flex-row">
-						<h3 class="mb-1 w-32 shrink-0 text-sm font-semibold uppercase tracking-wide text-gray-500">Language:</h3>
-						<p class="ml-4 text-gray-900">{ data.Book.Language }</p>
-					</div>
-				}
 			</div>
 		</div>
 	</div>
@@ -105,75 +167,154 @@ templ MainInfo(data Data) {
 templ Buttons(data Data) {
 	<div class="flex shrink-0 gap-2">
 		<a
-			class="rounded-md border border-green-600 px-4 py-2 text-sm text-green-600 transition-colors duration-200 hover:bg-green-100 focus:outline-none focus:ring-2 focus:ring-green-500"
+			class="whitespace-nowrap rounded-md border border-green-600 px-3 py-1 text-sm text-green-600 transition-colors duration-200 hover:bg-green-100 focus:outline-none focus:ring-2 focus:ring-green-500 md:px-4 md:py-2"
 			href={ "/book/" + strconv.FormatInt(data.Book.ID, 10) + "/edit" }
 		>
-			<span class="mr-2"></span>
+			<span class="mr-1 md:mr-2"></span>
 			<span class="align-middle">Edit</span>
 		</a>
 		<button
-			class="rounded-md border border-blue-600 px-4 py-2 text-sm text-blue-600 transition-colors duration-200 hover:bg-blue-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
+			class="whitespace-nowrap rounded-md border border-blue-600 px-3 py-1 text-sm text-blue-600 transition-colors duration-200 hover:bg-blue-100 focus:outline-none focus:ring-2 focus:ring-blue-500 md:px-4 md:py-2"
 			hx-get={ "/book/" + strconv.FormatInt(data.Book.ID, 10) + "/add_event" }
 			hx-target="#modal"
 			hx-swap="innerHTML"
 		>
-			<span class="mr-2"></span>
+			<span class="mr-1 md:mr-2"></span>
 			<span class="align-middle">Add Event</span>
 		</button>
 		<button
-			class="rounded-md border border-red-600 px-4 py-2 text-sm text-red-600 transition-colors duration-200 hover:bg-red-100 focus:outline-none focus:ring-2 focus:ring-red-500"
+			class="whitespace-nowrap rounded-md border border-red-600 px-3 py-1 text-sm text-red-600 transition-colors duration-200 hover:bg-red-100 focus:outline-none focus:ring-2 focus:ring-red-500 md:px-4 md:py-2"
 			hx-delete={ "/book/" + strconv.FormatInt(data.Book.ID, 10) }
 			hx-confirm="Are you sure you want to delete this book?"
 		>
-			<span class="mr-2">󰆴</span>
+			<span class="mr-1 md:mr-2">󰆴</span>
 			<span class="align-middle">Delete</span>
 		</button>
 	</div>
 }
 
-templ LongInfo(data Data) {
-	<div class="border-t border-gray-200 p-8">
-		if data.Book.Summary != "" {
-			<div class="mb-8">
-				<h2 class="mb-4 text-xl font-semibold text-gray-900">Summary</h2>
-				<p class="text-lg leading-relaxed text-gray-700">{ data.Book.Summary }</p>
+templ Stats(bookID int64, stats model.ReviewStats) {
+	<div class="text-center">
+		<div class="mb-3">
+			<div class="flex items-center justify-center gap-2">
+				<span class="text-3xl font-bold text-yellow-500">★</span>
+				<span class="text-2xl font-bold text-gray-900">{ fmt.Sprintf("%.1f", stats.AverageRating) }</span>
+				<span class="text-lg text-gray-500">/ 10</span>
 			</div>
-		}
-		if len(data.Book.Tags) > 0 {
-			<div class="mb-6">
-				<h3 class="mb-3 text-sm font-semibold uppercase tracking-wide text-gray-500">Tags</h3>
-				<div class="flex flex-wrap gap-2">
-					for _, tag := range data.Book.Tags {
-						<span class="rounded-full bg-gray-100 px-3 py-1 text-sm text-gray-800">
-							{ tag.Name }
-						</span>
+		</div>
+		<div class="mb-4 text-sm text-gray-700">
+			<div class="flex items-center justify-center gap-1">
+				<span class="font-medium">{ strconv.FormatInt(stats.OpinionsCount, 10) } opinions</span>
+				<span class="mx-4 text-gray-400">·</span>
+				<span class="font-medium">{ strconv.FormatInt(stats.RatingsCount, 10) } ratings</span>
+			</div>
+		</div>
+		<div class="my-6 border-t border-gray-200 pb-8 pt-8"></div>
+		<h3 class="mb-4 text-lg font-semibold text-gray-900">Your Rating</h3>
+		<div class="mb-4 flex justify-center gap-1 text-3xl">
+			for i := 1; i <= 10; i++ {
+				<div
+					hx-post={ "/book/" + strconv.FormatInt(bookID, 10) + "/rate" }
+					hx-vals={ "{\"rating\": " + strconv.Itoa(i) + "}" }
+					hx-swap="outerHTML"
+					class="cursor-pointer"
+				>
+					if i <= int(stats.UserRating) {
+						<span class="text-yellow-500">★</span>
+					} else {
+						<span class="text-gray-300">★</span>
 					}
-				</div>
-			</div>
-		}
-		<div class="grid grid-cols-1 gap-6 md:grid-cols-2">
-			if len(data.Book.Translators) > 0 {
-				<div>
-					<h3 class="mb-2 text-sm font-semibold uppercase tracking-wide text-gray-500">Translators</h3>
-					<ul class="space-y-1">
-						for _, translator := range data.Book.Translators {
-							<li class="text-gray-700">{ translator.Name }</li>
-						}
-					</ul>
-				</div>
-			}
-			if len(data.Book.Narrators) > 0 {
-				<div>
-					<h3 class="mb-2 text-sm font-semibold uppercase tracking-wide text-gray-500">Narrators</h3>
-					<ul class="space-y-1">
-						for _, narrator := range data.Book.Narrators {
-							<li class="text-gray-700">{ narrator.Name }</li>
-						}
-					</ul>
 				</div>
 			}
 		</div>
 	</div>
+}
+
+templ SummaryAndTags(data Data) {
+	<div class="border-t border-gray-200 p-8">
+		@Summary(data)
+		@Contributors(data)
+		@Tags(data)
+	</div>
+}
+
+// FIXME: make the gradient apply onlt to text, not the whole box
+templ Summary(data Data) {
+	if data.Book.Summary == "" {
+		{{ return }}
+	}
+	<div class="mb-6">
+		<h3 class="mb-3 text-sm font-semibold uppercase tracking-wide text-gray-500">Summary</h3>
+		<div class="relative">
+			<input type="checkbox" id="summary-toggle" class="peer/summary hidden"/>
+			<div
+				id="summary-box-css"
+				class="relative max-h-24 overflow-hidden pr-4 transition-all peer-checked/summary:max-h-none"
+			>
+				<p class="whitespace-pre-wrap text-gray-700">{ data.Book.Summary }</p>
+			</div>
+			<div
+				id="summary-gradient-css"
+				class="bg-linear-to-b pointer-events-none absolute left-0 top-0 h-24 w-full from-transparent to-white peer-checked/summary:hidden"
+			></div>
+			<label
+				for="summary-toggle"
+				class="mt-2 inline cursor-pointer text-sm font-medium text-blue-600 hover:underline peer-checked/summary:hidden"
+			>Show more</label>
+			<label
+				for="summary-toggle"
+				class="mt-2 hidden cursor-pointer text-sm font-medium text-blue-600 hover:underline peer-checked/summary:inline"
+			>Show less</label>
+		</div>
+	</div>
+}
+
+templ Tags(data Data) {
+	if len(data.Book.Tags) > 0 {
+		<div class="mb-6">
+			<h3 class="mb-3 text-sm font-semibold uppercase tracking-wide text-gray-500">Tags</h3>
+			<div class="flex flex-wrap gap-2">
+				for _, tag := range data.Book.Tags {
+					<span class="rounded-full bg-gray-100 px-3 py-1 text-sm text-gray-800">
+						{ tag.Name }
+					</span>
+				}
+			</div>
+		</div>
+	}
+}
+
+templ Contributors(data Data) {
+	<div class="grid grid-cols-1 gap-6 md:grid-cols-2">
+		@Translators(data)
+		@Narrators(data)
+	</div>
+}
+
+templ Translators(data Data) {
+	if len(data.Book.Translators) > 0 {
+		<div>
+			<h3 class="mb-2 text-sm font-semibold uppercase tracking-wide text-gray-500">Translators</h3>
+			<ul class="space-y-1">
+				for _, translator := range data.Book.Translators {
+					<li class="text-gray-700">{ translator.Name }</li>
+				}
+			</ul>
+		</div>
+	}
+}
+
+templ Narrators(data Data) {
+	if len(data.Book.Narrators) > 0 {
+		<div>
+			<h3 class="mb-2 text-sm font-semibold uppercase tracking-wide text-gray-500">Narrators</h3>
+			<ul class="space-y-1">
+				for _, narrator := range data.Book.Narrators {
+					<li class="text-gray-700">{ narrator.Name }</li>
+				}
+			</ul>
+		</div>
+	}
 }
 
 templ Events(data Data) {
@@ -204,15 +345,6 @@ templ Events(data Data) {
 					<span class="ml-2 text-gray-600">{ event.Date.Format("January 2, 2006") }</span>
 				</div>
 				<div class="flex">
-					// TODO: edit event
-					//<button
-					//	hx-get={ "/event/" + strconv.FormatInt(event.ID, 10) + "/edit" }
-					//	hx-target="#modal"
-					//	hx-swap="innerHTML"
-					//	class="mr-2 flex h-8 w-8 items-center justify-center rounded-md border border-green-600 text-green-600 transition-colors duration-200 hover:bg-green-100 focus:outline-none focus:ring-2 focus:ring-green-500"
-					//>
-					//	<span class="text-sm"></span>
-					//</button>
 					<button
 						hx-delete={ "/event/" + strconv.FormatInt(event.ID, 10) }
 						hx-confirm="Are you sure you want to delete this event?"
@@ -223,24 +355,6 @@ templ Events(data Data) {
 				</div>
 			</div>
 		}
-	</div>
-}
-
-templ Reviews(data Data) {
-	<div class="border-t border-gray-200 p-8">
-		<h2 class="mb-6 text-2xl font-semibold text-gray-900">Reviews</h2>
-		<div class="py-8 text-center text-gray-500">
-			<p>No reviews yet. <button class="text-blue-600 underline hover:text-blue-800">Write the first review</button></p>
-		</div>
-	</div>
-}
-
-templ Quotes(data Data) {
-	<div class="border-t border-gray-200 p-8">
-		<h2 class="mb-6 text-2xl font-semibold text-gray-900">Quotes</h2>
-		<div class="py-8 text-center text-gray-500">
-			<p>No quotes yet. <button class="text-blue-600 underline hover:text-blue-800">Add the first quote</button></p>
-		</div>
 	</div>
 }
 

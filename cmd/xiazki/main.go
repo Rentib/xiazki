@@ -84,6 +84,7 @@ func main() {
 	protected.GET("/add_book/autofill/sse", h.GetAddBookAutofillSSE)
 	protectedHX.POST("/add_book/autofill/select", h.PostAddBookAutofillSelect)
 	protectedHX.DELETE("/book/:id", h.DeleteBook)
+	protectedHX.GET("/book/:id/stats", h.GetBookStats)
 	protectedHX.PUT("/book/:id/edit", h.PutBookEdit)
 	protectedHX.GET("/book/:id/add_event", h.GetBookAddEvent)
 	protectedHX.POST("/book/:id/add_event", h.PostBookAddEvent)
