@@ -66,7 +66,6 @@ func (h *Handler) PostBookAddEvent(c echo.Context) error {
 
 func (h *Handler) DeleteEvent(c echo.Context) error {
 	idStr := c.Param("id")
-
 	id, err := strconv.ParseInt(idStr, 10, 64)
 	if err != nil {
 		return echo.NewHTTPError(http.StatusBadRequest, "Invalid event ID")

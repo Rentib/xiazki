@@ -149,15 +149,15 @@ templ RatingSection(data Data) {
 			@Buttons(data)
 		</div>
 		<div class="rounded-lg border border-gray-200 p-6">
-			<div id="review-section" class="mt-4">
-				<div
-					hx-get={ "/book/" + strconv.FormatInt(data.Book.ID, 10) + "/stats" }
-					hx-trigger="load"
-					hx-swap="innerHTML"
-				>
-					<div class="flex justify-center p-4">
-						<div class="loader h-8 w-8 rounded-full border-4 border-t-4 border-gray-200 ease-linear"></div>
-					</div>
+			<div
+				id="review-section"
+				class="mt-4"
+				hx-get={ "/book/" + strconv.FormatInt(data.Book.ID, 10) + "/stats" }
+				hx-trigger="load"
+				hx-swap="innerHTML"
+			>
+				<div class="flex justify-center p-4">
+					<div class="loader h-8 w-8 rounded-full border-4 border-t-4 border-gray-200 ease-linear"></div>
 				</div>
 			</div>
 		</div>
@@ -209,21 +209,25 @@ templ Stats(bookID int64, stats model.ReviewStats) {
 				<span class="font-medium">{ strconv.FormatInt(stats.RatingsCount, 10) } ratings</span>
 			</div>
 		</div>
-		<div class="my-6 border-t border-gray-200 pb-8 pt-8"></div>
+		<div class="my-6 border-t border-gray-200"></div>
 		<h3 class="mb-4 text-lg font-semibold text-gray-900">Your Rating</h3>
-		<div class="mb-4 flex justify-center gap-1 text-3xl">
-			for i := 1; i <= 10; i++ {
-				<div
-					hx-post={ "/book/" + strconv.FormatInt(bookID, 10) + "/rate" }
-					hx-vals={ "{\"rating\": " + strconv.Itoa(i) + "}" }
-					hx-swap="outerHTML"
-					class="cursor-pointer"
-				>
+		<div class="group mb-4 flex flex-row-reverse justify-center text-3xl">
+			for i := 10; i >= 1; i-- {
+				{{
+					class := "peer cursor-pointer px-1 hover:text-yellow-500 peer-hover:text-yellow-500 group-hover:text-gray-400"
 					if i <= int(stats.UserRating) {
-						<span class="text-yellow-500">★</span>
+						class += " text-yellow-500"
 					} else {
-						<span class="text-gray-300">★</span>
+						class += " text-gray-400"
 					}
+				}}
+				<div class={ class }>
+					<div
+						hx-post={ "/book/" + strconv.FormatInt(bookID, 10) + "/rate" }
+						hx-vals={ "{\"rating\": " + strconv.Itoa(i) + "}" }
+						hx-target="#review-section"
+						hx-swap="innerHTML"
+					>★</div>
 				</div>
 			}
 		</div>

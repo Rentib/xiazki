@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"strconv"
 
+	"xiazki/internal/db"
 	"xiazki/internal/model"
 	"xiazki/web/template/book"
 
@@ -73,6 +74,59 @@ func (h *Handler) GetBookStats(c echo.Context) error {
 	user, err := h.currentUser(c)
 	if err != nil {
 		return echo.NewHTTPError(http.StatusUnauthorized, "Unauthorized")
+	}
+
+	var stats model.ReviewStats
+	err = h.db.NewSelect().
+		ColumnExpr("COALESCE(MAX(CASE WHEN user_id = ? THEN rating END), 0) AS user_rating", user.ID).
+		ColumnExpr("COALESCE(AVG(CAST(rating AS REAL)), 0.0) AS average_rating").
+		ColumnExpr("COUNT(CASE WHEN rating != 0 THEN 1 END) AS ratings_count").
+		ColumnExpr("COUNT(CASE WHEN opinion != '' THEN 1 END) AS opinions_count").
+		Table("reviews").
+		Where("book_id = ?", id).
+		Scan(c.Request().Context(), &stats)
+	if err == nil {
+		return Render(c, book.Stats(id, stats))
+	} else if errors.Is(err, sql.ErrNoRows) {
+		return Render(c, book.Stats(id, model.ReviewStats{}))
+	}
+	return echo.NewHTTPError(http.StatusInternalServerError, "Failed to fetch book stats")
+}
+
+func (h *Handler) PostBookRate(c echo.Context) error {
+	ratingStr := c.FormValue("rating")
+	rating, err := strconv.Atoi(ratingStr)
+	if err != nil || rating < 0 || rating > 10 {
+		return echo.NewHTTPError(http.StatusBadRequest, "Invalid rating value")
+	}
+
+	idStr := c.Param("id")
+	id, err := strconv.ParseInt(idStr, 10, 64)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, "Invalid event ID")
+	}
+
+	err = h.db.NewSelect().
+		Model(&model.Book{}).
+		Where("id = ?", id).
+		Limit(1).
+		Scan(c.Request().Context())
+	if err != nil {
+		log.Println("Error fetching book:", err)
+		return echo.NewHTTPError(http.StatusInternalServerError, "Failed to fetch book: "+err.Error())
+	}
+
+	user, err := h.currentUser(c)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusUnauthorized, "Unauthorized")
+	}
+
+	if err := db.InsertOrUpdateReview(h.db, c.Request().Context(), &model.Review{
+		UserID: user.ID,
+		BookID: id,
+		Rating: rating,
+	}); err != nil {
+		return echo.NewHTTPError(http.StatusInternalServerError, "Failed to submit rating: "+err.Error())
 	}
 
 	var stats model.ReviewStats
