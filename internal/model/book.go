@@ -11,16 +11,16 @@ type Book struct {
 
 	ID           int64     `bun:"id,pk,autoincrement"`
 	Title        string    `bun:"title,notnull"`
-	Summary      string    `bun:"summary"`
-	ISBN10       string    `bun:"isbn10"`
-	ISBN13       string    `bun:"isbn13"`
-	Language     string    `bun:"language"`
-	Publisher    string    `bun:"publisher"`
-	PublishDate  time.Time `bun:"publish_date"`
-	PageCount    int64     `bun:"page_count"`
-	SeriesName   string    `bun:"series_name"`
-	SeriesNumber int64     `bun:"series_number"`
-	CoverURL     string    `bun:"cover_url"`
+	Summary      string    `bun:"summary,type:text,nullzero"`
+	ISBN10       string    `bun:"isbn10,nullzero"`
+	ISBN13       string    `bun:"isbn13,nullzero"`
+	Language     string    `bun:"language,nullzero"`
+	Publisher    string    `bun:"publisher,nullzero"`
+	PublishDate  time.Time `bun:"publish_date,nullzero"`
+	PageCount    int64     `bun:"page_count,nullzero"`
+	SeriesName   string    `bun:"series_name,nullzero"`
+	SeriesNumber int64     `bun:"series_number,nullzero"`
+	CoverURL     string    `bun:"cover_url,nullzero"`
 	CreatedAt    time.Time `bun:"created_at,nullzero,notnull,default:current_timestamp"`
 	UpdatedAt    time.Time `bun:"updated_at,nullzero,notnull,default:current_timestamp"`
 

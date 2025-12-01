@@ -25,7 +25,7 @@ type Event struct {
 	UpdatedAt time.Time `bun:"updated_at,nullzero,notnull,default:current_timestamp"`
 
 	UserID uuid.UUID `bun:"user_id,notnull"`
-	User   *User     `bun:"rel:belongs-to,join:user_id=id"`
 	BookID int64     `bun:"book_id,notnull"`
+	User   *User     `bun:"rel:belongs-to,join:user_id=id"`
 	Book   *Book     `bun:"rel:belongs-to,join:book_id=id"`
 }

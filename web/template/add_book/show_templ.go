@@ -101,42 +101,22 @@ func (b BookFormValues) ToBook() *model.Book {
 			}
 		}
 	}
-	if b.Summary != "" {
-		book.Summary = b.Summary
+	book.Summary = b.Summary
+	book.ISBN10 = b.ISBN10
+	book.ISBN13 = b.ISBN13
+	book.Language = b.Language
+	if pd, err := time.Parse("2006-01-02", b.PublishDate); err == nil {
+		book.PublishDate = pd
 	}
-	if b.ISBN10 != "" {
-		book.ISBN10 = b.ISBN10
+	book.Publisher = b.Publisher
+	if pc, err := strconv.ParseInt(b.PageCount, 10, 64); err == nil {
+		book.PageCount = pc
 	}
-	if b.ISBN13 != "" {
-		book.ISBN13 = b.ISBN13
+	book.SeriesName = b.SeriesName
+	if sn, err := strconv.ParseInt(b.SeriesNumber, 10, 64); err == nil {
+		book.SeriesNumber = sn
 	}
-	if b.Language != "" {
-		book.Language = b.Language
-	}
-	if b.PublishDate != "" {
-		if pd, err := time.Parse("2006-01-02", b.PublishDate); err == nil {
-			book.PublishDate = pd
-		}
-	}
-	if b.Publisher != "" {
-		book.Publisher = b.Publisher
-	}
-	if b.PageCount != "" {
-		if pc, err := strconv.ParseInt(b.PageCount, 10, 64); err == nil {
-			book.PageCount = pc
-		}
-	}
-	if b.SeriesName != "" {
-		book.SeriesName = b.SeriesName
-	}
-	if b.SeriesNumber != "" {
-		if sn, err := strconv.ParseInt(b.SeriesNumber, 10, 64); err == nil {
-			book.SeriesNumber = sn
-		}
-	}
-	if b.CoverURL != "" {
-		book.CoverURL = b.CoverURL
-	}
+	book.CoverURL = b.CoverURL
 
 	return book
 }
@@ -144,9 +124,7 @@ func (b BookFormValues) ToBook() *model.Book {
 func BookToBookFormValues(book model.Book) BookFormValues {
 	b := BookFormValues{}
 
-	if book.Title != "" {
-		b.Title = book.Title
-	}
+	b.Title = book.Title
 	if len(book.Authors) > 0 {
 		list := make([]string, len(book.Authors))
 		for i, author := range book.Authors {
@@ -266,13 +244,13 @@ func Show(data Data) templ.Component {
 			var templ_7745c5c3_Var3 string
 			templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(h1[data.Op])
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/template/add_book/show.templ`, Line: 225, Col: 67}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/template/add_book/show.templ`, Line: 203, Col: 67}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var3))
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "</h1><button type=\"button\" class=\"rounded-md bg-green-600 px-4 py-2 text-sm font-semibold text-white transition-colors duration-200 hover:bg-green-700 focus:ring-2 focus:ring-green-500 focus:outline-none\" hx-get=\"/add_book/autofill\" hx-target=\"#modal\" hx-swap=\"innerHTML\">Autofill</button></div>")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "</h1><button type=\"button\" class=\"rounded-md bg-green-600 px-4 py-2 text-sm font-semibold text-white transition-colors duration-200 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500\" hx-get=\"/add_book/autofill\" hx-target=\"#modal\" hx-swap=\"innerHTML\">Autofill</button></div>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -330,7 +308,7 @@ func FormAdd(data Data) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 5, "<button type=\"submit\" class=\"w-full rounded-md bg-blue-600 px-4 py-2 text-white hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:outline-none\">Add Book</button></form>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 5, "<button type=\"submit\" class=\"w-full rounded-md bg-blue-600 px-4 py-2 text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2\">Add Book</button></form>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -366,7 +344,7 @@ func FormEdit(data Data) templ.Component {
 		var templ_7745c5c3_Var6 string
 		templ_7745c5c3_Var6, templ_7745c5c3_Err = templ.JoinStringErrs("/book/" + strconv.FormatInt(data.BookID, 10) + "/edit")
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/template/add_book/show.templ`, Line: 265, Col: 66}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/template/add_book/show.templ`, Line: 243, Col: 66}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var6))
 		if templ_7745c5c3_Err != nil {
@@ -380,7 +358,7 @@ func FormEdit(data Data) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 8, "<div class=\"flex justify-end\"><button type=\"submit\" class=\"rounded-md bg-blue-600 px-6 py-2 text-sm text-white transition-colors duration-200 hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:outline-none\">Edit Book</button></div></form>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 8, "<div class=\"flex justify-end\"><button type=\"submit\" class=\"rounded-md bg-blue-600 px-6 py-2 text-sm text-white transition-colors duration-200 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500\">Edit Book</button></div></form>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

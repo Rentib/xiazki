@@ -93,42 +93,22 @@ func (b BookFormValues) ToBook() *model.Book {
 			}
 		}
 	}
-	if b.Summary != "" {
-		book.Summary = b.Summary
+	book.Summary = b.Summary
+	book.ISBN10 = b.ISBN10
+	book.ISBN13 = b.ISBN13
+	book.Language = b.Language
+	if pd, err := time.Parse("2006-01-02", b.PublishDate); err == nil {
+		book.PublishDate = pd
 	}
-	if b.ISBN10 != "" {
-		book.ISBN10 = b.ISBN10
+	book.Publisher = b.Publisher
+	if pc, err := strconv.ParseInt(b.PageCount, 10, 64); err == nil {
+		book.PageCount = pc
 	}
-	if b.ISBN13 != "" {
-		book.ISBN13 = b.ISBN13
+	book.SeriesName = b.SeriesName
+	if sn, err := strconv.ParseInt(b.SeriesNumber, 10, 64); err == nil {
+		book.SeriesNumber = sn
 	}
-	if b.Language != "" {
-		book.Language = b.Language
-	}
-	if b.PublishDate != "" {
-		if pd, err := time.Parse("2006-01-02", b.PublishDate); err == nil {
-			book.PublishDate = pd
-		}
-	}
-	if b.Publisher != "" {
-		book.Publisher = b.Publisher
-	}
-	if b.PageCount != "" {
-		if pc, err := strconv.ParseInt(b.PageCount, 10, 64); err == nil {
-			book.PageCount = pc
-		}
-	}
-	if b.SeriesName != "" {
-		book.SeriesName = b.SeriesName
-	}
-	if b.SeriesNumber != "" {
-		if sn, err := strconv.ParseInt(b.SeriesNumber, 10, 64); err == nil {
-			book.SeriesNumber = sn
-		}
-	}
-	if b.CoverURL != "" {
-		book.CoverURL = b.CoverURL
-	}
+	book.CoverURL = b.CoverURL
 
 	return book
 }
@@ -136,9 +116,7 @@ func (b BookFormValues) ToBook() *model.Book {
 func BookToBookFormValues(book model.Book) BookFormValues {
 	b := BookFormValues{}
 
-	if book.Title != "" {
-		b.Title = book.Title
-	}
+	b.Title = book.Title
 	if len(book.Authors) > 0 {
 		list := make([]string, len(book.Authors))
 		for i, author := range book.Authors {
@@ -192,7 +170,7 @@ func BookToBookFormValues(book model.Book) BookFormValues {
 		b.SeriesName = book.SeriesName
 	}
 	if book.SeriesNumber != 0 {
-        b.SeriesNumber = strconv.FormatInt(int64(book.SeriesNumber), 10)
+		b.SeriesNumber = strconv.FormatInt(int64(book.SeriesNumber), 10)
 	}
 	if book.CoverURL != "" {
 		b.CoverURL = book.CoverURL
@@ -225,7 +203,7 @@ templ Show(data Data) {
 				<h1 class="mb-6 text-2xl font-bold text-gray-900">{ h1[data.Op] }</h1>
 				<button
 					type="button"
-					class="rounded-md bg-green-600 px-4 py-2 text-sm font-semibold text-white transition-colors duration-200 hover:bg-green-700 focus:ring-2 focus:ring-green-500 focus:outline-none"
+					class="rounded-md bg-green-600 px-4 py-2 text-sm font-semibold text-white transition-colors duration-200 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500"
 					hx-get="/add_book/autofill"
 					hx-target="#modal"
 					hx-swap="innerHTML"
@@ -252,7 +230,7 @@ templ FormAdd(data Data) {
 		@BookFormFields(data)
 		<button
 			type="submit"
-			class="w-full rounded-md bg-blue-600 px-4 py-2 text-white hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:outline-none"
+			class="w-full rounded-md bg-blue-600 px-4 py-2 text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
 		>
 			Add Book
 		</button>
@@ -270,7 +248,7 @@ templ FormEdit(data Data) {
 		<div class="flex justify-end">
 			<button
 				type="submit"
-				class="rounded-md bg-blue-600 px-6 py-2 text-sm text-white transition-colors duration-200 hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+				class="rounded-md bg-blue-600 px-6 py-2 text-sm text-white transition-colors duration-200 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
 			>
 				Edit Book
 			</button>
