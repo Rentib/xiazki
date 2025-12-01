@@ -96,7 +96,7 @@ type Fetcher struct {
 
 func NewFetcher(apiKey string) *Fetcher {
 	return &Fetcher{
-		client:  http.DefaultClient,
+		client:  &http.Client{Timeout: 10 * time.Second},
 		baseURL: "https://www.googleapis.com/books/v1/volumes",
 		apiKey:  apiKey,
 	}

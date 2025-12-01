@@ -140,7 +140,7 @@ type Fetcher struct {
 
 func NewFetcher() *Fetcher {
 	return &Fetcher{
-		client:  http.DefaultClient,
+		client:  &http.Client{Timeout: 10 * time.Second},
 		baseURL: "https://openlibrary.org",
 	}
 }
