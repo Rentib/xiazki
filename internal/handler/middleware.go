@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"database/sql"
 	"net/http"
 	"os"
 
@@ -20,7 +21,10 @@ const (
 )
 
 func (h *Handler) createSession(c echo.Context, userID uuid.UUID) error {
-	sess, _ := session.Get(sessionName, c) // FIXME: handle error
+	sess, err := session.Get(sessionName, c)
+	if err != nil {
+		return err
+	}
 
 	sess.Options = &sessions.Options{
 		Path:     "/",
@@ -48,28 +52,17 @@ func (h *Handler) clearSession(c echo.Context) error {
 }
 
 func (h *Handler) currentUser(c echo.Context) (*model.User, error) {
-	sess, err := session.Get(sessionName, c)
+	userID, err := checkSession(c)
 	if err != nil {
-		return nil, err
-	}
-
-	if auth, ok := sess.Values[authKey].(bool); !ok || !auth {
 		return nil, echo.NewHTTPError(http.StatusUnauthorized, "Not authenticated")
 	}
 
-	userIDStr, ok := sess.Values[userIDKey].(string)
-	if !ok {
-		return nil, echo.NewHTTPError(http.StatusUnauthorized, "Invalid session")
-	}
-
-	userID, err := uuid.Parse(userIDStr)
-	if err != nil {
-		return nil, echo.NewHTTPError(http.StatusUnauthorized, "Invalid user ID")
-	}
-
 	var user model.User
-	if err := h.db.NewSelect().Model(&user).Where("id = ?", userID).Scan(c.Request().Context()); err != nil {
-		return nil, echo.NewHTTPError(http.StatusUnauthorized, "User not found")
+	if err = h.db.NewSelect().Model(&user).Where("id = ?", userID).Scan(c.Request().Context()); err != nil {
+		if err == sql.ErrNoRows {
+			return nil, echo.NewHTTPError(http.StatusUnauthorized, "User not found")
+		}
+		return nil, err
 	}
 
 	return &user, nil
@@ -77,7 +70,7 @@ func (h *Handler) currentUser(c echo.Context) (*model.User, error) {
 
 func (h *Handler) RequireAuth(next echo.HandlerFunc) echo.HandlerFunc {
 	return func(c echo.Context) error {
-		if err := checkSession(c); err != nil {
+		if _, err := checkSession(c); err != nil {
 			return c.Redirect(http.StatusSeeOther, "/login")
 		}
 		return next(c)
@@ -86,31 +79,31 @@ func (h *Handler) RequireAuth(next echo.HandlerFunc) echo.HandlerFunc {
 
 func (h *Handler) RequireAuthHTMX(next echo.HandlerFunc) echo.HandlerFunc {
 	return func(c echo.Context) error {
-		if err := checkSession(c); err != nil || c.Request().Header.Get("HX-Request") != "true" {
+		if _, err := checkSession(c); err != nil || c.Request().Header.Get("HX-Request") != "true" {
 			return c.NoContent(http.StatusUnauthorized)
 		}
 		return next(c)
 	}
 }
 
-func checkSession(c echo.Context) error {
+func checkSession(c echo.Context) (uuid.UUID, error) {
 	sess, err := session.Get(sessionName, c)
 	if err != nil {
-		return err
+		return uuid.Nil, err
 	}
 
 	if auth, ok := sess.Values[authKey].(bool); !ok || !auth {
-		return echo.NewHTTPError(http.StatusUnauthorized, "Not authenticated")
+		return uuid.Nil, echo.NewHTTPError(http.StatusUnauthorized, "Not authenticated")
 	}
 
 	userIDStr, ok := sess.Values[userIDKey].(string)
 	if !ok {
-		return echo.NewHTTPError(http.StatusUnauthorized, "Invalid session")
+		return uuid.Nil, echo.NewHTTPError(http.StatusUnauthorized, "Invalid session")
 	}
 
-	if _, err := uuid.Parse(userIDStr); err != nil {
-		return echo.NewHTTPError(http.StatusUnauthorized, "Invalid user ID")
+	if userID, err := uuid.Parse(userIDStr); err != nil {
+		return uuid.Nil, echo.NewHTTPError(http.StatusUnauthorized, "Invalid user ID")
+	} else {
+		return userID, nil
 	}
-
-	return nil
 }
