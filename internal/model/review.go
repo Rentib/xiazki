@@ -11,7 +11,7 @@ type Review struct {
 	bun.BaseModel `bun:"table:reviews"`
 
 	ID        int64     `bun:"id,pk,autoincrement"`
-	Rating    int       `bun:"rating,nullzero"` // 1-10
+	Rating    int64     `bun:"rating,nullzero"` // 1-10
 	Opinion   string    `bun:"opinion,nullzero"`
 	CreatedAt time.Time `bun:"created_at,nullzero,notnull,default:current_timestamp"`
 	UpdatedAt time.Time `bun:"updated_at,nullzero,notnull,default:current_timestamp"`

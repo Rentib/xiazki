@@ -95,7 +95,7 @@ func (h *Handler) GetBookStats(c echo.Context) error {
 
 func (h *Handler) PostBookRate(c echo.Context) error {
 	ratingStr := c.FormValue("rating")
-	rating, err := strconv.Atoi(ratingStr)
+	rating, err := strconv.ParseInt(ratingStr, 10, 64)
 	if err != nil || rating < 0 || rating > 10 {
 		return echo.NewHTTPError(http.StatusBadRequest, "Invalid rating value")
 	}
