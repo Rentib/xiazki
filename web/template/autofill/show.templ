@@ -33,14 +33,14 @@ templ AutofillModal(data Data) {
 				<div class="flex justify-end">
 					<button
 						type="button"
-						class="mr-2 rounded-md bg-gray-300 px-4 py-2 text-sm text-gray-700 transition-colors duration-200 hover:bg-gray-400 focus:ring-2 focus:ring-gray-500 focus:outline-none"
+						class="mr-2 rounded-md bg-gray-300 px-4 py-2 text-sm text-gray-700 transition-colors duration-200 hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-500"
 						onclick="document.getElementById('modal').innerHTML = ''"
 					>
 						Cancel
 					</button>
 					<button
 						type="submit"
-						class="rounded-md bg-blue-600 px-4 py-2 text-sm text-white transition-colors duration-200 hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+						class="rounded-md bg-blue-600 px-4 py-2 text-sm text-white transition-colors duration-200 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
 					>
 						Autofill
 					</button>
@@ -59,13 +59,13 @@ templ MatchListModal(data Data) {
 			sse-connect={ "/add_book/autofill/sse?isbn=" + data.Values.ISBN }
 			sse-close="close"
 		>
-			<div class="mb-6 flex flex-row space-around gap-4">
+			<div class="mb-6 flex flex-row place-content-around gap-4">
 				<h2 class="text-2xl font-bold text-gray-800">Select a Book to Autofill</h2>
 				<div
 					sse-swap="close"
 					hx-swap="outerHTML"
 				>
-					<svg class="w-8 h-8 animate-spin rounded-full border-4 border-blue-500 border-t-transparent"></svg>
+					<svg class="h-8 w-8 animate-spin rounded-full border-4 border-blue-500 border-t-transparent"></svg>
 				</div>
 			</div>
 			<div
@@ -192,7 +192,7 @@ templ MatchItem(CSRF string, Match *model.Book) {
 				<div class="mb-4 space-y-2">
 					if len(Match.Authors) > 0 {
 						<div class="flex items-start gap-2">
-							<span class="text-sm font-medium whitespace-nowrap text-gray-700">Author(s):</span>
+							<span class="whitespace-nowrap text-sm font-medium text-gray-700">Author(s):</span>
 							for i, author := range Match.Authors {
 								<div>
 									<span class="text-sm text-gray-600">{ author.Name }</span>
@@ -205,7 +205,7 @@ templ MatchItem(CSRF string, Match *model.Book) {
 					}
 					if len(Match.Narrators) > 0 {
 						<div class="flex items-start gap-2">
-							<span class="text-sm font-medium whitespace-nowrap text-gray-700">Narrator(s):</span>
+							<span class="whitespace-nowrap text-sm font-medium text-gray-700">Narrator(s):</span>
 							for i, narrator := range Match.Narrators {
 								<div>
 									<span class="text-sm text-gray-600">{ narrator.Name }</span>
@@ -218,7 +218,7 @@ templ MatchItem(CSRF string, Match *model.Book) {
 					}
 					if len(Match.Translators) > 0 {
 						<div class="flex items-start gap-2">
-							<span class="text-sm font-medium whitespace-nowrap text-gray-700">Translator(s):</span>
+							<span class="whitespace-nowrap text-sm font-medium text-gray-700">Translator(s):</span>
 							for i, translator := range Match.Translators {
 								<div>
 									<span class="text-sm text-gray-600">{ translator.Name }</span>
@@ -288,7 +288,7 @@ templ MatchItem(CSRF string, Match *model.Book) {
 			<div class="flex shrink-0 items-center">
 				<button
 					type="submit"
-					class="-translate-x-2 transform rounded-lg bg-blue-600 px-4 py-2 font-medium text-white opacity-0 transition-all duration-200 group-hover:translate-x-0 group-hover:opacity-100 hover:bg-blue-700"
+					class="-translate-x-2 transform rounded-lg bg-blue-600 px-4 py-2 font-medium text-white opacity-0 transition-all duration-200 hover:bg-blue-700 group-hover:translate-x-0 group-hover:opacity-100"
 				>
 					Select
 				</button>

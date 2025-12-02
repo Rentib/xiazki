@@ -68,7 +68,7 @@ func AutofillModal(data Data) templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "<div class=\"flex justify-end\"><button type=\"button\" class=\"mr-2 rounded-md bg-gray-300 px-4 py-2 text-sm text-gray-700 transition-colors duration-200 hover:bg-gray-400 focus:ring-2 focus:ring-gray-500 focus:outline-none\" onclick=\"document.getElementById('modal').innerHTML = ''\">Cancel</button> <button type=\"submit\" class=\"rounded-md bg-blue-600 px-4 py-2 text-sm text-white transition-colors duration-200 hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:outline-none\">Autofill</button></div></form></div>")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "<div class=\"flex justify-end\"><button type=\"button\" class=\"mr-2 rounded-md bg-gray-300 px-4 py-2 text-sm text-gray-700 transition-colors duration-200 hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-500\" onclick=\"document.getElementById('modal').innerHTML = ''\">Cancel</button> <button type=\"submit\" class=\"rounded-md bg-blue-600 px-4 py-2 text-sm text-white transition-colors duration-200 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500\">Autofill</button></div></form></div>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -128,7 +128,7 @@ func MatchListModal(data Data) templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 4, "\" sse-close=\"close\"><div class=\"mb-6 flex flex-row space-around gap-4\"><h2 class=\"text-2xl font-bold text-gray-800\">Select a Book to Autofill</h2><div sse-swap=\"close\" hx-swap=\"outerHTML\"><svg class=\"w-8 h-8 animate-spin rounded-full border-4 border-blue-500 border-t-transparent\"></svg></div></div><div class=\"max-h-128 space-y-4 overflow-y-auto\" sse-swap=\"message\" hx-swap=\"beforeend\"></div></div>")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 4, "\" sse-close=\"close\"><div class=\"mb-6 flex flex-row place-content-around gap-4\"><h2 class=\"text-2xl font-bold text-gray-800\">Select a Book to Autofill</h2><div sse-swap=\"close\" hx-swap=\"outerHTML\"><svg class=\"h-8 w-8 animate-spin rounded-full border-4 border-blue-500 border-t-transparent\"></svg></div></div><div class=\"max-h-128 space-y-4 overflow-y-auto\" sse-swap=\"message\" hx-swap=\"beforeend\"></div></div>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -509,7 +509,7 @@ func MatchItem(CSRF string, Match *model.Book) templ.Component {
 			return templ_7745c5c3_Err
 		}
 		if len(Match.Authors) > 0 {
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 35, "<div class=\"flex items-start gap-2\"><span class=\"text-sm font-medium whitespace-nowrap text-gray-700\">Author(s):</span> ")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 35, "<div class=\"flex items-start gap-2\"><span class=\"whitespace-nowrap text-sm font-medium text-gray-700\">Author(s):</span> ")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -548,7 +548,7 @@ func MatchItem(CSRF string, Match *model.Book) templ.Component {
 			}
 		}
 		if len(Match.Narrators) > 0 {
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 41, "<div class=\"flex items-start gap-2\"><span class=\"text-sm font-medium whitespace-nowrap text-gray-700\">Narrator(s):</span> ")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 41, "<div class=\"flex items-start gap-2\"><span class=\"whitespace-nowrap text-sm font-medium text-gray-700\">Narrator(s):</span> ")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -587,7 +587,7 @@ func MatchItem(CSRF string, Match *model.Book) templ.Component {
 			}
 		}
 		if len(Match.Translators) > 0 {
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 47, "<div class=\"flex items-start gap-2\"><span class=\"text-sm font-medium whitespace-nowrap text-gray-700\">Translator(s):</span> ")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 47, "<div class=\"flex items-start gap-2\"><span class=\"whitespace-nowrap text-sm font-medium text-gray-700\">Translator(s):</span> ")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -799,7 +799,7 @@ func MatchItem(CSRF string, Match *model.Book) templ.Component {
 				return templ_7745c5c3_Err
 			}
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 74, "</div><div class=\"flex shrink-0 items-center\"><button type=\"submit\" class=\"-translate-x-2 transform rounded-lg bg-blue-600 px-4 py-2 font-medium text-white opacity-0 transition-all duration-200 group-hover:translate-x-0 group-hover:opacity-100 hover:bg-blue-700\">Select</button></div></div></form>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 74, "</div><div class=\"flex shrink-0 items-center\"><button type=\"submit\" class=\"-translate-x-2 transform rounded-lg bg-blue-600 px-4 py-2 font-medium text-white opacity-0 transition-all duration-200 hover:bg-blue-700 group-hover:translate-x-0 group-hover:opacity-100\">Select</button></div></div></form>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

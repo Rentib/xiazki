@@ -466,6 +466,9 @@
   .flex-wrap {
     flex-wrap: wrap;
   }
+  .place-content-around {
+    place-content: space-around;
+  }
   .items-center {
     align-items: center;
   }
