@@ -3,7 +3,6 @@ package handler
 import (
 	"database/sql"
 	"errors"
-	"log"
 	"net/http"
 	"strconv"
 
@@ -112,7 +111,7 @@ func (h *Handler) PostBookRate(c echo.Context) error {
 		Limit(1).
 		Scan(c.Request().Context())
 	if err != nil {
-		log.Println("Error fetching book:", err)
+		c.Logger().Error("Failed to fetch book: ", err)
 		return echo.NewHTTPError(http.StatusInternalServerError, "Failed to fetch book: "+err.Error())
 	}
 
@@ -143,6 +142,6 @@ func (h *Handler) PostBookRate(c echo.Context) error {
 	} else if errors.Is(err, sql.ErrNoRows) {
 		return Render(c, book.Stats(id, model.ReviewStats{}))
 	}
-	log.Println("Error fetching book stats:", err)
+	c.Logger().Error("Failed to fetch book stats: ", err)
 	return echo.NewHTTPError(http.StatusInternalServerError, "Failed to fetch book stats")
 }
