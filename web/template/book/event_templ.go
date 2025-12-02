@@ -33,7 +33,7 @@ func (e EventFormValues) ToEvent() *model.Event {
 	return event
 }
 
-func AddEventModal(bookID int64, csrf string) templ.Component {
+func AddEventModal(bookID int64) templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
 		if templ_7745c5c3_CtxErr := ctx.Err(); templ_7745c5c3_CtxErr != nil {
@@ -126,7 +126,7 @@ func AddEventModal(bookID int64, csrf string) templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 6, "</fieldset><div class=\"flex justify-end\"><button type=\"button\" class=\"mr-2 rounded-md bg-gray-300 px-4 py-2 text-sm text-gray-700 transition-colors duration-200 hover:bg-gray-400 focus:ring-2 focus:ring-gray-500 focus:outline-none\" onclick=\"document.getElementById('modal').innerHTML = ''\">Cancel</button> <button type=\"submit\" class=\"rounded-md bg-blue-600 px-4 py-2 text-sm text-white transition-colors duration-200 hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:outline-none\">Add Event</button></div></form></div>")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 6, "</fieldset><div class=\"flex justify-end\"><button type=\"button\" class=\"mr-2 rounded-md bg-gray-300 px-4 py-2 text-sm text-gray-700 transition-colors duration-200 hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-500\" onclick=\"document.getElementById('modal').innerHTML = ''\">Cancel</button> <button type=\"submit\" class=\"rounded-md bg-blue-600 px-4 py-2 text-sm text-white transition-colors duration-200 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500\">Add Event</button></div></form></div>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}

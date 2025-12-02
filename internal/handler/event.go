@@ -18,10 +18,7 @@ func (h *Handler) GetBookAddEvent(c echo.Context) error {
 		return echo.NewHTTPError(http.StatusBadRequest, "Invalid book ID")
 	}
 
-	return Render(c, book.AddEventModal(
-		id,
-		c.Get("csrf").(string),
-	))
+	return Render(c, book.AddEventModal(id))
 }
 
 func (h *Handler) PostBookAddEvent(c echo.Context) error {
