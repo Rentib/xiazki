@@ -163,7 +163,7 @@ templ MatchItem(CSRF string, Match *model.Book) {
 					if Match.CoverURL != "" {
 						<img
 							src={ Match.CoverURL }
-							alt={ `Cover of ${Match.Title}` }
+							alt={ "Cover of " + Match.Title }
 							class="h-full w-full object-cover transition-transform duration-200"
 						/>
 					} else {
