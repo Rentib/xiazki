@@ -11,7 +11,7 @@ func StringToISBN(isbn string) (string, error) {
 	result = strings.ReplaceAll(result, "-", "")
 	result = strings.ReplaceAll(result, " ", "")
 
-	if !IsValidISBN(isbn) {
+	if !IsValidISBN(result) {
 		return isbn, fmt.Errorf("invalid ISBN: %s", isbn)
 	}
 
