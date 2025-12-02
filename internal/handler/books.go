@@ -38,7 +38,8 @@ func (h *Handler) GetAuthor(c echo.Context) error {
 	idStr := c.Param("id")
 	id, err := strconv.ParseInt(idStr, 10, 64)
 	if err != nil {
-		return err
+		c.Logger().Error("Invalid author ID: ", err)
+		return echo.NewHTTPError(http.StatusBadRequest, "Invalid author ID")
 	}
 
 	// TOOD: change logic to add events
