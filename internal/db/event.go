@@ -60,6 +60,8 @@ func InsertEvent(db *bun.DB, ctx context.Context, book *model.Book, user *model.
 			if err != nil {
 				return err
 			}
+		default:
+			return errors.New("unknown event type")
 		}
 
 		// Insert the new event
