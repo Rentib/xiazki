@@ -32,12 +32,14 @@ func (h *Handler) GetBook(c echo.Context) error {
 		}).
 		Scan(c.Request().Context())
 	if err != nil {
+		c.Logger().Error("Failed to fetch book details: ", err)
 		return echo.NewHTTPError(http.StatusInternalServerError, "Failed to fetch book details")
 	}
 
+	csrf, _ := c.Get("csrf").(string)
 	return Render(c, book.Show(
 		book.Data{
-			CSRF: c.Get("csrf").(string),
+			CSRF: csrf,
 			Book: b,
 		},
 	))
