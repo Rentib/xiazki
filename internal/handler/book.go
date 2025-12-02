@@ -57,7 +57,8 @@ func (h *Handler) DeleteBook(c echo.Context) error {
 		Where("id = ?", id).
 		Exec(c.Request().Context())
 	if err != nil {
-		return echo.NewHTTPError(http.StatusInternalServerError, "Failed to delete book: "+err.Error())
+		c.Logger().Error("Failed to delete book: ", err)
+		return echo.NewHTTPError(http.StatusInternalServerError, "Failed to delete book")
 	}
 
 	return HxRedirect(c, "/books")
@@ -111,7 +112,7 @@ func (h *Handler) PostBookRate(c echo.Context) error {
 		Scan(c.Request().Context())
 	if err != nil {
 		c.Logger().Error("Failed to fetch book: ", err)
-		return echo.NewHTTPError(http.StatusInternalServerError, "Failed to fetch book: "+err.Error())
+		return echo.NewHTTPError(http.StatusInternalServerError, "Failed to fetch book")
 	}
 
 	user, err := h.currentUser(c)
@@ -124,7 +125,8 @@ func (h *Handler) PostBookRate(c echo.Context) error {
 		BookID: id,
 		Rating: rating,
 	}); err != nil {
-		return echo.NewHTTPError(http.StatusInternalServerError, "Failed to submit rating: "+err.Error())
+		c.Logger().Error("Failed to submit rating: ", err)
+		return echo.NewHTTPError(http.StatusInternalServerError, "Failed to submit rating")
 	}
 
 	var stats model.ReviewStats
