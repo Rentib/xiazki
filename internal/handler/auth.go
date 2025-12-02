@@ -20,11 +20,13 @@ type AuthForm struct {
 }
 
 func (h *Handler) GetRegister(c echo.Context) error {
-	return Render(c, auth.Show(auth.Data{Op: auth.Register, CSRF: c.Get("csrf").(string)}))
+	csrf, _ := c.Get("csrf").(string)
+	return Render(c, auth.Show(auth.Data{Op: auth.Register, CSRF: csrf}))
 }
 
 func (h *Handler) GetLogin(c echo.Context) error {
-	return Render(c, auth.Show(auth.Data{Op: auth.Login, CSRF: c.Get("csrf").(string)}))
+	csrf, _ := c.Get("csrf").(string)
+	return Render(c, auth.Show(auth.Data{Op: auth.Login, CSRF: csrf}))
 }
 
 // TODO: password strength meter
@@ -35,11 +37,10 @@ func (h *Handler) PostRegister(c echo.Context) error {
 		return echo.NewHTTPError(http.StatusBadRequest, "Invalid form data")
 	}
 
-	// FIXME: is returnign password back safe???
-
+	csrf, _ := c.Get("csrf").(string)
 	data := auth.Data{
 		Op:     auth.Register,
-		CSRF:   c.Get("csrf").(string),
+		CSRF:   csrf,
 		Values: map[string]string{"username": form.Username, "password": form.Password},
 		Errors: map[string]string{},
 	}
@@ -113,10 +114,10 @@ func (h *Handler) PostLogin(c echo.Context) error {
 		return echo.NewHTTPError(http.StatusBadRequest, "Invalid form data")
 	}
 
-	// FIXME: is returnign password back safe???
+	csrf, _ := c.Get("csrf").(string)
 	data := auth.Data{
 		Op:     auth.Login,
-		CSRF:   c.Get("csrf").(string),
+		CSRF:   csrf,
 		Values: map[string]string{"username": form.Username, "password": form.Password},
 		Errors: map[string]string{},
 	}
