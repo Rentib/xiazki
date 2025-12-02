@@ -23,7 +23,8 @@ func (h *Handler) GetBooks(c echo.Context) error {
 		OrderExpr("created_at DESC").
 		Scan(c.Request().Context())
 	if err != nil {
-		return echo.NewHTTPError(http.StatusInternalServerError, "Failed to fetch books: "+err.Error())
+		c.Logger().Error("Failed to fetch books: ", err)
+		return echo.NewHTTPError(http.StatusInternalServerError, "Failed to fetch books")
 	}
 
 	csrf, ok := c.Get("csrf").(string)
