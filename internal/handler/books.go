@@ -49,7 +49,8 @@ func (h *Handler) GetAuthor(c echo.Context) error {
 		Relation("Books").
 		Scan(c.Request().Context())
 	if err != nil {
-		return err
+		c.Logger().Error("Failed to fetch author: ", err)
+		return echo.NewHTTPError(http.StatusInternalServerError, "Failed to fetch author")
 	}
 
 	csrf, _ := c.Get("csrf").(string)
