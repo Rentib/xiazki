@@ -31,7 +31,7 @@ func (h *Handler) GetBook(c echo.Context) error {
 		Relation("Translators").
 		Relation("Narrators").
 		Relation("Events", func(q *bun.SelectQuery) *bun.SelectQuery {
-			return q.Order("event.date ASC")
+			return q.OrderExpr("CASE WHEN type = ? THEN 3 WHEN type = ? THEN 2 WHEN type = ? THEN 1 ELSE 0 END ASC", model.EventFinished, model.EventDropped, model.EventReading).OrderExpr("date ASC")
 		}).
 		Scan(c.Request().Context())
 	if err != nil {

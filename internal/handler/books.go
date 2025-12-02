@@ -18,9 +18,7 @@ func (h *Handler) GetBooks(c echo.Context) error {
 		Model(&b).
 		Relation("Authors").
 		Relation("Events", func(q *bun.SelectQuery) *bun.SelectQuery {
-			return q.Where(
-				"date = (SELECT MAX(e2.date) FROM events e2 WHERE e2.book_id = event.book_id)",
-			).Order("date DESC")
+			return q.OrderExpr("CASE WHEN type = ? THEN 3 WHEN type = ? THEN 2 WHEN type = ? THEN 1 ELSE 0 END ASC", model.EventFinished, model.EventDropped, model.EventReading).OrderExpr("date ASC")
 		}).
 		OrderExpr("created_at DESC").
 		Scan(c.Request().Context())
