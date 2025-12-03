@@ -1,53 +1,70 @@
 # xiazki
 
-Lightweight, selfhosted application for tracking books.
+Lightweight, self-hosted application for tracking books.
 
 ## Why?
-I started reading books, and thought of tracking it. I saw goodreads and
-I hated it. Then I remembered about self-hosting, so I looked for something
-reasonable. There is [jelu](https://github.com/bayang/jelu), which would be
-great if not for 3 things: it's slow, it's ugly, and it uses A LOT of ram. There
-is also [booklogr](https://github.com/Mozzo1000/booklogr), but it has even more
-problems. Currently, xiazki solves only the ram usage issue and none of the
-other, however it also introduces its own problems :-).
-
-## Tools it uses
-- [echo](https://echo.labstack.com/)
-- [templ](https://templ.guide/)
-- [tailwind](https://tailwindcss.com/)
-- [htmx](https://htmx.org/)
-- [bun](https://bun.uptrace.dev/)
-- [sqlite](https://pkg.go.dev/github.com/uptrace/bun/driver/sqliteshim)
+I started reading books, and thought it would be great to keep track of them.
+I tried goodreads and hated it. Then self-hosting came to mind.
+There are a few apps which do this, most notably
+[jelu](https://github.com/bayang/jelu). It works, but has its issues: it's
+slow, its design is questionable, and it uses a lot of memory.
+Therefore, I decided to make *xiazki*. It currently is not ideal and lacks
+features, but at least it deals with the aforementioned problems :-).
 
 ## Features:
-- [x] adding/deleting/editing books
-- [x] book's information
-- [x] importing books based on ISBN
-- [x] listing all books by author
+- [x] password authentication
 - [x] listing books
-- [x] marking books as reading/finished/dropped
-- [x] reviews (ratings)
-- [x] user accounts
-- [ ] color schemes
-- [ ] importing books based on author and title
-- [ ] marking books as "to read"
-- [ ] merge authors
+- [x] adding books
+- [x] editing books
+- [x] getting book metadata from ISBN ([openlibrary](https://openlibrary.org/), [googlebooks](https://books.google.com/))
+- [x] events (*reading*/*finished*/*dropped*)
+- [x] rating books
 - [ ] quotes
-- [ ] reading statistics
-- [ ] reviews (opinions)
-- [ ] saving covers on disk
-- [ ] search feature to look up books with given properties
-- [ ] sorting books
-- [ ] track page
-- [ ] translations
-- [ ] various editions of works
+- [ ] bulk import
+- [ ] full book reviews (opinions)
+- [ ] dark mode and color schemes
+- [ ] i18n, l10n (translations basically)
+- [ ] docker
+- [ ] marking books as *to read*
+- [ ] advanced search features
+- [ ] OAuth/LDAP
+- [ ] documentation
 
-## Requirements:
-- go 1.25.4 (earlier versions probably work too)
-- templ 0.3.960
-- tailwind 4.1.17
+The unfulfilled fields in the TODO list are sorted by priority, although it
+doesn't mean, they will be done in this order.
+
+## Screenshots
+Book Details
+![Book Details](./screenshots/details.png "Book Details")
+Book List
+![Book List](./screenshots/list.png "Book List")
+Add Book
+![Add Book](./screenshots/add_book.png "Add Book")
+Author
+![Author](./screenshots/author.png "Author")
+Auto fill
+![Auto fill](./screenshots/autofill.png "Auto fill")
+Auto fill Results
+![Auto fill Results](./screenshots/autofill_results.png "Auto fill Results")
+Profile
+![Profile](./screenshots/profile.png "Profile")
+Login
+![Login](./screenshots/login.png "Login")
+Register
+![Register](./screenshots/register.png "Register")
 
 ## Building
+- go 1.25
+
 ```sh
-make
+make xiazki
+```
+
+## Developing
+- go 1.25
+- [templ](https://templ.guide/quick-start/installation) 0.3.960
+- [tailwind](https://tailwindcss.com/docs/installation/tailwind-cli) 4.1
+
+```sh
+make dev
 ```
