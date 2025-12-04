@@ -7,12 +7,11 @@ import (
 )
 
 type Data struct {
-	CSRF  string
 	Books []*model.Book
 }
 
 templ Show(data Data) {
-	@layout.Base(layout.Data{Title: "Books", CSRF: data.CSRF}) {
+	@layout.Base("Books") {
 		@components.BookList(data.Books)
 	}
 }

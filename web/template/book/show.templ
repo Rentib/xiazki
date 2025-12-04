@@ -9,12 +9,11 @@ import (
 )
 
 type Data struct {
-	CSRF string
 	Book model.Book
 }
 
 templ Show(data Data) {
-	@layout.Base(layout.Data{Title: data.Book.Title, CSRF: data.CSRF}) {
+	@layout.Base(data.Book.Title) {
 		@MainInfo(data)
 		@SummaryAndTags(data)
 		@Events(data)

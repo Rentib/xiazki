@@ -27,8 +27,7 @@ func (h *Handler) GetBooks(c echo.Context) error {
 		return echo.NewHTTPError(http.StatusInternalServerError, "Failed to fetch books")
 	}
 
-	csrf, _ := c.Get("csrf").(string)
-	return Render(c, books.Show(books.Data{CSRF: csrf, Books: b}))
+	return Render(c, books.Show(books.Data{Books: b}))
 }
 
 func (h *Handler) GetAuthor(c echo.Context) error {
@@ -53,9 +52,5 @@ func (h *Handler) GetAuthor(c echo.Context) error {
 		return echo.NewHTTPError(http.StatusInternalServerError, "Failed to fetch author")
 	}
 
-	csrf, _ := c.Get("csrf").(string)
-	return Render(c, author.Show(author.Data{
-		CSRF:   csrf,
-		Author: &a,
-	}))
+	return Render(c, author.Show(author.Data{Author: &a}))
 }

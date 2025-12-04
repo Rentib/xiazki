@@ -36,13 +36,7 @@ func (h *Handler) GetBook(c echo.Context) error {
 		return echo.NewHTTPError(http.StatusInternalServerError, "Failed to fetch book details")
 	}
 
-	csrf, _ := c.Get("csrf").(string)
-	return Render(c, book.Show(
-		book.Data{
-			CSRF: csrf,
-			Book: b,
-		},
-	))
+	return Render(c, book.Show(book.Data{Book: b}))
 }
 
 func (h *Handler) DeleteBook(c echo.Context) error {

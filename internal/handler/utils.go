@@ -33,7 +33,9 @@ func NewHandler(db *bun.DB, gbAPIKey string) *Handler {
 }
 
 func Render(c echo.Context, component templ.Component) error {
-	return component.Render(context.Background(), c.Response())
+	csrf := c.Get("csrf")
+	ctx := context.WithValue(c.Request().Context(), "X-CSRF-Token", csrf)
+	return component.Render(ctx, c.Response())
 }
 
 func HxRedirect(c echo.Context, path string) error {

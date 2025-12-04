@@ -12,12 +12,7 @@ import (
 )
 
 func (h *Handler) GetAddBook(c echo.Context) error {
-	return Render(c, add_book.Show(
-		add_book.Data{
-			CSRF: c.Get("csrf").(string),
-			Op:   add_book.Add,
-		},
-	))
+	return Render(c, add_book.Show(add_book.Data{Op: add_book.Add}))
 }
 
 func (h *Handler) PostAddBook(c echo.Context) error {
@@ -28,7 +23,6 @@ func (h *Handler) PostAddBook(c echo.Context) error {
 
 	if errors := bfv.Validate(); len(errors) > 0 {
 		return Render(c, add_book.FormAdd(add_book.Data{
-			CSRF:   c.Get("csrf").(string),
 			Op:     add_book.Add,
 			Values: bfv,
 			Errors: errors,
@@ -62,13 +56,11 @@ func (h *Handler) GetBookEdit(c echo.Context) error {
 		return echo.NewHTTPError(http.StatusInternalServerError, "Failed to fetch book details")
 	}
 
-	return Render(c, add_book.Show(
-		add_book.Data{
-			CSRF:   c.Get("csrf").(string),
-			Op:     add_book.Edit,
-			Values: add_book.BookToBookFormValues(b),
-			BookID: b.ID,
-		},
+	return Render(c, add_book.Show(add_book.Data{
+		Op:     add_book.Edit,
+		Values: add_book.BookToBookFormValues(b),
+		BookID: b.ID,
+	},
 	))
 }
 
@@ -85,14 +77,12 @@ func (h *Handler) PutBookEdit(c echo.Context) error {
 	}
 
 	if errors := bfv.Validate(); len(errors) > 0 {
-		return Render(c, add_book.FormEdit(
-			add_book.Data{
-				CSRF:   c.Get("csrf").(string),
-				Op:     add_book.Edit,
-				BookID: id,
-				Errors: errors,
-				Values: bfv,
-			},
+		return Render(c, add_book.FormEdit(add_book.Data{
+			Op:     add_book.Edit,
+			BookID: id,
+			Errors: errors,
+			Values: bfv,
+		},
 		))
 	}
 

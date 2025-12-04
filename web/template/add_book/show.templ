@@ -189,7 +189,6 @@ const (
 type Data struct {
 	Op     Operation
 	BookID int64
-	CSRF   string
 	Errors map[string]string
 	Values BookFormValues
 }
@@ -197,7 +196,7 @@ type Data struct {
 templ Show(data Data) {
 	{{ title := map[Operation]string{Add: "Add Book", Edit: "Edit Book"} }}
 	{{ h1 := map[Operation]string{Add: "Add New Book", Edit: "Edit Book"} }}
-	@layout.Base(layout.Data{Title: title[data.Op], CSRF: data.CSRF}) {
+	@layout.Base(title[data.Op]) {
 		<div class="mx-auto max-w-4xl rounded-lg bg-white p-6 shadow-sm">
 			<div class="mb-6 flex items-center justify-between">
 				<h1 class="mb-6 text-2xl font-bold text-gray-900">{ h1[data.Op] }</h1>

@@ -16,17 +16,14 @@ import (
 type AuthForm struct {
 	Username string `form:"username"`
 	Password string `form:"password"`
-	CSRF     string `form:"csrf"`
 }
 
 func (h *Handler) GetRegister(c echo.Context) error {
-	csrf, _ := c.Get("csrf").(string)
-	return Render(c, auth.Show(auth.Data{Op: auth.Register, CSRF: csrf}))
+	return Render(c, auth.Show(auth.Data{Op: auth.Register}))
 }
 
 func (h *Handler) GetLogin(c echo.Context) error {
-	csrf, _ := c.Get("csrf").(string)
-	return Render(c, auth.Show(auth.Data{Op: auth.Login, CSRF: csrf}))
+	return Render(c, auth.Show(auth.Data{Op: auth.Login}))
 }
 
 // TODO: password strength meter
@@ -37,10 +34,8 @@ func (h *Handler) PostRegister(c echo.Context) error {
 		return echo.NewHTTPError(http.StatusBadRequest, "Invalid form data")
 	}
 
-	csrf, _ := c.Get("csrf").(string)
 	data := auth.Data{
 		Op:     auth.Register,
-		CSRF:   csrf,
 		Values: map[string]string{"username": form.Username, "password": form.Password},
 		Errors: map[string]string{},
 	}
@@ -114,10 +109,8 @@ func (h *Handler) PostLogin(c echo.Context) error {
 		return echo.NewHTTPError(http.StatusBadRequest, "Invalid form data")
 	}
 
-	csrf, _ := c.Get("csrf").(string)
 	data := auth.Data{
 		Op:     auth.Login,
-		CSRF:   csrf,
 		Values: map[string]string{"username": form.Username, "password": form.Password},
 		Errors: map[string]string{},
 	}

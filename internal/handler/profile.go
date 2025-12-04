@@ -14,15 +14,7 @@ func (h *Handler) GetProfile(c echo.Context) error {
 		return err
 	}
 
-	csrf, ok := c.Get("csrf").(string)
-	if !ok {
-		return echo.NewHTTPError(http.StatusInternalServerError, "CSRF token not found")
-	}
-
-	return Render(c, profile.Show(profile.Data{
-		CSRF: csrf,
-		User: user,
-	}))
+	return Render(c, profile.Show(profile.Data{User: user}))
 }
 
 func (h *Handler) PostUserChangePassword(c echo.Context) error {
@@ -36,14 +28,8 @@ func (h *Handler) PostUserChangePassword(c echo.Context) error {
 		return echo.NewHTTPError(http.StatusBadRequest, "Invalid form data")
 	}
 
-	csrf, ok := c.Get("csrf").(string)
-	if !ok {
-		return echo.NewHTTPError(http.StatusInternalServerError, "CSRF token not found")
-	}
-
 	if errors := cpfv.Validate(user); len(errors) > 0 {
 		return Render(c, profile.ChangePasswordForm(profile.Data{
-			CSRF:   csrf,
 			User:   user,
 			Values: cpfv,
 			Errors: errors,

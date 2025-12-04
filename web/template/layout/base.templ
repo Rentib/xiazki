@@ -2,21 +2,24 @@ package layout
 
 type Data struct {
 	Title string
-	CSRF  string
 }
 
-templ Base(data Data) {
+templ Base(Title string) {
 	<!DOCTYPE html>
 	<html lang="en">
 		<head>
 			<meta charset="UTF-8"/>
 			<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-			<title>{ data.Title } - xiazki</title>
+			<title>{ Title } - xiazki</title>
 			<script src="/static/js/htmx.min.js"></script>
 			<script src="/static/js/htmx-ext-sse.js"></script>
 			<link href="/static/css/tailwind.css" rel="stylesheet"/>
 		</head>
-		<body class="min-h-screen bg-gray-50" hx-boost="true" hx-headers={ "{\"X-CSRF-Token\":\"" + data.CSRF + "\"}" }>
+		<body
+			class="min-h-screen bg-gray-50"
+			hx-boost="true"
+			hx-headers={ "{\"X-CSRF-Token\":\"" + ctx.Value("X-CSRF-Token").(string) + "\"}" }
+		>
 			<nav class="border-b bg-white shadow-sm">
 				<div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
 					<div class="flex h-16 justify-between">
@@ -24,11 +27,11 @@ templ Base(data Data) {
 							<a href="/books" class="text-xl font-bold text-gray-900">xiazki</a>
 						</div>
 						// FIXME: This is a temporary solution until we have a proper way to check authentication status in templates.
-						if data.Title != "Login" && data.Title != "Register" {
+						if Title != "Login" && Title != "Register" {
 							<div class="flex items-center space-x-4">
 								@baseLink("/books", "Books")
 								@baseLink("/add_book", "Add Book")
-								@profile(data)
+								@profile()
 							</div>
 						}
 					</div>
@@ -46,7 +49,7 @@ templ baseLink(href string, text string) {
 	<a href={ href } class="text-gray-700 hover:text-gray-900">{ text }</a>
 }
 
-templ profile(data Data) {
+templ profile() {
 	<div class="relative inline-block text-left">
 		// TODO: hide on click anywhere, not only on click on profile-menu
 		<button

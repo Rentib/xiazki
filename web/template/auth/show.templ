@@ -16,7 +16,6 @@ const (
 
 type Data struct {
 	Op     Operation
-	CSRF   string
 	Errors map[string]string
 	Values map[string]string
 }
@@ -28,7 +27,7 @@ templ Show(data Data) {
 		note := map[Operation]string{Login: "Don't have an account? Register", Register: "Already have an account? Sign in"}
 		href := map[Operation]string{Login: "/register", Register: "/login"}
 	}}
-	@layout.Base(layout.Data{Title: title[data.Op], CSRF: data.CSRF}) {
+	@layout.Base(title[data.Op]) {
 		<div class="flex min-h-full items-center justify-center px-4 py-12 sm:px-6 lg:px-8">
 			<div class="w-full max-w-md space-y-8">
 				<div>

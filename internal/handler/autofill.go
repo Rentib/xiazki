@@ -29,16 +29,12 @@ func (h *Handler) GetAddBookAutofill(c echo.Context) error {
 			errors = map[string]string{"isbn": "Invalid ISBN format"}
 		}
 		return Render(c, autofill.AutofillModal(autofill.Data{
-			CSRF:   c.Get("csrf").(string),
 			Values: afv,
 			Errors: errors,
 		}))
 	}
 
-	return Render(c, autofill.MatchListModal(autofill.Data{
-		CSRF:   c.Get("csrf").(string),
-		Values: afv,
-	}))
+	return Render(c, autofill.MatchListModal(autofill.Data{Values: afv}))
 }
 
 func (h *Handler) GetAddBookAutofillSSE(c echo.Context) error {
@@ -87,7 +83,7 @@ func (h *Handler) GetAddBookAutofillSSE(c echo.Context) error {
 				return nil
 			}
 
-			component := autofill.MatchItem(c.Get("csrf").(string), match)
+			component := autofill.MatchItem(match)
 			if _, err := io.WriteString(w, "data: "); err != nil {
 				close(done)
 				return err
@@ -112,7 +108,6 @@ func (h *Handler) PostAddBookAutofillSelect(c echo.Context) error {
 	}
 
 	return Render(c, add_book.Show(add_book.Data{
-		CSRF:   c.Get("csrf").(string),
 		Op:     add_book.Add,
 		Values: bfv,
 	}))
