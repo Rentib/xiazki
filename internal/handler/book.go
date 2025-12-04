@@ -58,34 +58,6 @@ func (h *Handler) DeleteBook(c echo.Context) error {
 	return HxRedirect(c, "/books")
 }
 
-func (h *Handler) GetBookStats(c echo.Context) error {
-	idStr := c.Param("id")
-	id, err := strconv.ParseInt(idStr, 10, 64)
-	if err != nil {
-		return echo.NewHTTPError(http.StatusBadRequest, "Invalid book ID")
-	}
-
-	user, err := h.currentUser(c)
-	if err != nil {
-		return echo.NewHTTPError(http.StatusUnauthorized, "Unauthorized")
-	}
-
-	var stats model.ReviewStats
-	err = h.db.NewSelect().
-		ColumnExpr("COALESCE(MAX(CASE WHEN user_id = ? THEN rating END), 0) AS user_rating", user.ID).
-		ColumnExpr("COALESCE(AVG(CAST(rating AS REAL)), 0.0) AS average_rating").
-		ColumnExpr("COUNT(CASE WHEN rating != 0 THEN 1 END) AS ratings_count").
-		ColumnExpr("COUNT(CASE WHEN opinion != '' THEN 1 END) AS opinions_count").
-		Table("reviews").
-		Where("book_id = ?", id).
-		Scan(c.Request().Context(), &stats)
-	if err == nil {
-		return Render(c, book.Stats(id, stats))
-	}
-	c.Logger().Error("Failed to fetch book stats: ", err)
-	return echo.NewHTTPError(http.StatusInternalServerError, "Failed to fetch book stats")
-}
-
 func (h *Handler) PostBookRate(c echo.Context) error {
 	ratingStr := c.FormValue("rating")
 	rating, err := strconv.ParseInt(ratingStr, 10, 64)
@@ -118,7 +90,7 @@ func (h *Handler) PostBookRate(c echo.Context) error {
 		UserID: user.ID,
 		BookID: id,
 		Rating: rating,
-	}); err != nil {
+	}, false); err != nil {
 		c.Logger().Error("Failed to submit rating: ", err)
 		return echo.NewHTTPError(http.StatusInternalServerError, "Failed to submit rating")
 	}
@@ -132,9 +104,9 @@ func (h *Handler) PostBookRate(c echo.Context) error {
 		Table("reviews").
 		Where("book_id = ?", id).
 		Scan(c.Request().Context(), &stats)
-	if err == nil {
-		return Render(c, book.Stats(id, stats))
+	if err != nil {
+		c.Logger().Error("Failed to fetch book stats: ", err)
+		return echo.NewHTTPError(http.StatusInternalServerError, "Failed to fetch book stats")
 	}
-	c.Logger().Error("Failed to fetch book stats: ", err)
-	return echo.NewHTTPError(http.StatusInternalServerError, "Failed to fetch book stats")
+	return Render(c, book.Stats(id, stats))
 }

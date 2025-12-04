@@ -192,6 +192,15 @@ templ Buttons(data Data) {
 	</div>
 }
 
+templ OpinionsLink(bookID int64, text string) {
+	<a
+		class="cursor-pointer font-medium hover:underline"
+		href={ "/book/" + strconv.FormatInt(bookID, 10) + "/opinions" }
+	>
+		{ text }
+	</a>
+}
+
 templ Stats(bookID int64, stats model.ReviewStats) {
 	<div class="text-center">
 		<div class="mb-3">
@@ -203,9 +212,9 @@ templ Stats(bookID int64, stats model.ReviewStats) {
 		</div>
 		<div class="mb-4 text-sm text-gray-700">
 			<div class="flex items-center justify-center gap-1">
-				<span class="font-medium">{ strconv.FormatInt(stats.OpinionsCount, 10) } opinions</span>
+				@OpinionsLink(bookID, fmt.Sprintf("%d Opinions", stats.OpinionsCount))
 				<span class="mx-4 text-gray-400">·</span>
-				<span class="font-medium">{ strconv.FormatInt(stats.RatingsCount, 10) } ratings</span>
+				@OpinionsLink(bookID, fmt.Sprintf("%d Ratings", stats.RatingsCount))
 			</div>
 		</div>
 		<div class="my-6 border-t border-gray-200"></div>

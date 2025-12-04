@@ -23,8 +23,9 @@ type Review struct {
 }
 
 type ReviewStats struct {
-	UserRating    int64   `bun:"user_rating"`
-	AverageRating float64 `bun:"average_rating"`
-	RatingsCount  int64   `bun:"ratings_count"`
-	OpinionsCount int64   `bun:"opinions_count"`
+	UserRating    int64            `bun:"user_rating"`
+	AverageRating float64          `bun:"average_rating"`
+	RatingsCount  int64            `bun:"ratings_count"`
+	OpinionsCount int64            `bun:"opinions_count"`
+	RatingsSpread map[string]int64 `bun:"ratings_spread,type:jsonb,json_use_number"`
 }

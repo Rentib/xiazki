@@ -72,6 +72,7 @@ func main() {
 	protected.GET("/author/:id", h.GetAuthor)
 	protected.GET("/add_book", h.GetAddBook)
 	protected.GET("/book/:id", h.GetBook)
+	protected.GET("/book/:id/opinions", h.GetBookOpinions)
 	protected.GET("/book/:id/edit", h.GetBookEdit)
 	protected.GET("/profile", h.GetProfile)
 
@@ -86,6 +87,7 @@ func main() {
 	protectedHX.DELETE("/book/:id", h.DeleteBook)
 	protectedHX.GET("/book/:id/stats", h.GetBookStats)
 	protectedHX.POST("/book/:id/rate", h.PostBookRate)
+	protectedHX.POST("/book/:id/review", h.PostBookReview)
 	protectedHX.PUT("/book/:id/edit", h.PutBookEdit)
 	protectedHX.GET("/book/:id/add_event", h.GetBookAddEvent)
 	protectedHX.POST("/book/:id/add_event", h.PostBookAddEvent)
