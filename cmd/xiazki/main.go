@@ -5,7 +5,7 @@ import (
 	"log"
 	"os"
 
-	"xiazki/internal/db"
+	"xiazki/internal/database"
 	"xiazki/internal/handler"
 
 	"github.com/gorilla/sessions"
@@ -22,7 +22,7 @@ func main() {
 		}
 	}
 
-	database, err := db.InitDB()
+	database, err := database.InitDB()
 	if err != nil {
 		log.Fatal(err)
 	}

@@ -1,4 +1,4 @@
-package db
+package database
 
 import (
 	"context"
@@ -12,7 +12,7 @@ import (
 	"github.com/uptrace/bun"
 )
 
-func InsertOrUpdateReview(db *bun.DB, ctx context.Context, review *model.Review, updateOpinion bool) error {
+func (db *DB) InsertOrUpdateReview(ctx context.Context, review *model.Review, updateOpinion bool) error {
 	return db.RunInTx(ctx, nil, func(ctx context.Context, tx bun.Tx) error {
 		var oldReview model.Review
 
@@ -48,7 +48,7 @@ func InsertOrUpdateReview(db *bun.DB, ctx context.Context, review *model.Review,
 	})
 }
 
-func FullReviewStats(db *bun.DB, ctx context.Context, bookID int64, userID uuid.UUID) (*model.ReviewStats, error) {
+func (db *DB) FullReviewStats(ctx context.Context, bookID int64, userID uuid.UUID) (*model.ReviewStats, error) {
 	var stats model.ReviewStats
 	ratingsSpreadCTE := db.NewSelect().
 		Table("reviews").

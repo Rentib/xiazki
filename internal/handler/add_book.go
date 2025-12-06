@@ -4,7 +4,6 @@ import (
 	"net/http"
 	"strconv"
 
-	"xiazki/internal/db"
 	"xiazki/internal/model"
 	"xiazki/web/template/add_book"
 
@@ -29,7 +28,7 @@ func (h *Handler) PostAddBook(c echo.Context) error {
 		}))
 	}
 
-	if err := db.InsertBook(h.db, c, bfv.ToBook()); err != nil {
+	if err := h.db.InsertBook(c, bfv.ToBook()); err != nil {
 		return echo.NewHTTPError(http.StatusInternalServerError, "Failed to add book: "+err.Error())
 	}
 
@@ -86,7 +85,7 @@ func (h *Handler) PutBookEdit(c echo.Context) error {
 		))
 	}
 
-	if err := db.UpdateBook(h.db, c, id, bfv.ToBook()); err != nil {
+	if err := h.db.UpdateBook(c, id, bfv.ToBook()); err != nil {
 		return echo.NewHTTPError(http.StatusInternalServerError, "Failed to update book: "+err.Error())
 	}
 

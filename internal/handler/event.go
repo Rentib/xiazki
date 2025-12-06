@@ -4,10 +4,10 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/labstack/echo/v4"
-	"xiazki/internal/db"
 	"xiazki/internal/model"
 	"xiazki/web/template/book"
+
+	"github.com/labstack/echo/v4"
 )
 
 func (h *Handler) GetBookAddEvent(c echo.Context) error {
@@ -27,7 +27,6 @@ func (h *Handler) PostBookAddEvent(c echo.Context) error {
 		return echo.NewHTTPError(http.StatusBadRequest, "Invalid form data")
 	}
 
-	// Validate the form values
 	if err := efv.Validate(); err != nil {
 		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
 	}
@@ -54,7 +53,7 @@ func (h *Handler) PostBookAddEvent(c echo.Context) error {
 	}
 
 	// TODO: notify user if event insertion is rejected due to existing conflicting events
-	if err := db.InsertEvent(h.db, c.Request().Context(), &b, u, efv.ToEvent()); err != nil {
+	if err := h.db.InsertEvent(c.Request().Context(), &b, u, efv.ToEvent()); err != nil {
 		return echo.NewHTTPError(http.StatusInternalServerError, "Failed to add event: "+err.Error())
 	}
 

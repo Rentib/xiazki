@@ -1,4 +1,4 @@
-package db
+package database
 
 import (
 	"context"
@@ -12,7 +12,7 @@ import (
 	"github.com/uptrace/bun"
 )
 
-func InsertBook(db *bun.DB, c echo.Context, book *model.Book) error {
+func (db *DB) InsertBook(c echo.Context, book *model.Book) error {
 	ctx := c.Request().Context()
 
 	return db.RunInTx(ctx, nil, func(ctx context.Context, tx bun.Tx) error {
@@ -49,7 +49,7 @@ func insertBookRelation[T any](ctx context.Context, tx bun.Tx, bookID int64, ite
 	return nil
 }
 
-func UpdateBook(db *bun.DB, c echo.Context, id int64, book *model.Book) error {
+func (db *DB) UpdateBook(c echo.Context, id int64, book *model.Book) error {
 	ctx := c.Request().Context()
 
 	return db.RunInTx(ctx, nil, func(ctx context.Context, tx bun.Tx) error {

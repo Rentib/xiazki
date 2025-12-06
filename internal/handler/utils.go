@@ -4,13 +4,13 @@ import (
 	"context"
 	"net/http"
 
+	"xiazki/internal/database"
 	"xiazki/internal/model"
 	"xiazki/internal/services/googlebooks"
 	"xiazki/internal/services/openlibrary"
 
 	"github.com/a-h/templ"
 	"github.com/labstack/echo/v4"
-	"github.com/uptrace/bun"
 )
 
 type Fetcher interface {
@@ -18,11 +18,11 @@ type Fetcher interface {
 }
 
 type Handler struct {
-	db      *bun.DB
+	db      *database.DB
 	fetcher []Fetcher
 }
 
-func NewHandler(db *bun.DB, gbAPIKey string) *Handler {
+func NewHandler(db *database.DB, gbAPIKey string) *Handler {
 	return &Handler{
 		db: db,
 		fetcher: []Fetcher{

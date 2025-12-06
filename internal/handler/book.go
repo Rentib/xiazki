@@ -4,7 +4,6 @@ import (
 	"net/http"
 	"strconv"
 
-	"xiazki/internal/db"
 	"xiazki/internal/model"
 	"xiazki/web/template/book"
 
@@ -86,7 +85,7 @@ func (h *Handler) PostBookRate(c echo.Context) error {
 		return echo.NewHTTPError(http.StatusUnauthorized, "Unauthorized")
 	}
 
-	if err := db.InsertOrUpdateReview(h.db, c.Request().Context(), &model.Review{
+	if err := h.db.InsertOrUpdateReview(c.Request().Context(), &model.Review{
 		UserID: user.ID,
 		BookID: id,
 		Rating: rating,

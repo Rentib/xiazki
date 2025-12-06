@@ -1,4 +1,4 @@
-package db
+package database
 
 import (
 	"context"
@@ -10,7 +10,7 @@ import (
 	"github.com/uptrace/bun"
 )
 
-func InsertEvent(db *bun.DB, ctx context.Context, book *model.Book, user *model.User, event *model.Event) error {
+func (db *DB) InsertEvent(ctx context.Context, book *model.Book, user *model.User, event *model.Event) error {
 	return db.RunInTx(ctx, nil, func(ctx context.Context, tx bun.Tx) error {
 		event.UserID = user.ID
 		event.BookID = book.ID

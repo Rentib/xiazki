@@ -5,7 +5,6 @@ import (
 	"net/http"
 	"strconv"
 
-	"xiazki/internal/db"
 	"xiazki/internal/model"
 	"xiazki/web/template/book"
 	"xiazki/web/template/opinions"
@@ -64,7 +63,7 @@ func (h *Handler) GetBookOpinions(c echo.Context) error {
 		return echo.NewHTTPError(http.StatusInternalServerError, "Failed to fetch reviews")
 	}
 
-	stats, err := db.FullReviewStats(h.db, c.Request().Context(), bookID, user.ID)
+	stats, err := h.db.FullReviewStats(c.Request().Context(), bookID, user.ID)
 	if err != nil {
 		c.Logger().Error("Failed to fetch book stats: ", err)
 		return echo.NewHTTPError(http.StatusInternalServerError, "Failed to fetch book stats")
@@ -126,7 +125,7 @@ func (h *Handler) PostBookReview(c echo.Context) error {
 		return echo.NewHTTPError(http.StatusUnauthorized, "Unauthorized")
 	}
 
-	if err := db.InsertOrUpdateReview(h.db, c.Request().Context(), &model.Review{
+	if err := h.db.InsertOrUpdateReview(c.Request().Context(), &model.Review{
 		UserID:  user.ID,
 		BookID:  bookID,
 		Rating:  rating,

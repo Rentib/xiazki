@@ -1,4 +1,4 @@
-package db
+package database
 
 import (
 	"context"
@@ -12,7 +12,11 @@ import (
 	"github.com/uptrace/bun/driver/sqliteshim"
 )
 
-func InitDB() (*bun.DB, error) {
+type DB struct {
+	*bun.DB
+}
+
+func InitDB() (*DB, error) {
 	sqldb, err := sql.Open(sqliteshim.ShimName, "file:xiazki.db?cache=shared")
 	if err != nil {
 		return nil, err
@@ -52,5 +56,5 @@ func InitDB() (*bun.DB, error) {
 	}
 
 	log.Println("Database initialized successfully")
-	return db, nil
+	return &DB{db}, nil
 }
