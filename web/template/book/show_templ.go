@@ -1039,20 +1039,20 @@ func Summary(data Data) templ.Component {
 		if data.Book.Summary == "" {
 			return
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 59, "<div class=\"mb-6\"><h3 class=\"mb-3 text-sm font-semibold uppercase tracking-wide text-gray-500\">Summary</h3><div class=\"relative\"><input type=\"checkbox\" id=\"summary-toggle\" class=\"peer/summary hidden\"><div id=\"summary-box-css\" class=\"relative max-h-24 overflow-hidden pr-4 transition-all peer-checked/summary:max-h-none\"><p class=\"whitespace-pre-wrap text-gray-700\">")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 59, "<div class=\"mb-6\"><h3 class=\"mb-3 text-sm font-semibold uppercase tracking-wide text-gray-500\">Summary</h3><div class=\"relative\"><input type=\"checkbox\" id=\"summary-toggle2\" class=\"peer/summary hidden\"><div id=\"summary-box-css2\" class=\"relative max-h-24 overflow-hidden pr-4 transition-all peer-checked/summary:max-h-none\"><article class=\"prose max-w-none text-gray-700\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var44 string
 		templ_7745c5c3_Var44, templ_7745c5c3_Err = templ.JoinStringErrs(data.Book.Summary)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/template/book/show.templ`, Line: 266, Col: 68}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/template/book/show.templ`, Line: 266, Col: 71}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var44))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 60, "</p></div><div id=\"summary-gradient-css\" class=\"bg-linear-to-b pointer-events-none absolute left-0 top-0 h-24 w-full from-transparent to-white peer-checked/summary:hidden\"></div><label for=\"summary-toggle\" class=\"mt-2 inline cursor-pointer text-sm font-medium text-blue-600 hover:underline peer-checked/summary:hidden\">Show more</label> <label for=\"summary-toggle\" class=\"mt-2 hidden cursor-pointer text-sm font-medium text-blue-600 hover:underline peer-checked/summary:inline\">Show less</label></div></div>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 60, "</article></div><div id=\"summary-gradient-css2\" class=\"bg-linear-to-b pointer-events-none absolute left-0 top-0 h-24 w-full from-transparent to-white peer-checked/summary:hidden\"></div><label for=\"summary-toggle2\" class=\"mt-2 inline cursor-pointer text-sm font-medium text-blue-600 hover:underline peer-checked/summary:hidden\">Show more</label> <label for=\"summary-toggle2\" class=\"mt-2 hidden cursor-pointer text-sm font-medium text-blue-600 hover:underline peer-checked/summary:inline\">Show less</label></div></div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
