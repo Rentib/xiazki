@@ -18,10 +18,9 @@ features, but at least it deals with the aforementioned problems :-).
 - [x] editing books
 - [x] getting book metadata from ISBN ([openlibrary](https://openlibrary.org/), [googlebooks](https://books.google.com/))
 - [x] events (*reading*/*finished*/*dropped*)
-- [x] rating books
+- [x] book reviews
 - [ ] quotes
 - [ ] bulk import
-- [ ] full book reviews (opinions)
 - [ ] dark mode and color schemes
 - [ ] i18n, l10n (translations basically)
 - [ ] docker
