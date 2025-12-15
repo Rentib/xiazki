@@ -1,21 +1,43 @@
-all: xiazki templ tailwind
+all: xiazki
 
-xiazki:
+xiazki: templ tailwind
 	go build -o xiazki ./cmd/xiazki/main.go
 
 dev:
-	@make -j2 templ-dev tailwind-dev
+	@make -j4 dev-server dev-templ dev-tailwind dev-sync
 
-templ-dev:
+dev-server:
+	air \
+		--build.bin "./tmp/xiazki" \
+		--build.cmd "go build -o ./tmp/xiazki ./cmd/xiazki/" \
+		--build.delay "100" \
+		--build.exclude_dir "assets,tmp,node_modules" \
+		--build.exclude_regex "_test.go" \
+		--build.include_ext "go" \
+		--build.log "./tmp/server-build-errors.log"
+
+dev-templ:
 	templ generate \
 		--watch \
 		--proxy="http://localhost:8080" \
-		--cmd="go run ./cmd/xiazki/main.go" \
+		--open-browser="false" \
 		--include-version \
 		--log-level=warn
 
-tailwind-dev:
-	npx @tailwindcss/cli -i ./assets/css/input.css -o ./web/static/css/tailwind.css --watch
+dev-tailwind:
+	npx @tailwindcss/cli \
+		--input ./assets/css/input.css \
+		--output ./web/static/css/tailwind.css \
+		--watch
+
+dev-sync:
+	air \
+		--build.bin "true" \
+		--build.cmd "templ generate --notify-proxy" \
+		--build.delay "100" \
+		--build.exclude_dir "assets" \
+		--build.include_ext "css,js" \
+		--build.log "./tmp/sync-build-errors.log"
 
 templ:
 	templ generate \
@@ -23,6 +45,10 @@ templ:
 		--log-level=warn
 
 tailwind:
-	npx @tailwindcss/cli -i ./assets/css/input.css -o ./web/static/css/tailwind.css
+	npx @tailwindcss/cli \
+		--input ./assets/css/input.css \
+		--output ./web/static/css/tailwind.css \
+		--optimize \
+		--minify
 
 .PHONY: all templ tailwind dev templ-dev tailwind-dev
