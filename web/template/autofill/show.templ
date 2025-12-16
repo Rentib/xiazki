@@ -20,7 +20,7 @@ templ AutofillModal(data Data) {
 	{{ Values := data.Values }}
 	{{ Errors := data.Errors }}
 	@components.Modal() {
-		<div class="w-full max-w-md rounded-lg bg-white p-6 shadow-lg">
+		<div class="bg-popover text-popover-foreground w-full max-w-md rounded-lg p-6 shadow-lg">
 			<h2 class="mb-4 text-xl font-bold">Autofill Book Information</h2>
 			<form
 				class="space-y-4"
@@ -32,14 +32,14 @@ templ AutofillModal(data Data) {
 				<div class="flex justify-end">
 					<button
 						type="button"
-						class="mr-2 rounded-md bg-gray-300 px-4 py-2 text-sm text-gray-700 transition-colors duration-200 hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-500"
+						class="bg-gray text-background hover:bg-gray-light focus:ring-gray-light mr-2 rounded-md px-4 py-2 text-sm transition-colors duration-200 focus:outline-none focus:ring-2"
 						onclick="document.getElementById('modal').innerHTML = ''"
 					>
 						Cancel
 					</button>
 					<button
 						type="submit"
-						class="rounded-md bg-blue-600 px-4 py-2 text-sm text-white transition-colors duration-200 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+						class="bg-blue text-background hover:bg-blue-light focus:ring-blue-light rounded-md px-4 py-2 text-sm transition-colors duration-200 focus:outline-none focus:ring-2"
 					>
 						Autofill
 					</button>
@@ -53,18 +53,18 @@ templ MatchListModal(data Data) {
 	// TODO: make width and height constant
 	@components.Modal() {
 		<div
-			class="mx-4 w-full max-w-4xl rounded-lg bg-white p-6 shadow-xl"
+			class="bg-popover mx-4 w-full max-w-4xl rounded-lg p-6 shadow-xl"
 			hx-ext="sse"
 			sse-connect={ "/add_book/autofill/sse?isbn=" + data.Values.ISBN }
 			sse-close="close"
 		>
 			<div class="mb-6 flex flex-row place-content-around gap-4">
-				<h2 class="text-2xl font-bold text-gray-800">Select a Book to Autofill</h2>
+				<h2 class="text-2xl font-bold">Select a Book to Autofill</h2>
 				<div
 					sse-swap="close"
 					hx-swap="outerHTML"
 				>
-					<svg class="h-8 w-8 animate-spin rounded-full border-4 border-blue-500 border-t-transparent"></svg>
+					<svg class="border-blue h-8 w-8 animate-spin rounded-full border-4 border-t-transparent"></svg>
 				</div>
 			</div>
 			<div
@@ -78,7 +78,7 @@ templ MatchListModal(data Data) {
 
 templ MatchItem(Match *model.Book) {
 	<form
-		class="group cursor-pointer rounded-xl border border-gray-200 bg-white p-6 transition-all duration-200 hover:border-blue-300 hover:shadow-md"
+		class="hover:border-blue-light bg-background-soft border-gray group rounded-xl border p-6 transition-all duration-200 hover:shadow-md"
 		hx-post="/add_book/autofill/select"
 		hx-target="body"
 		hx-swap="innerHTML"
@@ -158,7 +158,7 @@ templ MatchItem(Match *model.Book) {
 		// }}}
 		<div class="flex gap-6">
 			<div class="shrink-0">
-				<div class="h-36 w-24 overflow-hidden rounded-lg bg-gray-100 shadow-sm">
+				<div class="bg-gray h-36 w-24 overflow-hidden rounded-lg shadow-sm">
 					if Match.CoverURL != "" {
 						<img
 							src={ Match.CoverURL }
@@ -166,7 +166,7 @@ templ MatchItem(Match *model.Book) {
 							class="h-full w-full object-cover transition-transform duration-200"
 						/>
 					} else {
-						<div class="flex h-full w-full items-center justify-center bg-gray-200 text-gray-400">
+						<div class="bg-gray text-foreground2 flex h-full w-full items-center justify-center">
 							<svg class="h-8 w-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
 							</svg>
@@ -176,12 +176,12 @@ templ MatchItem(Match *model.Book) {
 			</div>
 			<div class="min-w-0 flex-1">
 				<div class="mb-3">
-					<h3 class="line-clamp-2 text-xl font-bold text-gray-900 transition-colors group-hover:text-blue-600">
+					<h3 class="group-hover:text-blue line-clamp-2 text-xl font-bold transition-colors">
 						{ Match.Title }
 					</h3>
 					if Match.SeriesName != "" {
 						<div class="mt-1 flex items-center gap-2">
-							<span class="rounded bg-blue-50 px-2 py-1 text-sm text-blue-600">
+							<span class="text-foreground bg-blue rounded px-2 py-1 text-sm">
 								{ Match.SeriesName }
 								<span>#{ strconv.FormatInt(int64(Match.SeriesNumber), 10) }</span>
 							</span>
@@ -191,12 +191,12 @@ templ MatchItem(Match *model.Book) {
 				<div class="mb-4 space-y-2">
 					if len(Match.Authors) > 0 {
 						<div class="flex items-start gap-2">
-							<span class="whitespace-nowrap text-sm font-medium text-gray-700">Author(s):</span>
+							<span class="text-foreground2 whitespace-nowrap text-sm font-medium">Author(s):</span>
 							for i, author := range Match.Authors {
 								<div>
-									<span class="text-sm text-gray-600">{ author.Name }</span>
+									<span class="text-popover-foreground text-sm">{ author.Name }</span>
 									if i < len(Match.Authors)-1 {
-										<span class="text-sm text-gray-300">, </span>
+										<span class="text-foreground3 text-sm">, </span>
 									}
 								</div>
 							}
@@ -204,12 +204,12 @@ templ MatchItem(Match *model.Book) {
 					}
 					if len(Match.Narrators) > 0 {
 						<div class="flex items-start gap-2">
-							<span class="whitespace-nowrap text-sm font-medium text-gray-700">Narrator(s):</span>
+							<span class="text-foreground2 whitespace-nowrap text-sm font-medium">Narrator(s):</span>
 							for i, narrator := range Match.Narrators {
 								<div>
-									<span class="text-sm text-gray-600">{ narrator.Name }</span>
+									<span class="text-popover-foreground text-sm">{ narrator.Name }</span>
 									if i < len(Match.Narrators)-1 {
-										<span class="text-sm text-gray-300">, </span>
+										<span class="text-foreground3 text-sm">, </span>
 									}
 								</div>
 							}
@@ -217,12 +217,12 @@ templ MatchItem(Match *model.Book) {
 					}
 					if len(Match.Translators) > 0 {
 						<div class="flex items-start gap-2">
-							<span class="whitespace-nowrap text-sm font-medium text-gray-700">Translator(s):</span>
+							<span class="text-foreground2 whitespace-nowrap text-sm font-medium">Translator(s):</span>
 							for i, translator := range Match.Translators {
 								<div>
-									<span class="text-sm text-gray-600">{ translator.Name }</span>
+									<span class="text-popover-foreground text-sm">{ translator.Name }</span>
 									if i < len(Match.Translators)-1 {
-										<span class="text-sm text-gray-300">, </span>
+										<span class="text-foreground3 text-sm">, </span>
 									}
 								</div>
 							}
@@ -232,52 +232,52 @@ templ MatchItem(Match *model.Book) {
 				<div class="mb-4 grid grid-cols-2 gap-x-6 gap-y-2">
 					if Match.Publisher != "" {
 						<div class="flex items-center gap-2">
-							<span class="text-xs font-medium text-gray-500">Publisher:</span>
-							<span class="text-xs text-gray-600">{ Match.Publisher }</span>
+							<span class="text-foreground2 text-xs font-medium">Publisher:</span>
+							<span class="text-popover-foreground text-xs">{ Match.Publisher }</span>
 						</div>
 					}
 					if !Match.PublishDate.IsZero() {
 						<div class="flex items-center gap-2">
-							<span class="text-xs font-medium text-gray-500">Published:</span>
-							<span class="text-xs text-gray-600">{ Match.PublishDate.Format("January 2, 2006") }</span>
+							<span class="text-foreground2 text-xs font-medium">Published:</span>
+							<span class="text-popover-foreground text-xs">{ Match.PublishDate.Format("January 2, 2006") }</span>
 						</div>
 					}
 					if Match.Language != "" {
 						<div class="flex items-center gap-2">
-							<span class="text-xs font-medium text-gray-500">Language:</span>
-							<span class="text-xs text-gray-600">{ Match.Language }</span>
+							<span class="text-foreground2 text-xs font-medium">Language:</span>
+							<span class="text-popover-foreground text-xs">{ Match.Language }</span>
 						</div>
 					}
 					if Match.PageCount > 0 {
 						<div class="flex items-center gap-2">
-							<span class="text-xs font-medium text-gray-500">Pages:</span>
-							<span class="text-xs text-gray-600">{ strconv.FormatInt(Match.PageCount, 10) }</span>
+							<span class="text-foreground2 text-xs font-medium">Pages:</span>
+							<span class="text-popover-foreground text-xs">{ strconv.FormatInt(Match.PageCount, 10) }</span>
 						</div>
 					}
 				</div>
 				<div class="mb-3 flex flex-wrap gap-4">
 					if Match.ISBN13 != "" {
 						<div class="flex items-center gap-1">
-							<span class="text-xs font-medium text-gray-500">ISBN-13:</span>
-							<code class="rounded bg-gray-100 px-2 py-1 text-xs">{ Match.ISBN13 }</code>
+							<span class="text-foreground2 text-xs font-medium">ISBN-13:</span>
+							<code class="bg-background rounded px-2 py-1 text-xs">{ Match.ISBN13 }</code>
 						</div>
 					}
 					if Match.ISBN10 != "" {
 						<div class="flex items-center gap-1">
-							<span class="text-xs font-medium text-gray-500">ISBN-10:</span>
-							<code class="rounded bg-gray-100 px-2 py-1 text-xs">{ Match.ISBN10 }</code>
+							<span class="text-foreground2 text-xs font-medium">ISBN-10:</span>
+							<code class="bg-background rounded px-2 py-1 text-xs">{ Match.ISBN10 }</code>
 						</div>
 					}
 				</div>
 				if Match.Summary != "" {
 					<div class="mt-3">
-						<p class="line-clamp-2 text-sm text-gray-600">{ Match.Summary }</p>
+						<p class="text-popover-foreground line-clamp-2 text-sm">{ Match.Summary }</p>
 					</div>
 				}
 				if len(Match.Tags) > 0 {
 					<div class="mt-3 flex flex-wrap gap-1">
 						for _, tag := range Match.Tags {
-							<span class="inline-block rounded-full bg-gray-100 px-2 py-1 text-xs text-gray-700">
+							<span class="text-popover-foreground bg-background inline-block rounded-full px-2 py-1 text-xs">
 								{ tag.Name }
 							</span>
 						}
@@ -287,7 +287,7 @@ templ MatchItem(Match *model.Book) {
 			<div class="flex shrink-0 items-center">
 				<button
 					type="submit"
-					class="-translate-x-2 transform rounded-lg bg-blue-600 px-4 py-2 font-medium text-white opacity-0 transition-all duration-200 hover:bg-blue-700 group-hover:translate-x-0 group-hover:opacity-100"
+					class="bg-blue text-background hover:bg-blue-light -translate-x-2 transform cursor-pointer rounded-lg px-4 py-2 font-medium opacity-0 transition-all duration-200 group-hover:translate-x-0 group-hover:opacity-100"
 				>
 					Select
 				</button>

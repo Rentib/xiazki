@@ -43,7 +43,7 @@ templ CoverImage(data Data) {
 templ BookDetails(data Data) {
 	<div class="flex-1">
 		<div class="mb-4 flex flex-wrap items-center justify-between gap-4">
-			<h1 class="wrap-break-word flex-1 text-2xl font-bold text-gray-900 md:text-3xl">
+			<h1 class="wrap-break-word flex-1 text-2xl font-bold md:text-3xl">
 				{ data.Book.Title }
 			</h1>
 		</div>
@@ -54,12 +54,12 @@ templ BookDetails(data Data) {
 
 templ Authors(data Data) {
 	<div class="mb-4 flex flex-row">
-		<h2 class="mb-2 w-24 shrink-0 text-sm font-semibold uppercase tracking-wide text-gray-500 md:w-32">Authors:</h2>
+		<h2 class="text-foreground3 mb-2 w-24 shrink-0 text-sm font-semibold uppercase tracking-wide md:w-32">Authors:</h2>
 		<div class="flex flex-wrap gap-2">
 			for _, author := range data.Book.Authors {
 				<a href={ "/author/" + strconv.FormatInt(author.ID, 10) }>
 					<span
-						class="rounded-full bg-gray-100 px-3 py-1 text-sm text-gray-800 transition-colors duration-200 hover:bg-gray-200"
+						class="bg-background-soft text-foreground2 hover:bg-background2 rounded-full px-3 py-1 text-sm transition-colors duration-200"
 					>{ author.Name }</span>
 				</a>
 			}
@@ -68,78 +68,56 @@ templ Authors(data Data) {
 }
 
 templ BookMetadata(data Data) {
-	<div class="mb-4 grid grid-cols-1 gap-4">
-		@Publisher(data)
-		@ISBN(data)
-		@Pages(data)
-		@PublishDate(data)
-		@Series(data)
-		@Language(data)
+	<div class="text-card-foreground mb-4 grid grid-cols-1 gap-4">
+		if data.Book.Publisher != "" {
+			@BookMetadataItem("Publisher") {
+				<p class="ml-4">{ data.Book.Publisher }</p>
+			}
+		}
+		if data.Book.ISBN13 != "" || data.Book.ISBN10 != "" {
+			if data.Book.ISBN13 != "" {
+				@BookMetadataItem("ISBN13") {
+					<p class="ml-4 font-mono">{ data.Book.ISBN13 }</p>
+				}
+			} else {
+				@BookMetadataItem("ISBN10") {
+					<p class="ml-4 font-mono">{ data.Book.ISBN10 }</p>
+				}
+			}
+		}
+		if data.Book.PageCount > 0 {
+			@BookMetadataItem("Pages") {
+				<p class="ml-4">{ strconv.FormatInt(data.Book.PageCount, 10) }</p>
+			}
+		}
+		if !data.Book.PublishDate.IsZero() {
+			@BookMetadataItem("Published") {
+				<p class="ml-4">{ data.Book.PublishDate.Format("January 2, 2006") }</p>
+			}
+		}
+		if data.Book.SeriesName != "" {
+			@BookMetadataItem("Series") {
+				<p class="ml-4">
+					{ data.Book.SeriesName }
+					if data.Book.SeriesNumber > 0 {
+						<span class="text-foreground2 ml-2">(#{ strconv.FormatInt(int64(data.Book.SeriesNumber), 10) })</span>
+					}
+				</p>
+			}
+		}
+		if data.Book.Language != "" {
+			@BookMetadataItem("Language") {
+				<p class="ml-4">{ data.Book.Language }</p>
+			}
+		}
 	</div>
 }
 
-templ Publisher(data Data) {
-	if data.Book.Publisher != "" {
-		<div class="flex flex-row">
-			<h3 class="mb-1 w-24 shrink-0 text-sm font-semibold uppercase tracking-wide text-gray-500 md:w-32">Publisher:</h3>
-			<p class="ml-4 text-gray-900">{ data.Book.Publisher }</p>
-		</div>
-	}
-}
-
-templ ISBN(data Data) {
-	if data.Book.ISBN13 != "" || data.Book.ISBN10 != "" {
-		<div class="flex flex-row">
-			if data.Book.ISBN13 != "" {
-				<h3 class="mb-1 w-24 shrink-0 text-sm font-semibold uppercase tracking-wide text-gray-500 md:w-32">ISBN13:</h3>
-				<p class="ml-4 font-mono text-gray-900">{ data.Book.ISBN13 }</p>
-			} else {
-				<h3 class="mb-1 w-24 shrink-0 text-sm font-semibold uppercase tracking-wide text-gray-500 md:w-32">ISBN10:</h3>
-				<p class="ml-4 font-mono text-gray-900">{ data.Book.ISBN10 }</p>
-			}
-		</div>
-	}
-}
-
-templ Pages(data Data) {
-	if data.Book.PageCount > 0 {
-		<div class="flex flex-row">
-			<h3 class="mb-1 w-24 shrink-0 text-sm font-semibold uppercase tracking-wide text-gray-500 md:w-32">Pages:</h3>
-			<p class="ml-4 text-gray-900">{ strconv.FormatInt(data.Book.PageCount, 10) }</p>
-		</div>
-	}
-}
-
-templ PublishDate(data Data) {
-	if !data.Book.PublishDate.IsZero() {
-		<div class="flex flex-row">
-			<h3 class="mb-1 w-24 shrink-0 text-sm font-semibold uppercase tracking-wide text-gray-500 md:w-32">Published:</h3>
-			<p class="ml-4 text-gray-900">{ data.Book.PublishDate.Format("January 2, 2006") }</p>
-		</div>
-	}
-}
-
-templ Series(data Data) {
-	if data.Book.SeriesName != "" {
-		<div class="flex flex-row">
-			<h3 class="mb-1 w-24 shrink-0 text-sm font-semibold uppercase tracking-wide text-gray-500 md:w-32">Series:</h3>
-			<p class="ml-4 text-gray-900">
-				{ data.Book.SeriesName }
-				if data.Book.SeriesNumber > 0 {
-					<span class="ml-2 text-gray-500">(#{ strconv.FormatInt(int64(data.Book.SeriesNumber), 10) })</span>
-				}
-			</p>
-		</div>
-	}
-}
-
-templ Language(data Data) {
-	if data.Book.Language != "" {
-		<div class="flex flex-row">
-			<h3 class="mb-1 w-24 shrink-0 text-sm font-semibold uppercase tracking-wide text-gray-500 md:w-32">Language:</h3>
-			<p class="ml-4 text-gray-900">{ data.Book.Language }</p>
-		</div>
-	}
+templ BookMetadataItem(name string) {
+	<div class="flex flex-row">
+		<h2 class="text-foreground3 mb-2 w-24 shrink-0 text-sm font-semibold uppercase tracking-wide md:w-32">{ name }:</h2>
+		{ children... }
+	</div>
 }
 
 templ RatingSection(data Data) {
@@ -147,7 +125,7 @@ templ RatingSection(data Data) {
 		<div class="mb-4 flex justify-end">
 			@Buttons(data)
 		</div>
-		<div class="rounded-lg border border-gray-200 p-6">
+		<div class="border-gray rounded-lg border p-6">
 			<div
 				id="review-section"
 				class="mt-4"
@@ -156,7 +134,7 @@ templ RatingSection(data Data) {
 				hx-swap="innerHTML"
 			>
 				<div class="flex justify-center p-4">
-					<div class="loader h-8 w-8 rounded-full border-4 border-t-4 border-gray-200 ease-linear"></div>
+					<div class="loader border-gray h-8 w-8 rounded-full border-4 border-t-4 ease-linear"></div>
 				</div>
 			</div>
 		</div>
@@ -166,14 +144,14 @@ templ RatingSection(data Data) {
 templ Buttons(data Data) {
 	<div class="flex shrink-0 gap-2">
 		<a
-			class="whitespace-nowrap rounded-md border border-green-600 px-3 py-1 text-sm text-green-600 transition-colors duration-200 hover:bg-green-100 focus:outline-none focus:ring-2 focus:ring-green-500 md:px-4 md:py-2"
+			class="border-green text-green hover:bg-green hover:text-background focus:ring-green-light cursor-pointer whitespace-nowrap rounded-md border px-3 py-1 text-sm transition-colors duration-200 focus:outline-none focus:ring-2 md:px-4 md:py-2"
 			href={ "/book/" + strconv.FormatInt(data.Book.ID, 10) + "/edit" }
 		>
 			<span class="mr-1 md:mr-2"></span>
 			<span class="align-middle">Edit</span>
 		</a>
 		<button
-			class="whitespace-nowrap rounded-md border border-blue-600 px-3 py-1 text-sm text-blue-600 transition-colors duration-200 hover:bg-blue-100 focus:outline-none focus:ring-2 focus:ring-blue-500 md:px-4 md:py-2"
+			class="border-blue text-blue hover:bg-blue hover:text-background focus:ring-blue-light cursor-pointer whitespace-nowrap rounded-md border px-3 py-1 text-sm transition-colors duration-200 focus:outline-none focus:ring-2 md:px-4 md:py-2"
 			hx-get={ "/book/" + strconv.FormatInt(data.Book.ID, 10) + "/add_event" }
 			hx-target="#modal"
 			hx-swap="innerHTML"
@@ -182,7 +160,7 @@ templ Buttons(data Data) {
 			<span class="align-middle">Add Event</span>
 		</button>
 		<button
-			class="whitespace-nowrap rounded-md border border-red-600 px-3 py-1 text-sm text-red-600 transition-colors duration-200 hover:bg-red-100 focus:outline-none focus:ring-2 focus:ring-red-500 md:px-4 md:py-2"
+			class="border-red text-red hover:bg-red hover:text-background focus:ring-red-light cursor-pointer whitespace-nowrap rounded-md border px-3 py-1 text-sm transition-colors duration-200 focus:outline-none focus:ring-2 md:px-4 md:py-2"
 			hx-delete={ "/book/" + strconv.FormatInt(data.Book.ID, 10) }
 			hx-confirm="Are you sure you want to delete this book?"
 		>
@@ -205,28 +183,28 @@ templ Stats(bookID int64, stats model.ReviewStats) {
 	<div class="text-center">
 		<div class="mb-3">
 			<div class="flex items-center justify-center gap-2">
-				<span class="text-3xl font-bold text-yellow-500">★</span>
-				<span class="text-2xl font-bold text-gray-900">{ fmt.Sprintf("%.1f", stats.AverageRating) }</span>
-				<span class="text-lg text-gray-500">/ 10</span>
+				<span class="text-yellow text-3xl font-bold">★</span>
+				<span class="text-foreground text-2xl font-bold">{ fmt.Sprintf("%.1f", stats.AverageRating) }</span>
+				<span class="text-gray text-lg">/ 10</span>
 			</div>
 		</div>
-		<div class="mb-4 text-sm text-gray-700">
+		<div class="text-foreground3 mb-4 text-sm">
 			<div class="flex items-center justify-center gap-1">
 				@OpinionsLink(bookID, fmt.Sprintf("%d Opinions", stats.OpinionsCount))
-				<span class="mx-4 text-gray-400">·</span>
+				<span class="text-foreground4 mx-4">·</span>
 				@OpinionsLink(bookID, fmt.Sprintf("%d Ratings", stats.RatingsCount))
 			</div>
 		</div>
-		<div class="my-6 border-t border-gray-200"></div>
-		<h3 class="mb-4 text-lg font-semibold text-gray-900">Your Rating</h3>
+		<div class="border-gray my-6 border-t"></div>
+		<h3 class="text-foreground mb-4 text-lg font-semibold">Your Rating</h3>
 		<div class="group mb-4 flex flex-row-reverse justify-center text-3xl">
 			for i := 10; i >= 1; i-- {
 				{{
-					class := "peer cursor-pointer px-1 hover:text-yellow-500 peer-hover:text-yellow-500 group-hover:text-gray-400"
+					class := "peer cursor-pointer px-1 hover:text-yellow peer-hover:text-yellow group-hover:text-gray"
 					if i <= int(stats.UserRating) {
-						class += " text-yellow-500"
+						class += " text-yellow"
 					} else {
-						class += " text-gray-400"
+						class += " text-gray"
 					}
 				}}
 				<div class={ class }>
@@ -243,39 +221,39 @@ templ Stats(bookID int64, stats model.ReviewStats) {
 }
 
 templ SummaryAndTags(data Data) {
-	<div class="border-t border-gray-200 p-8">
+	<div class="border-gray border-t p-8">
 		@Summary(data)
 		@Contributors(data)
 		@Tags(data)
 	</div>
 }
 
-// FIXME: make the gradient apply onlt to text, not the whole box
 templ Summary(data Data) {
+	// FIXME: make the gradient apply onlt to text, not the whole box
 	if data.Book.Summary == "" {
 		{{ return }}
 	}
 	<div class="mb-6">
-		<h3 class="mb-3 text-sm font-semibold uppercase tracking-wide text-gray-500">Summary</h3>
+		<h3 class="text-gray mb-3 text-sm font-semibold uppercase tracking-wide">Summary</h3>
 		<div class="relative">
 			<input type="checkbox" id="summary-toggle2" class="peer/summary hidden"/>
 			<div
 				id="summary-box-css2"
 				class="relative max-h-24 overflow-hidden pr-4 transition-all peer-checked/summary:max-h-none"
 			>
-				<article class="prose max-w-none text-gray-700">{ data.Book.Summary }</article>
+				<article class="prose text-foreground1 max-w-none">{ data.Book.Summary }</article>
 			</div>
 			<div
 				id="summary-gradient-css2"
-				class="bg-linear-to-b pointer-events-none absolute left-0 top-0 h-24 w-full from-transparent to-white peer-checked/summary:hidden"
+				class="bg-linear-to-b to-background pointer-events-none absolute left-0 top-0 h-24 w-full from-transparent peer-checked/summary:hidden"
 			></div>
 			<label
 				for="summary-toggle2"
-				class="mt-2 inline cursor-pointer text-sm font-medium text-blue-600 hover:underline peer-checked/summary:hidden"
+				class="text-blue mt-2 inline cursor-pointer text-sm font-medium hover:underline peer-checked/summary:hidden"
 			>Show more</label>
 			<label
 				for="summary-toggle2"
-				class="mt-2 hidden cursor-pointer text-sm font-medium text-blue-600 hover:underline peer-checked/summary:inline"
+				class="text-blue mt-2 hidden cursor-pointer text-sm font-medium hover:underline peer-checked/summary:inline"
 			>Show less</label>
 		</div>
 	</div>
@@ -284,10 +262,10 @@ templ Summary(data Data) {
 templ Tags(data Data) {
 	if len(data.Book.Tags) > 0 {
 		<div class="mb-6">
-			<h3 class="mb-3 text-sm font-semibold uppercase tracking-wide text-gray-500">Tags</h3>
+			<h3 class="text-foreground2 mb-3 text-sm font-semibold uppercase tracking-wide">Tags</h3>
 			<div class="flex flex-wrap gap-2">
 				for _, tag := range data.Book.Tags {
-					<span class="rounded-full bg-gray-100 px-3 py-1 text-sm text-gray-800">
+					<span class="bg-background-soft text-foreground2 rounded-full px-3 py-1 text-sm">
 						{ tag.Name }
 					</span>
 				}
@@ -306,10 +284,10 @@ templ Contributors(data Data) {
 templ Translators(data Data) {
 	if len(data.Book.Translators) > 0 {
 		<div>
-			<h3 class="mb-2 text-sm font-semibold uppercase tracking-wide text-gray-500">Translators</h3>
+			<h3 class="text-foreground2 mb-2 text-sm font-semibold uppercase tracking-wide">Translators</h3>
 			<ul class="space-y-1">
 				for _, translator := range data.Book.Translators {
-					<li class="text-gray-700">{ translator.Name }</li>
+					<li class="text-foreground2">{ translator.Name }</li>
 				}
 			</ul>
 		</div>
@@ -319,10 +297,10 @@ templ Translators(data Data) {
 templ Narrators(data Data) {
 	if len(data.Book.Narrators) > 0 {
 		<div>
-			<h3 class="mb-2 text-sm font-semibold uppercase tracking-wide text-gray-500">Narrators</h3>
+			<h3 class="text-foreground2 mb-2 text-sm font-semibold uppercase tracking-wide">Narrators</h3>
 			<ul class="space-y-1">
 				for _, narrator := range data.Book.Narrators {
-					<li class="text-gray-700">{ narrator.Name }</li>
+					<li class="text-foreground2">{ narrator.Name }</li>
 				}
 			</ul>
 		</div>
@@ -333,34 +311,26 @@ templ Events(data Data) {
 	if len(data.Book.Events) == 0 {
 		{{ return }}
 	}
-	<div class="border-t border-gray-200 p-8">
-		<h2 class="mb-6 text-2xl font-semibold text-gray-900">Events</h2>
+	<div class="border-gray border-t p-8">
+		<h2 class="text-foreground1 mb-6 text-2xl font-semibold">Events</h2>
 		for _, event := range data.Book.Events {
-			<div class="mb-4 flex items-center justify-between rounded-lg bg-gray-100 px-4 py-2">
+			<div class="bg-card text-card-foreground mb-4 flex items-center justify-between rounded-lg px-4 py-2">
 				<div>
 					switch event.Type {
 						case model.EventFinished:
-							<span class="font-semibold text-blue-600">
-								Finished Reading
-							</span>
+							<span class="text-blue font-semibold">Finished Reading </span>
 						case model.EventReading:
-							<span class="font-semibold text-green-600">
-								Started Reading
-							</span>
+							<span class="text-green font-semibold">Started Reading </span>
 						case model.EventDropped:
-							<span class="font-semibold text-red-600">
-								Dropped
-							</span>
-						default:
-							Unknown
+							<span class="text-red font-semibold">Dropped </span>
 					}
-					<span class="ml-2 text-gray-600">{ event.Date.Format("January 2, 2006") }</span>
+					<span class="text-foreground1 ml-2">{ event.Date.Format("January 2, 2006") }</span>
 				</div>
 				<div class="flex">
 					<button
 						hx-delete={ "/event/" + strconv.FormatInt(event.ID, 10) }
 						hx-confirm="Are you sure you want to delete this event?"
-						class="flex h-8 w-8 items-center justify-center rounded-md border border-red-600 text-red-600 transition-colors duration-200 hover:bg-red-100 focus:outline-none focus:ring-2 focus:ring-red-500"
+						class="border-red text-red hover:bg-red hover:text-card focus:ring-red-light flex h-8 w-8 cursor-pointer items-center justify-center rounded-md border transition-colors duration-200 focus:outline-none focus:ring-2"
 					>
 						<span class="text-sm">󰆴</span>
 					</button>

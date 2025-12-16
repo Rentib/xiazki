@@ -27,7 +27,7 @@ func (e EventFormValues) ToEvent() *model.Event {
 
 templ AddEventModal(bookID int64) {
 	@components.Modal() {
-		<div class="w-full max-w-md rounded-lg bg-white p-6 shadow-lg">
+		<div class="bg-popover text-popover-foreground w-full max-w-md rounded-lg p-6 shadow-lg">
 			<form
 				class="flex flex-col gap-6"
 				hx-post={ "/book/" + strconv.FormatInt(bookID, 10) + "/add_event" }
@@ -36,27 +36,27 @@ templ AddEventModal(bookID int64) {
 			>
 				<fieldset>
 					<input id="finished" class="peer/finished hidden" type="radio" name="type" value={ string(model.EventFinished) } checked/>
-					<label for="finished" class="mr-2 cursor-pointer rounded-md border border-gray-300 px-4 py-2 text-sm text-gray-700 peer-checked/finished:border-blue-600 peer-checked/finished:bg-blue-100">Finished</label>
+					<label for="finished" class="peer-checked/finished:border-blue-light peer-checked/finished:bg-blue peer-checked/finished:text-background border-gray mr-2 cursor-pointer rounded-md border px-4 py-2 text-sm">Finished</label>
 					<input id="reading" class="peer/reading hidden" type="radio" name="type" value={ string(model.EventReading) }/>
-					<label for="reading" class="mr-2 cursor-pointer rounded-md border border-gray-300 px-4 py-2 text-sm text-gray-700 peer-checked/reading:border-green-600 peer-checked/reading:bg-green-100">Reading</label>
+					<label for="reading" class="peer-checked/reading:border-green-light peer-checked/reading:bg-green peer-checked/reading:text-background border-gray mr-2 cursor-pointer rounded-md border px-4 py-2 text-sm">Reading</label>
 					<input id="dropped" class="peer/dropped hidden" type="radio" name="type" value={ string(model.EventDropped) }/>
-					<label for="dropped" class="cursor-pointer rounded-md border border-gray-300 px-4 py-2 text-sm text-gray-700 peer-checked/dropped:border-red-600 peer-checked/dropped:bg-red-100">Dropped</label>
-					<div class="mt-4 hidden text-sm font-medium text-gray-700 peer-checked/finished:block">Date you finished reading this book:</div>
-					<div class="mt-4 hidden text-sm font-medium text-gray-700 peer-checked/reading:block">Date you started reading this book:</div>
-					<div class="mt-4 hidden text-sm font-medium text-gray-700 peer-checked/dropped:block">Date you dropped this book:</div>
+					<label for="dropped" class="peer-checked/dropped:border-red-light peer-checked/dropped:bg-red peer-checked/dropped:text-background border-gray cursor-pointer rounded-md border px-4 py-2 text-sm">Dropped</label>
+					<div class="mt-4 hidden text-sm font-medium peer-checked/finished:block">Date you finished reading this book:</div>
+					<div class="mt-4 hidden text-sm font-medium peer-checked/reading:block">Date you started reading this book:</div>
+					<div class="mt-4 hidden text-sm font-medium peer-checked/dropped:block">Date you dropped this book:</div>
 					@components.Input("Date", "", "", "date", nil, time.Now().Format("2006-01-02"))
 				</fieldset>
 				<div class="flex justify-end">
 					<button
 						type="button"
-						class="mr-2 rounded-md bg-gray-300 px-4 py-2 text-sm text-gray-700 transition-colors duration-200 hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-500"
+						class="bg-gray text-background hover:bg-gray-light focus:ring-gray-light mr-2 rounded-md px-4 py-2 text-sm transition-colors duration-200 focus:outline-none focus:ring-2"
 						onclick="document.getElementById('modal').innerHTML = ''"
 					>
 						Cancel
 					</button>
 					<button
 						type="submit"
-						class="rounded-md bg-blue-600 px-4 py-2 text-sm text-white transition-colors duration-200 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+						class="bg-blue text-background hover:bg-blue-light focus:ring-blue-light rounded-md px-4 py-2 text-sm transition-colors duration-200 focus:outline-none focus:ring-2"
 					>
 						Add Event
 					</button>

@@ -17,21 +17,21 @@ templ Base(Title string) {
 			<link href="/static/css/tailwind.css" rel="stylesheet"/>
 		</head>
 		<body
-			class="min-h-screen bg-gray-50"
+			class="bg-background text-foreground min-h-screen"
 			hx-boost="true"
 			hx-headers={ "{\"X-CSRF-Token\":\"" + ctx.Value("X-CSRF-Token").(string) + "\"}" }
 		>
-			<nav class="border-b bg-white shadow-sm">
+			<nav class="bg-background1 text-foreground1 border-b shadow-sm">
 				<div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
 					<div class="flex h-16 justify-between">
 						<div class="flex items-center">
-							<a href="/books" class="text-xl font-bold text-gray-900">xiazki</a>
+							<a href="/books" class="hover:text-foreground2 text-xl font-bold">xiazki</a>
 						</div>
 						// FIXME: This is a temporary solution until we have a proper way to check authentication status in templates.
 						if Title != "Login" && Title != "Register" {
 							<div class="flex items-center space-x-4">
-								@baseLink("/books", "Books")
-								@baseLink("/add_book", "Add Book")
+								<a href="/books" class="hover:underline">Books</a>
+								<a href="/add_book" class="hover:underline">Add Book</a>
 								@profile()
 							</div>
 						}
@@ -46,27 +46,24 @@ templ Base(Title string) {
 	</html>
 }
 
-templ baseLink(href string, text string) {
-	<a href={ href } class="text-gray-700 hover:text-gray-900">{ text }</a>
-}
-
 templ profile() {
-	<div class="relative inline-block text-left">
+	// TODO: improve styling
+	<div class="relative inline-block text-center">
 		// TODO: hide on click anywhere, not only on click on profile-menu
 		<button
 			hx-on:click="document.getElementById('profile-menu').classList.toggle('hidden')"
-			class="flex h-8 w-8 items-center justify-center rounded-full bg-gray-300 font-semibold text-gray-700 hover:bg-gray-400"
+			class="bg-background0 text-foreground0 hover:bg-background2 flex h-8 w-8 items-center justify-center rounded-full font-semibold"
 		>
 			// TODO: replace with user's initial
 			R
 		</button>
 		<div
 			id="profile-menu"
-			class="absolute right-0 z-50 mt-2 hidden w-40 origin-top-right rounded-md border border-gray-200 bg-white shadow-lg"
+			class="bg-card border-gray absolute right-0 z-50 mt-2 hidden w-40 origin-top-right rounded-md border shadow-lg"
 		>
 			<div class="py-1">
 				<a
-					class="block px-4 py-2 text-gray-700 hover:bg-gray-100"
+					class="bg-card text-card-foreground hover:bg-background block px-4  py-2"
 					href="/profile"
 				>
 					Profile
@@ -74,7 +71,7 @@ templ profile() {
 				<div class="my-1 border-t"></div>
 				<a
 					hx-post="/logout"
-					class="block px-4 py-2 text-gray-700 hover:bg-gray-100"
+					class="bg-card text-card-foreground hover:bg-background block px-4  py-2"
 				>
 					Sign out
 				</a>

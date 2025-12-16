@@ -66,7 +66,7 @@ func AddEventModal(bookID int64) templ.Component {
 				}()
 			}
 			ctx = templ.InitializeContext(ctx)
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div class=\"w-full max-w-md rounded-lg bg-white p-6 shadow-lg\"><form class=\"flex flex-col gap-6\" hx-post=\"")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div class=\"bg-popover text-popover-foreground w-full max-w-md rounded-lg p-6 shadow-lg\"><form class=\"flex flex-col gap-6\" hx-post=\"")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -92,7 +92,7 @@ func AddEventModal(bookID int64) templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "\" checked> <label for=\"finished\" class=\"mr-2 cursor-pointer rounded-md border border-gray-300 px-4 py-2 text-sm text-gray-700 peer-checked/finished:border-blue-600 peer-checked/finished:bg-blue-100\">Finished</label> <input id=\"reading\" class=\"peer/reading hidden\" type=\"radio\" name=\"type\" value=\"")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "\" checked> <label for=\"finished\" class=\"peer-checked/finished:border-blue-light peer-checked/finished:bg-blue peer-checked/finished:text-background border-gray mr-2 cursor-pointer rounded-md border px-4 py-2 text-sm\">Finished</label> <input id=\"reading\" class=\"peer/reading hidden\" type=\"radio\" name=\"type\" value=\"")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -105,7 +105,7 @@ func AddEventModal(bookID int64) templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 4, "\"> <label for=\"reading\" class=\"mr-2 cursor-pointer rounded-md border border-gray-300 px-4 py-2 text-sm text-gray-700 peer-checked/reading:border-green-600 peer-checked/reading:bg-green-100\">Reading</label> <input id=\"dropped\" class=\"peer/dropped hidden\" type=\"radio\" name=\"type\" value=\"")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 4, "\"> <label for=\"reading\" class=\"peer-checked/reading:border-green-light peer-checked/reading:bg-green peer-checked/reading:text-background border-gray mr-2 cursor-pointer rounded-md border px-4 py-2 text-sm\">Reading</label> <input id=\"dropped\" class=\"peer/dropped hidden\" type=\"radio\" name=\"type\" value=\"")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -118,7 +118,7 @@ func AddEventModal(bookID int64) templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 5, "\"> <label for=\"dropped\" class=\"cursor-pointer rounded-md border border-gray-300 px-4 py-2 text-sm text-gray-700 peer-checked/dropped:border-red-600 peer-checked/dropped:bg-red-100\">Dropped</label><div class=\"mt-4 hidden text-sm font-medium text-gray-700 peer-checked/finished:block\">Date you finished reading this book:</div><div class=\"mt-4 hidden text-sm font-medium text-gray-700 peer-checked/reading:block\">Date you started reading this book:</div><div class=\"mt-4 hidden text-sm font-medium text-gray-700 peer-checked/dropped:block\">Date you dropped this book:</div>")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 5, "\"> <label for=\"dropped\" class=\"peer-checked/dropped:border-red-light peer-checked/dropped:bg-red peer-checked/dropped:text-background border-gray cursor-pointer rounded-md border px-4 py-2 text-sm\">Dropped</label><div class=\"mt-4 hidden text-sm font-medium peer-checked/finished:block\">Date you finished reading this book:</div><div class=\"mt-4 hidden text-sm font-medium peer-checked/reading:block\">Date you started reading this book:</div><div class=\"mt-4 hidden text-sm font-medium peer-checked/dropped:block\">Date you dropped this book:</div>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -126,7 +126,7 @@ func AddEventModal(bookID int64) templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 6, "</fieldset><div class=\"flex justify-end\"><button type=\"button\" class=\"mr-2 rounded-md bg-gray-300 px-4 py-2 text-sm text-gray-700 transition-colors duration-200 hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-500\" onclick=\"document.getElementById('modal').innerHTML = ''\">Cancel</button> <button type=\"submit\" class=\"rounded-md bg-blue-600 px-4 py-2 text-sm text-white transition-colors duration-200 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500\">Add Event</button></div></form></div>")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 6, "</fieldset><div class=\"flex justify-end\"><button type=\"button\" class=\"bg-gray text-background hover:bg-gray-light focus:ring-gray-light mr-2 rounded-md px-4 py-2 text-sm transition-colors duration-200 focus:outline-none focus:ring-2\" onclick=\"document.getElementById('modal').innerHTML = ''\">Cancel</button> <button type=\"submit\" class=\"bg-blue text-background hover:bg-blue-light focus:ring-blue-light rounded-md px-4 py-2 text-sm transition-colors duration-200 focus:outline-none focus:ring-2\">Add Event</button></div></form></div>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}

@@ -1,4 +1,125 @@
 @import "tailwindcss";
 @plugin "@tailwindcss/typography";
 
-/* TODO: gruvbox palette */
+:root {
+  --background: #fbf1c7;
+  --foreground: #282828;
+  --card: #ebdbb2;
+  --card-foreground: #3c3836;
+  --popover: #ebdbb2;
+  --popover-foreground: #3c3836;
+
+  --background-hard: #f9f5d7;
+  --background-soft: #f2e5bc;
+
+  --background0: #fbf1c7;
+  --background1: #ebdbb2;
+  --background2: #d5c4a1;
+  --background3: #bdae93;
+  --background4: #a89984;
+
+  --foreground0: #282828;
+  --foreground1: #3c3836;
+  --foreground2: #504945;
+  --foreground3: #665c54;
+  --foreground4: #7c6f64;
+
+  --white: #fbf1c7;
+  --black: #3c3836;
+  --red: #cc241d;
+  --red-light: #9d0006;
+  --green: #98971a;
+  --green-light: #79740e;
+  --blue: #458588;
+  --blue-light: #076678;
+  --yellow: #d79921;
+  --yellow-light: #b57614;
+  --purple: #b16286;
+  --purple-light: #8f3f71;
+  --aqua: #689d6a;
+  --aqua-light: #427b58;
+  --gray: #928374;
+  --gray-light: #7c6f64;
+
+  --font-sans:
+    ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif,
+    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  --font-serif: ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
+  --font-mono:
+    ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
+    "Courier New", monospace;
+  --radius: 0.5rem;
+  --shadow-2xs: 0 1px 3px 0px hsl(34 12% 15% / 0.04);
+  --shadow-xs: 0 1px 3px 0px hsl(34 12% 15% / 0.04);
+  --shadow-sm:
+    0 1px 3px 0px hsl(34 12% 15% / 0.08), 0 1px 2px -1px hsl(34 12% 15% / 0.08);
+  --shadow:
+    0 1px 3px 0px hsl(34 12% 15% / 0.08), 0 1px 2px -1px hsl(34 12% 15% / 0.08);
+  --shadow-md:
+    0 1px 3px 0px hsl(34 12% 15% / 0.08), 0 2px 4px -1px hsl(34 12% 15% / 0.08);
+  --shadow-lg:
+    0 1px 3px 0px hsl(34 12% 15% / 0.08), 0 4px 6px -1px hsl(34 12% 15% / 0.08);
+  --shadow-xl:
+    0 1px 3px 0px hsl(34 12% 15% / 0.08), 0 8px 10px -1px hsl(34 12% 15% / 0.08);
+  --shadow-2xl: 0 1px 3px 0px hsl(34 12% 15% / 0.18);
+  --tracking-normal: 0em;
+  --spacing: 0.25rem;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+
+  --color-white: var(--white);
+  --color-black: var(--black);
+  --color-red: var(--red);
+  --color-red-light: var(--red-light);
+  --color-green: var(--green);
+  --color-green-light: var(--green-light);
+  --color-blue: var(--blue);
+  --color-blue-light: var(--blue-light);
+  --color-yellow: var(--yellow);
+  --color-yellow-light: var(--yellow-light);
+  --color-purple: var(--purple);
+  --color-purple-light: var(--purple-light);
+  --color-aqua: var(--aqua);
+  --color-aqua-light: var(--aqua-light);
+  --color-gray: var(--gray);
+  --color-gray-light: var(--gray-light);
+
+  --color-background-hard: var(--background-hard);
+  --color-background-soft: var(--background-soft);
+  --color-background0: var(--background0);
+  --color-background1: var(--background1);
+  --color-background2: var(--background2);
+  --color-background3: var(--background3);
+  --color-background4: var(--background4);
+  --color-foreground0: var(--foreground0);
+  --color-foreground1: var(--foreground1);
+  --color-foreground2: var(--foreground2);
+  --color-foreground3: var(--foreground3);
+  --color-foreground4: var(--foreground4);
+
+  --font-sans: var(--font-sans);
+  --font-mono: var(--font-mono);
+  --font-serif: var(--font-serif);
+
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+
+  --shadow-2xs: var(--shadow-2xs);
+  --shadow-xs: var(--shadow-xs);
+  --shadow-sm: var(--shadow-sm);
+  --shadow: var(--shadow);
+  --shadow-md: var(--shadow-md);
+  --shadow-lg: var(--shadow-lg);
+  --shadow-xl: var(--shadow-xl);
+  --shadow-2xl: var(--shadow-2xl);
+}

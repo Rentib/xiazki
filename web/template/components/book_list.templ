@@ -16,77 +16,56 @@ templ BookList(books []*model.Book) {
 }
 
 templ BookCard(book *model.Book) {
-	<div class="group flex w-full max-w-xs flex-col items-center rounded-lg bg-white p-0 shadow-md transition-all duration-300 hover:shadow-2xl">
-		@BookCover(book)
-		<div class="flex flex-1 flex-col p-4">
-			@BookTitle(book)
-			@BookAuthorList(book)
-			<div class="mt-2 flex items-center justify-center gap-2">
+	<div class="bg-card text-card-foreground group flex h-full w-full max-w-xs flex-col items-center rounded-lg p-0 shadow-md transition-all duration-300 hover:shadow-2xl">
+		<div class="flex justify-center overflow-hidden">
+			<a href={ "/book/" + strconv.FormatInt(book.ID, 10) } class="aspect-3/4 block w-full">
+				<img
+					src={ getCoverURL(book.CoverURL) }
+					alt={ book.Title }
+					class="h-full w-full object-contain"
+				/>
+			</a>
+		</div>
+		<div class="flex w-full flex-1 flex-col p-4">
+			<a href={ "/book/" + strconv.FormatInt(book.ID, 10) } class="mb-1 w-full text-center text-lg font-semibold hover:underline">
+				{ book.Title }
+			</a>
+			<div class="mb-4">
+				<div class="flex flex-wrap justify-center gap-x-1 text-center">
+					for i, author := range book.Authors {
+						<a href={ "/author/" + strconv.FormatInt(author.ID, 10) } class="text-foreground2 hover:text-blue text-sm transition-colors duration-200 hover:underline">
+							{ author.Name }
+						</a>
+						if i < len(book.Authors)-1 {
+							<span class="text-foreground4">,</span>
+						}
+					}
+				</div>
+			</div>
+			<div class="mt-auto flex items-center justify-center gap-2 pt-2">
 				if book.SeriesName != "" {
-					<div class="text-sm font-medium text-gray-500" title={ book.SeriesName }>
+					<div class="text-foreground3 text-sm font-medium" title={ book.SeriesName }>
 						#{ book.SeriesNumber }
 					</div>
 				}
-				@BookEvent(book)
-			</div>
-		</div>
-	</div>
-}
-
-templ BookCover(book *model.Book) {
-	<div class="flex justify-center overflow-hidden bg-gray-100">
-		<a href={ "/book/" + strconv.FormatInt(book.ID, 10) } class="block aspect-3/4 w-full">
-			<img
-				src={ getCoverURL(book.CoverURL) }
-				alt={ book.Title }
-				class="h-full w-full object-contain"
-			/>
-		</a>
-	</div>
-}
-
-templ BookTitle(book *model.Book) {
-	<a href={ "/book/" + strconv.FormatInt(book.ID, 10) } class="mb-1 w-full text-center text-lg font-semibold text-gray-900 hover:underline">
-		{ book.Title }
-	</a>
-}
-
-templ BookAuthorList(book *model.Book) {
-	<div class="mb-4 min-h-12">
-		<div class="flex flex-wrap justify-center gap-x-1 text-center">
-			for i, author := range book.Authors {
-				@BookAuthor(author)
-				if i < len(book.Authors)-1 {
-					<span class="text-gray-500">,</span>
+				if book.Events != nil && len(book.Events) > 0 {
+					{{
+						event := book.Events[len(book.Events)-1]
+						colors := ""
+						switch event.Type {
+						case model.EventFinished:
+							colors = "border-blue-light text-card bg-blue"
+						case model.EventReading:
+							colors = "border-green-light text-card bg-green"
+						case model.EventDropped:
+							colors = "border-red-light text-card bg-red"
+						}
+					}}
+					<div class={ colors + " whitespace-nowrap rounded-full border px-3 py-1 text-sm font-medium capitalize" }>{ event.Type }</div>
 				}
-			}
+			</div>
 		</div>
 	</div>
-}
-
-templ BookAuthor(author *model.Author) {
-	<a href={ "/author/" + strconv.FormatInt(author.ID, 10) } class="text-sm text-gray-600 transition-colors duration-200 hover:text-blue-600 hover:underline">
-		{ author.Name }
-	</a>
-}
-
-templ BookEvent(book *model.Book) {
-	if book.Events != nil && len(book.Events) > 0 {
-		{{ event := book.Events[len(book.Events)-1] }}
-		if event.Type == "finished" {
-			<div class="rounded-full border border-blue-200 bg-blue-50 px-3 py-1 text-sm font-medium whitespace-nowrap text-blue-700">
-				Finished
-			</div>
-		} else if event.Type == "reading" {
-			<div class="rounded-full border border-green-200 bg-green-50 px-3 py-1 text-sm font-medium whitespace-nowrap text-green-700">
-				Reading
-			</div>
-		} else if event.Type == "dropped" {
-			<div class="rounded-full border border-red-200 bg-red-50 px-3 py-1 text-sm font-medium whitespace-nowrap text-red-700">
-				Dropped
-			</div>
-		}
-	}
 }
 
 func getCoverURL(coverURL string) string {

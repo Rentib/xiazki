@@ -30,20 +30,20 @@ templ Show(data Data) {
 
 templ Title(data Data) {
 	<div class="mb-8 flex items-center space-x-6">
-		<div class="text-gray-500">
+		<div class="text-foreground3">
 			Reviews of
 		</div>
 		<div>
-			<h1 class="text-4xl font-bold text-gray-900">{ data.Book.Title }</h1>
+			<h1 class="text-4xl font-bold">{ data.Book.Title }</h1>
 			for i, author := range data.Book.Authors {
 				<a
 					href={ "/author/" + strconv.FormatInt(author.ID, 10) }
-					class="text-lg text-gray-700 transition-colors duration-200 hover:underline"
+					class="text-card-foreground text-lg transition-colors duration-200 hover:underline"
 				>
 					{ author.Name }
 				</a>
 				if i < len(data.Book.Authors)-1 {
-					<span class="text-gray-500">,</span>
+					<span class="text-foreground4">,</span>
 				}
 			}
 		</div>
@@ -59,19 +59,19 @@ templ Title(data Data) {
 
 templ Stats(stats *model.ReviewStats) {
 	<div class="mx-auto flex max-w-3xl flex-col items-center space-y-6 md:flex-row md:space-x-6 md:space-y-0">
-		<div class="flex min-w-max flex-col space-y-4 bg-gray-100 p-8">
-			<span class="mt-4 text-lg text-gray-600">Average Rating</span>
+		<div class="bg-card text-card-foreground flex min-w-max flex-col space-y-4 p-8">
+			<span class="mt-4 text-lg">Average Rating</span>
 			<div class="flex items-end space-x-1">
-				<span class="text-3xl font-bold text-red-600">★{ fmt.Sprintf("%.1f", stats.AverageRating) }</span>
-				<span class="text-xl text-gray-500">/ 10</span>
+				<span class="text-red text-3xl font-bold">★{ fmt.Sprintf("%.1f", stats.AverageRating) }</span>
+				<span class="text-foreground2 text-xl">/ 10</span>
 			</div>
 			<div class="p-4">
-				<span class="text-lg text-gray-600">{ stats.RatingsCount } ratings </span>
+				<span class="text-lg">{ stats.RatingsCount } ratings </span>
 			</div>
-			<span class="mt-4 text-lg text-gray-600">Your Rating</span>
+			<span class="mt-4 text-lg">Your Rating</span>
 			<div class="flex items-center space-x-1">
-				<span class="text-3xl font-bold text-red-600">★{ stats.UserRating }</span>
-				<span class="text-xl text-gray-500">/ 10</span>
+				<span class="text-red text-3xl font-bold">★{ stats.UserRating }</span>
+				<span class="text-foreground2 text-xl">/ 10</span>
 			</div>
 		</div>
 		<div class="grow">
@@ -82,7 +82,7 @@ templ Stats(stats *model.ReviewStats) {
 
 templ UserReview(review *model.Review) {
 	<div class="mt-8">
-		<span class="mb-4 text-2xl font-semibold text-gray-900">Your Review</span>
+		<span class="mb-4 text-2xl font-semibold">Your Review</span>
 		@ReviewForm(review)
 	</div>
 }
@@ -91,12 +91,12 @@ templ ReviewForm(review *model.Review) {
 	// FIXME: hover should cancel checked styles and make stars after the one hovered have gray background
 	<form
 		hx-post={ "/book/" + strconv.FormatInt(review.BookID, 10) + "/review" }
-		class="mt-4 rounded-lg bg-gray-50 p-6 shadow-md"
+		class="bg-card mt-4 rounded-lg p-6 shadow-md"
 	>
 		<div class="mb-6">
 			<div class="flex flex-row justify-center text-5xl">
 				for i := 1; i <= 10; i++ {
-					<label class="relative text-gray-500 has-[input:checked]:text-yellow-400 has-[input:hover]:text-yellow-500 has-[~label>input:checked]:text-yellow-400 has-[~label>input:hover]:text-yellow-500">
+					<label class="text-gray has-[input:checked]:text-yellow has-[input:hover]:text-yellow-light has-[~label>input:checked]:text-yellow has-[~label>input:hover]:text-yellow-light relative">
 						<input
 							class="absolute inset-0 h-full w-full cursor-pointer opacity-0"
 							type="radio"
@@ -115,7 +115,7 @@ templ ReviewForm(review *model.Review) {
 		<div class="mt-6 flex justify-end">
 			<button
 				type="submit"
-				class="rounded bg-blue-600 px-4 py-2 font-semibold text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+				class="bg-blue hover:bg-blue-light focus:ring-blue-light text-background rounded px-4 py-2 text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-offset-2"
 			>
 				Submit Review
 			</button>
@@ -124,9 +124,12 @@ templ ReviewForm(review *model.Review) {
 }
 
 templ OtherReviews(reviews []*model.Review) {
+	if len(reviews) == 0 {
+		{{ return }}
+	}
 	<div class="mt-8">
-		<h2 class="mb-4 text-2xl font-semibold text-gray-900">Other Reviews</h2>
-		<div class="mt-4 rounded-lg bg-gray-100 p-6 shadow-md">
+		<h2 class="mb-4 text-2xl font-semibold ">Other Reviews</h2>
+		<div class="bg-card text-card-foreground mt-4 rounded-lg p-6 shadow-md">
 			<div class="space-y-4">
 				for _, review := range reviews {
 					@Review(review)
@@ -137,20 +140,20 @@ templ OtherReviews(reviews []*model.Review) {
 }
 
 templ Review(review *model.Review) {
-	<div class="border-b border-gray-300 py-4">
+	<div class="border-gray border-b py-4">
 		<div class="mb-2 flex items-center justify-between text-sm">
 			<div class="flex items-center space-x-2">
 				<span class="text-base font-semibold">{ review.User.Username }</span>
-				<span class="text-gray-500">
+				<span class="text-foreground3">
 					{ review.CreatedAt.Format("02.01.2006") }
 				</span>
 			</div>
 			<div class="flex items-center space-x-1 font-bold">
-				<span class="text-xl text-red-600">★</span>
-				<span class="text-red-600">{ strconv.FormatInt(review.Rating, 10) }</span>
-				<span class="text-gray-400">/ 10</span>
+				<span class="text-red text-xl">★</span>
+				<span class="text-red">{ strconv.FormatInt(review.Rating, 10) }</span>
+				<span class="text-foreground2">/ 10</span>
 			</div>
 		</div>
-		<p class="mb-4 whitespace-pre-line text-gray-800">{ review.Opinion }</p>
+		<p class="mb-4 whitespace-pre-line">{ review.Opinion }</p>
 	</div>
 }
